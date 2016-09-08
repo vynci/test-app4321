@@ -4,9 +4,9 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers'])
+var app = angular.module('starter', ['ionic', 'starter.controllers', 'angular-spinkit'])
 
-.run(function($ionicPlatform) {
+app.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -20,12 +20,15 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       StatusBar.styleDefault();
     }
   });
+  
+  Parse.initialize("myAppId");
+  Parse.serverURL = 'https://muse-rest-api.herokuapp.com/parse';  
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+app.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
-    .state('app', {
+  .state('app', {
     url: '/app',
     abstract: true,
     templateUrl: 'templates/menu.html',
@@ -41,11 +44,93 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     }
   })
 
-  .state('app.browse', {
-      url: '/browse',
+  .state('app.service', {
+    url: '/service',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/service.html',
+        controller: 'ServiceCtrl'
+      }
+    }
+  })
+
+  .state('app.home', {
+    url: '/home',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/home.html',
+        controller: 'HomeCtrl'
+      }
+    }
+  })
+
+  .state('app.chatView', {
+    url: '/chat-view/:artistId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/chat-view.html',
+        controller: 'ChatViewCtrl'
+      }
+    }
+  })
+
+  .state('app.account', {
+    url: '/account',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/account.html',
+        controller: 'AccountCtrl'
+      }
+    }
+  })
+
+  .state('app.artistlist', {
+    url: '/artistlist',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/artistListView.html',
+        controller: 'ArtistListViewCtrl'
+      }
+    }
+  })
+
+  .state('app.book', {
+    url: '/book/:bookInfo',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/book.html',
+        controller: 'BookCtrl'
+      }
+    }
+  })
+
+  .state('app.artist', {
+    url: '/artist/:artistId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/artist.html',
+        controller: 'ArtistCtrl'
+      }
+    }
+  })
+
+  .state('app.appointment', {
+    url: '/appointment',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/appointment.html',
+        controller: 'AppointmentCtrl'
+      }
+    }
+  })
+
+
+  .state('app.discover', {
+      url: '/discover',
       views: {
         'menuContent': {
-          templateUrl: 'templates/browse.html'
+          templateUrl: 'templates/discover.html',
+          controller: 'DiscoverCtrl'
         }
       }
     })
@@ -69,5 +154,5 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     }
   });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/playlists');
+  $urlRouterProvider.otherwise('/app/home');
 });
