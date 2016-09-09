@@ -11,23 +11,31 @@ app.controller('ServiceCtrl', function($scope, $ionicHistory, $ionicModal, $time
   });
 
   $scope.$on('$ionicView.leave', function(e) {
-    map.remove();
+    if(map){
+      map.remove();
+    }
   });
 
   var map;
 
   function loadMap(){
-    plugin.google.maps.Map.isAvailable(function(isAvailable, message) {
-      currentPosition = $rootScope.currentUserPosition;
 
-      // var currentPosition = new Parse.GeoPoint({latitude: 10.349792530358712, longitude: 123.90758514404297});
-      $rootScope.side_menu.style.visibility = "hidden";
+    try {
+      plugin.google.maps.Map.isAvailable(function(isAvailable, message) {
+        // currentPosition = $rootScope.currentUserPosition;
 
-      if (isAvailable) {
-        initMap(currentPosition);
-      }
+        currentPosition = new Parse.GeoPoint({latitude: 10.349792530358712, longitude: 123.90758514404297});
+        $rootScope.side_menu.style.visibility = "hidden";
 
-    });
+        if (isAvailable) {
+          initMap(currentPosition);
+        }
+
+      });
+    }
+    catch(err) {
+      alert('plugin not available');
+    }
   }
 
   function initMap(currentPosition){
@@ -73,33 +81,33 @@ app.controller('ServiceCtrl', function($scope, $ionicHistory, $ionicModal, $time
      marker.showInfoWindow();
    });
 
-   nearbyArtists.forEach(function(artist) {
-     var locObj = new plugin.google.maps.LatLng(artist.get('coordinates')._latitude, artist.get('coordinates')._longitude);
-
-     map.addMarker({
-       'position': locObj,
-       'title': artist.get('firstName') + ' ' + artist.get('lastName'),
-       'snippet': artist.get('serviceType'),
-       'icon' : {
-         url : artist.get('icon'),
-         size : {
-           width : 48,
-           height : 48
-         }
-       },
-       infoClick: function(marker) {
-         $state.go('app.artist', {artistId: artist.id});
-       }
-     }, function(marker) {
-       // marker.showInfoWindow(); // Show infowindow
-       $scope.artistCount += 1;
-
-       if($scope.artistCount === nearbyArtists.length){
-         $ionicLoading.hide();
-       }
-     });
-
-   });
+  //  nearbyArtists.forEach(function(artist) {
+  //    var locObj = new plugin.google.maps.LatLng(artist.get('coordinates')._latitude, artist.get('coordinates')._longitude);
+   //
+  //    map.addMarker({
+  //      'position': locObj,
+  //      'title': artist.get('firstName') + ' ' + artist.get('lastName'),
+  //      'snippet': artist.get('serviceType'),
+  //      'icon' : {
+  //        url : artist.get('icon'),
+  //        size : {
+  //          width : 48,
+  //          height : 48
+  //        }
+  //      },
+  //      infoClick: function(marker) {
+  //        $state.go('app.artist', {artistId: artist.id});
+  //      }
+  //    }, function(marker) {
+  //      // marker.showInfoWindow(); // Show infowindow
+  //      $scope.artistCount += 1;
+   //
+  //      if($scope.artistCount === nearbyArtists.length){
+  //        $ionicLoading.hide();
+  //      }
+  //    });
+   //
+  //  });
  }
 
  $rootScope.$ionicGoBack = function(backCount) {
