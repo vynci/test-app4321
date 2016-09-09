@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-var app = angular.module('starter', ['ionic', 'starter.controllers', 'angular-spinkit'])
+var app = angular.module('starter', ['ionic', 'starter.controllers', 'angular-spinkit', 'ion-datetime-picker', 'ionic.rating', 'angularMoment', 'ngCordova', 'ion-google-place'])
 
 app.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -20,9 +20,9 @@ app.run(function($ionicPlatform) {
       StatusBar.styleDefault();
     }
   });
-  
+
   Parse.initialize("myAppId");
-  Parse.serverURL = 'https://muse-rest-api.herokuapp.com/parse';  
+  Parse.serverURL = 'https://muse-rest-api.herokuapp.com/parse';
 })
 
 app.config(function($stateProvider, $urlRouterProvider) {
