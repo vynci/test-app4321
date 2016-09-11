@@ -24,6 +24,9 @@
 	background-color: #46000D;
 }
 /* ionic overrides*/
+.bar {
+	background-image: none;
+}
 
 .dot1, .dot2 {
 	background-color: #6cff93 !important;

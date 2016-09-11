@@ -113,19 +113,6 @@ app.controller('ArtistCtrl', function($scope, $ionicModal, $timeout, $ionicLoadi
     }
   }
 
-  $ionicModal.fromTemplateUrl('templates/my-modal.html', {
-    scope: $scope,
-    animation: 'slide-in-up'
-  }).then(function(modal) {
-    $scope.modalConf = modal;
-  });
-  $scope.openModal = function() {
-    $scope.modalConf.show();
-  };
-  $scope.closeModal = function() {
-    $scope.modalConf.hide();
-  };
-
   $scope.followArtist = function() {
     var alertPopup = $ionicPopup.alert({
       title: 'Follow Artist',
@@ -136,12 +123,6 @@ app.controller('ArtistCtrl', function($scope, $ionicModal, $timeout, $ionicLoadi
       console.log('Thank you for not eating my delicious ice cream cone');
     });
   }
-
-  $scope.registerLater = function() {
-    console.log('close!');
-    $scope.modalConf.hide();
-    $state.go('app.book');
-  };
 
   $scope.toggleSelection = function(service){
     if(!service.checked || service.checked === undefined){

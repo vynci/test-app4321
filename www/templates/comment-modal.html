@@ -1,8 +1,12 @@
 <ion-modal-view>
 	<ion-header-bar>
-		<button class="button button-small button-energized" style="margin-top: 0px;
-		margin-bottom: 0px;" ng-click="hideComments()"><b><i class="icon ion-chevron-left"></i></b></button>
 		<h1 class="title">Comments</h1>
+		<div class="buttons">
+			<button class="button button-icon icon ion-android-close" ng-click="hideComments()">
+			</button>
+		</div>
+		<!-- <button class="button button-small button-block button-energized" style="margin-top: 0px;
+		margin-bottom: 0px;" ng-click="hideComments()"><b>Close <i class="icon ion-chevron-left"></i></b></button> -->
 	</ion-header-bar>
 	<ion-content>
 
@@ -10,7 +14,7 @@
 
 			<a class="item item-avatar" ng-repeat="comment in comments">
 				<img ng-src="{{comment.attributes.commenterInfo.avatar || spiral}}">
-				<h2>{{comment.attributes.commenterInfo.firstName}} {{comment.attributes.commenterInfo.lastName}}</h2>
+				<h2>{{comment.attributes.commenterInfo.firstName || 'Anonymous'}} {{comment.attributes.commenterInfo.lastName}}</h2>
 				<p style="white-space: normal;">{{comment.attributes.comment}}</p>
 				<h5 style="white-space: normal;">{{comment.attributes.updatedAt | date: "MMMM dd yyyy h:mm a"}}</h5>
 			</a>

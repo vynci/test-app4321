@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="com.ionicframework.myapp105837" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>myApp</name>
+  <name>Blush - Beta</name>
   <description>&#xD;
         An Ionic Framework and Cordova project.&#xD;
     </description>
@@ -76,8 +76,10 @@
     <splash src="resources/wp8/splash/SplashScreenImage.png" width="768" height="1280"/>
   </platform>
   <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
-  <plugin spec="https://github.com/mapsplugin/cordova-plugin-googlemaps.git">
+  <plugin name="cordova-plugin-geolocation" spec="~2.2.0"/>
+  <plugin name="plugin.google.maps" spec="~1.3.9">
+    <variable name="API_KEY_FOR_ANDROID" value="AIzaSyCd92YvCeP1tzD2R5U-MGymGk0Pejnbsdo"/>
     <variable name="API_KEY_FOR_IOS" value="AIzaSyAmrM8n0B8r67-DWJyjtCW6LcfaXOVP1ko"/>
   </plugin>
-  <plugin name="cordova-plugin-geolocation" spec="~2.2.0"/>
+  <engine name="ios" spec="~3.9.2"/>
 </widget>
