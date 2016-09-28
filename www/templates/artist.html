@@ -34,8 +34,10 @@
     </ion-tabs>
 
     <div ng-if="selectedTab === 'services'" style="padding-bottom: 20%;">
-      <ion-list>
 
+      <div ng-if="!artistServices.length" class="item" style="text-align: center; white-space: normal;">Sorry, {{profile.firstName}} doesn't have any services yet.</div>
+
+      <ion-list>
         <ion-checkbox ng-click="toggleSelection(service)" ng-checked="service.checked" ng-repeat="service in artistServices">
           <b>{{service.attributes.name}}</b>
           <p>{{service.attributes.duration}} mins</p>
@@ -67,6 +69,7 @@
 
     <div ng-if="selectedTab === 'reviews'">
       <br>
+      <div ng-if="!artistReviews.length" class="item" style="text-align: center; white-space: normal;">Sorry, {{profile.firstName}} doesn't have any reviews yet.</div>
       <div class="list">
 
         <div class="item item-thumbnail-left" ng-repeat="review in artistReviews">

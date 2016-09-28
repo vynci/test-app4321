@@ -114,6 +114,8 @@ input.ion-google-place[readonly]{
 
 .tabs-assertive > .tabs {
 	background-color: #ff6c8f;
+	height: 65px;
+	padding-top: 10px;
 }
 
 .tabs-striped.tabs-assertive .tabs {

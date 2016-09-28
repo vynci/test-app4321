@@ -11,30 +11,23 @@ app.controller('ServiceCtrl', function($scope, $ionicHistory, $ionicModal, $time
   });
 
   $scope.$on('$ionicView.leave', function(e) {
-    if(map){
-      map.remove();
-    }
+    map.remove();
   });
 
   var map;
 
   function loadMap(){
-    try {
-      plugin.google.maps.Map.isAvailable(function(isAvailable, message) {
-        currentPosition = $rootScope.currentUserPosition;
+    plugin.google.maps.Map.isAvailable(function(isAvailable, message) {
+      currentPosition = $rootScope.currentUserPosition;
 
-        // currentPosition = new Parse.GeoPoint({latitude: 10.349792530358712, longitude: 123.90758514404297});
-        $rootScope.side_menu.style.visibility = "hidden";
+      // var currentPosition = new Parse.GeoPoint({latitude: 10.349792530358712, longitude: 123.90758514404297});
+      $rootScope.side_menu.style.visibility = "hidden";
 
-        if (isAvailable) {
-          initMap(currentPosition);
-        }
+      if (isAvailable) {
+        initMap(currentPosition);
+      }
 
-      });
-    }
-    catch(err) {
-      alert('plugin not available');
-    }
+    });
   }
 
   function initMap(currentPosition){
@@ -62,57 +55,57 @@ app.controller('ServiceCtrl', function($scope, $ionicHistory, $ionicModal, $time
     map.addEventListener(plugin.google.maps.event.MAP_READY, function() {
       initMarkers();
     });
- }
+  }
 
- function initMarkers(){
-   $ionicLoading.show({
-     template: 'Loading :)'
-   }).then(function(){
-   });
+  function initMarkers(){
+    $ionicLoading.show({
+      template: 'Loading :)'
+    }).then(function(){
+    });
 
-   map.addMarker({
-     'position': new plugin.google.maps.LatLng(currentPosition._latitude, currentPosition._longitude),
-     'title': 'You',
-     'icon': {
-       'url': 'http://maps.google.com/intl/en_us/mapfiles/ms/micons/green.png'
-     }
-   }, function(marker) {
-     marker.showInfoWindow();
-   });
+    map.addMarker({
+      'position': new plugin.google.maps.LatLng(currentPosition._latitude, currentPosition._longitude),
+      'title': 'You',
+      'icon': {
+        'url': 'http://maps.google.com/intl/en_us/mapfiles/ms/micons/green.png'
+      }
+    }, function(marker) {
+      marker.showInfoWindow();
+    });
 
-   nearbyArtists.forEach(function(artist) {
-     var locObj = new plugin.google.maps.LatLng(artist.get('coordinates')._latitude, artist.get('coordinates')._longitude);
+    nearbyArtists.forEach(function(artist) {
+      var locObj = new plugin.google.maps.LatLng(artist.get('coordinates')._latitude, artist.get('coordinates')._longitude);
 
-     map.addMarker({
-       'position': locObj,
-       'title': artist.get('firstName') + ' ' + artist.get('lastName'),
-       'snippet': artist.get('serviceType'),
-       'icon' : {
-         url : artist.get('icon'),
-         size : {
-           width : 48,
-           height : 48
-         }
-       },
-       infoClick: function(marker) {
-         $state.go('app.artist', {artistId: artist.id});
-       }
-     }, function(marker) {
-       // marker.showInfoWindow(); // Show infowindow
-       $scope.artistCount += 1;
+      map.addMarker({
+        'position': locObj,
+        'title': artist.get('firstName') + ' ' + artist.get('lastName'),
+        'snippet': artist.get('serviceType'),
+        'icon' : {
+          url : artist.get('icon'),
+          size : {
+            width : 48,
+            height : 48
+          }
+        },
+        infoClick: function(marker) {
+          $state.go('app.artist', {artistId: artist.id});
+        }
+      }, function(marker) {
+        // marker.showInfoWindow(); // Show infowindow
+        $scope.artistCount += 1;
 
-       if($scope.artistCount === nearbyArtists.length){
-         $ionicLoading.hide();
-       }
-     });
+        if($scope.artistCount === nearbyArtists.length){
+          $ionicLoading.hide();
+        }
+      });
 
-   });
- }
+    });
+  }
 
- $rootScope.$ionicGoBack = function(backCount) {
-   if($scope.artistCount === nearbyArtists.length){
-     $ionicHistory.goBack(backCount);
-   }
- };
+  $rootScope.$ionicGoBack = function(backCount) {
+    if($scope.artistCount === nearbyArtists.length){
+      $ionicHistory.goBack(backCount);
+    }
+  };
 
 });

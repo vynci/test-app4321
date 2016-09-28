@@ -1,5 +1,5 @@
 
-app.controller('ArtistListViewCtrl', function($scope, $ionicModal, $timeout, serviceService, $ionicLoading, $rootScope, $ionicPopup, artistService, $state, $cordovaGeolocation) {
+app.controller('ArtistListViewCtrl', function($scope, $ionicModal, $timeout, $ionicLoading, $rootScope, $ionicPopup, artistService, $state, $cordovaGeolocation) {
   $scope.spiral = 'img/placeholder.png';
   $scope.position = {
     search : ''
@@ -15,7 +15,11 @@ app.controller('ArtistListViewCtrl', function($scope, $ionicModal, $timeout, ser
 
   var map;
   var point;
-  getCurrentLocation();
+
+  $scope.$on('$ionicView.enter', function(e) {
+    console.log('enter view');
+    getCurrentLocation();
+  });
 
   $ionicModal.fromTemplateUrl('templates/filterModal.html', {
     scope: $scope
@@ -56,58 +60,53 @@ app.controller('ArtistListViewCtrl', function($scope, $ionicModal, $timeout, ser
     });
   }
 
-  function parsePriceRange(artists){
-    angular.forEach(artists, function(artist){
-      var services= artist.get('services');
-
-      var priceRange = [];
-      angular.forEach(services, function(service){
-        var price = service.price;
-        priceRange.push(price);
-      });
-      // console.log(priceRange);
-      artist.set('priceRange', priceRange);
-    });
-  }
-
   function getCurrentLocation() {
     // point = new Parse.GeoPoint({latitude: 10.349792530358712, longitude: 123.90758514404297});
     // getArtists(point);
-
-    map = plugin.google.maps.Map.getMap(document.getElementById("map_canvas1"));
-
-    map.addEventListener(plugin.google.maps.event.MAP_READY, function() {
-      map.getMyLocation({enableHighAccuracy: true }, function(location) {
-        point = new Parse.GeoPoint({latitude: location.latLng.lat, longitude: location.latLng.lng});
-        $rootScope.currentUserPosition = point;
-        getArtists(point);
-
-      }, function(err){
-        var options = {timeout: 10000, enableHighAccuracy: false };
-        $ionicLoading.show({
-          template: 'Finding Artists Near You :)'
-        }).then(function(){
-        });
-
-        $cordovaGeolocation.getCurrentPosition(options).then(function(position){
-          var point = new Parse.GeoPoint({latitude: position.coords.latitude, longitude: position.coords.longitude});
+    if(plugin){
+      map = plugin.google.maps.Map.getMap();
+      map.on(plugin.google.maps.event.MAP_READY, function() {
+        map.getMyLocation({enableHighAccuracy: true }, function(location) {
+          point = new Parse.GeoPoint({latitude: location.latLng.lat, longitude: location.latLng.lng});
           $rootScope.currentUserPosition = point;
           getArtists(point);
-
-        }, function(error){
-          $ionicLoading.hide();
-          $scope.isListEmpty = true;
-          var alertPopup = $ionicPopup.alert({
-            title: 'Find Location',
-            template: "Sorry we couldn't get your current location. <br><br> Please input your location in the search box above. <br><br> Sorry for the inconvenience."
+        }, function(err){
+          console.log('C');
+          var options = {timeout: 10000, enableHighAccuracy: false };
+          $ionicLoading.show({
+            template: 'Finding Artists Near You :)'
+          }).then(function(){
           });
 
-          alertPopup.then(function(res) {
+          $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+            var point = new Parse.GeoPoint({latitude: position.coords.latitude, longitude: position.coords.longitude});
+            $rootScope.currentUserPosition = point;
+            getArtists(point);
 
+          }, function(error){
+            $ionicLoading.hide();
+            $scope.isListEmpty = true;
+            var alertPopup = $ionicPopup.alert({
+              title: 'Find Location',
+              template: "Sorry we couldn't get your current location. <br><br> Please input your location in the search box above. <br><br> Sorry for the inconvenience."
+            });
+
+            alertPopup.then(function(res) {
+
+            });
           });
         });
       });
-    });
+    } else {
+      var alertPopup = $ionicPopup.alert({
+        title: 'Find Location',
+        template: "Sorry, This feature is not available in your device."
+      });
+
+      alertPopup.then(function(res) {
+        $state.go('app.home');
+      });
+    }
   }
 
   $scope.loadMoreArtists = function(){

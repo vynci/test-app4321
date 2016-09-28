@@ -1,0 +1,23 @@
+<ion-modal-view>
+	<ion-header-bar>
+		<h1 class="title">Quick Booking</h1>
+		<div class="buttons">
+			<button class="button button-icon icon ion-android-close" ng-click="closeModal()">
+			</button>
+		</div>
+	</ion-header-bar>
+	<ion-content style="padding-top: 25%;">
+		<div>
+			<div class="item" style="text-align: center; background: white; padding-top: 2px;">
+				<img ng-src="{{profile.attributes.avatar || spiral}}" class="blush-avatar" style="width: 100px; max-width: 100px; max-height: 100px; border-width: 3px; border-style: solid; border-color: goldenrod;">
+				<h2 style="color:black;">{{profile.attributes.firstName}} {{profile.attributes.lastName}}</h2>
+				<p style="color:#444;">{{profile.attributes.serviceType}}</p>
+				<br>
+				<p style="color:#444;">{{randomDistance}} meters away from you.</p>
+				<br>
+				<button class="button button-positive button-outline button-block" ng-click="changeToMapView()">View in Map</button>
+				<button class="button button-positive button-block" ng-click="bookSelectedArtist()">Continue Booking Artist</button>
+		</div>
+	</div>
+	</ion-content>
+</ion-modal-view>
