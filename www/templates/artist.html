@@ -1,33 +1,51 @@
-<ion-view view-title="">
+<ion-view view-title="Booking">
+
   <ion-content>
-    <div>
-      <div class="item" style="text-align: center; background: white; padding-top: 2px;">
-        <img ng-src="{{profile.avatar || spiral}}" class="blush-avatar" style="width: 100px; max-width: 100px; max-height: 100px; border-width: 3px; border-style: solid; border-color: goldenrod;">
-        <h2 style="color:black;">{{profile.firstName}} {{profile.lastName}}</h2>
-        <p style="color:#444;">{{profile.serviceType}}</p>
-        <!-- <p>
-          <i class="ion-android-star energized"></i>
-          <i class="ion-android-star energized"></i>
-          <i class="ion-android-star energized"></i>
-          <i class="ion-android-star energized"></i>
-          <i class="ion-android-star-half energized"></i>
-        </p> -->
-        <button class="button button-positive button-small" ng-click="followArtist()"><i class="ion-person-add"> Follow</i></button>
-        <a class="button button-positive button-small" ng-href="#/app/chat-view/{{artistId}}"><i class="ion-ios-chatboxes"> Message</i></a>
+    <div style="background: #f1807a; padding-top: 10px;">
+      <div class="row">
+        <div class="col col-90" style="padding:0px; padding-left:10%;">
+          <div class="item" style="background: #f1807a; text-align: center;">
+            <img ng-src="{{profile.avatar || spiral}}" class="blush-avatar" style="width: 100px; max-width: 100px; max-height: 100px; border-width: 7px; border-style: double; border-color: white;">
+            <h2 style="color: white;">{{profile.firstName}} {{profile.lastName}}</h2>
+            <p style="color: white; font-size: 12px;">{{profile.serviceType}}  |  350 meters away from you</p>
+            <!-- <p>
+            <i class="ion-android-star energized"></i>
+            <i class="ion-android-star energized"></i>
+            <i class="ion-android-star energized"></i>
+            <i class="ion-android-star energized"></i>
+            <i class="ion-android-star-half energized"></i>
+          </p> -->
+          <!-- <button class="button button-positive button-small" ng-click="followArtist()"><i class="ion-person-add"> Follow</i></button>
+          <a class="button button-positive button-small" ng-href="#/app/chat-view/{{artistId}}"><i class="ion-ios-chatboxes"> Message</i></a> -->
+        </div>
+        </div>
+        <div class="col" style="padding:0px; text-align: center; padding-top: 10px;">
+          <div>
+            <i class="ion-ios-chatbubble" style="font-size: 28px; color: white;"></i>
+          </div>
+          <br>
+          <div>
+            <i class="ion-information-circled" style="font-size: 24px; color: white;"></i>
+          </div>
+          <br>
+          <div>
+            <i class="ion-android-person-add" style="font-size: 24px; color: white;"></i>
+          </div>
+        </div>
       </div>
     </div>
 
     <ion-tabs class="tabs-assertive tabs-color-light tabs-icon-top">
 
-      <ion-tab on-select="changeTab('services')" title="Services" icon-on="ion-ios-rose" icon-off="ion-ios-rose-outline">
+      <ion-tab on-select="changeTab('services')" title="Services" icon-on="ion-paintbrush" icon-off="ion-paintbrush">
         <!-- Tab 1 content -->
       </ion-tab>
 
-      <ion-tab on-select="changeTab('portfolio')" title="Portfolio" icon-on="ion-ios-person" icon-off="ion-ios-person-outline">
+      <ion-tab on-select="changeTab('portfolio')" title="Portfolio" icon-on="ion-android-person" icon-off="ion-android-person">
         <!-- Tab 2 content -->
       </ion-tab>
 
-      <ion-tab on-select="changeTab('reviews')" title="Reviews" icon-on="ion-ios-compose" icon-off="ion-ios-compose-outline">
+      <ion-tab on-select="changeTab('reviews')" title="Reviews" icon-on="ion-compose" icon-off="ion-compose">
         <!-- Tab 3 content -->
       </ion-tab>
 
@@ -38,16 +56,28 @@
       <div ng-if="!artistServices.length" class="item" style="text-align: center; white-space: normal;">Sorry, {{profile.firstName}} doesn't have any services yet.</div>
 
       <ion-list>
-        <ion-checkbox ng-click="toggleSelection(service)" ng-checked="service.checked" ng-repeat="service in artistServices">
-          <b>{{service.attributes.name}}</b>
-          <p>{{service.attributes.duration}} mins</p>
-          <p style="white-space: normal;">{{service.attributes.description}}
-          </p>
-          <br>
-          <span class="item-note">
+        <div ng-repeat="service in artistServices" style="border-bottom-color: lightgray; border-bottom-width: 2px; border-bottom-style: dashed;">
+          <ion-checkbox ng-click="toggleSelection(service)" ng-checked="service.checked">
+            <div class="row" style="padding: 0px;">
+              <div class="col-75" style="padding: 0px;"><b>{{service.attributes.name}}</b></div>
+              <div class="col" style="padding: 0px; text-align: right;"><b>₱{{service.attributes.price}}</b></div>
+            </div>
+
+            <p>{{service.attributes.duration}} mins</p>
+            <p style="white-space: normal;">{{service.attributes.description}}
+            </p>
+            <!-- <br> -->
+            <!-- <span class="item-note">
             ₱{{service.attributes.price}}
-          </span>
+          </span> -->
         </ion-checkbox>
+        <div class="row" style="padding-left: 15%; padding-right: 10%;">
+          <div class="col"><img ng-src="{{service.attributes.servicePhotos[0].path}}" alt="" style="width: 100%;"></div>
+          <div class="col"><img ng-src="{{service.attributes.servicePhotos[1].path}}" alt="" style="width: 100%;"></div>
+          <div class="col"><img ng-src="{{service.attributes.servicePhotos[2].path}}" alt="" style="width: 100%;"></div>
+          <div class="col"><img ng-src="{{service.attributes.servicePhotos[3].path}}" alt="" style="width: 100%;"></div>
+        </div>
+        </div>
 
 
       </ion-list>
@@ -90,10 +120,10 @@
   <div ng-style="{opacity : ((totalBill > 0) && '1') || '0.8'}" ng-if="selectedTab === 'services'" class="item item-divider blush-background-alt" style="position: fixed; bottom: 0; width: 100%; padding-top: 1px;
   padding-bottom: 1px; padding-right: 5px;">
     <div class="row">
-      <div class="col">Total Bill:</div>
-      <div class="col text-left"><b>₱{{totalBill}}</b></div>
+      <div class="col" style="padding-top: 15px;"><span>Total Bill:</span></div>
+      <div class="col text-left" style="padding-top: 15px;"><b>₱{{totalBill}}</b></div>
       <div class="col col-50"><button class="button button-block button-small button-energized" style="margin-top: 0px;
-        margin-bottom: 0px;" ng-click="book()" ng-disabled="!totalBill"><b>Book Now! <i class="icon ion-chevron-right"></i></b></button></div>
+        margin-bottom: 0px; background: #b7d05b; border-radius:30px; height: 40px;" ng-click="book()" ng-disabled="!totalBill"><b style="font-size: 16px;">Book Now! <i class="icon ion-chevron-right"></i></b></button></div>
     </div>
   </div>
 </ion-view>

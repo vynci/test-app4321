@@ -25,6 +25,8 @@ angular.module('starter.controllers', [])
     password : ''
   }
 
+  $scope.spiral = "img/02.jpg"
+
   $ionicModal.fromTemplateUrl('templates/login.html', {
     scope: $scope
   }).then(function(modal) {
@@ -119,7 +121,7 @@ angular.module('starter.controllers', [])
       $scope.modal.show();
       $ionicHistory.nextViewOptions({
         disableBack: true
-      });         
+      });
       $state.transitionTo('app.home', null, {reload: true, notify:true});
     });
   }

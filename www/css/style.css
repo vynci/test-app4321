@@ -1,7 +1,12 @@
 /* Empty. Add your own CSS if you like */
 
+@font-face {
+	font-family: Raleway;
+	src: url(fonts/Raleway-Regular.ttf);
+}
+
 .body{
-	font-family: monospace;
+	font-family: Raleway !important;
 }
 
 .item {
@@ -23,7 +28,29 @@
 #home-find : hover {
 	background-color: #46000D;
 }
+
 /* ionic overrides*/
+
+p {
+	font-family: RaleWay;
+}
+
+h1,h2,h3,h4{
+	font-family: RaleWay;
+}
+
+b, strong {
+	font-family: RaleWay;
+}
+
+span {
+	font-family: RaleWay;
+}
+
+.bar .title {
+	font-family: RaleWay;
+}
+
 .bar {
 	background-image: none;
 }
@@ -90,8 +117,8 @@ input.ion-google-place[readonly]{
 }
 
 .checkbox input:checked:before, .checkbox input:checked + .checkbox-icon:before {
-	background: #6cffdc;
-	border-color: #6cffdc;
+	background: #f1807a;
+	border-color: #f1807a;
 }
 
 .bar.bar-stable {
@@ -112,10 +139,16 @@ input.ion-google-place[readonly]{
 	border-bottom-width: 0px;
 }
 
+.tab-item .icon {
+	font-size: 26px;
+}
+
 .tabs-assertive > .tabs {
-	background-color: #ff6c8f;
+	background-color: #443b3e;
 	height: 65px;
 	padding-top: 10px;
+	border-color: #443b3e;
+	background-image: none;
 }
 
 .tabs-striped.tabs-assertive .tabs {
@@ -226,18 +259,27 @@ a {
 	padding-top: 4%;
 }
 
+.login-button {
+	border-radius: 30px !important;
+	height: 50px !important;
+}
+
 .login-text {
-	color : rgba(68, 68, 68, 0.74) !important;
+	color: #444 !important;
+	text-align: center;
 }
 
 .login-input {
-	border-bottom-color: rgba(68, 68, 68, 0.74) !important;
-	border-bottom-width: 1px !important;
-	border-bottom-style: solid !important;
+	border-width: 1px !important;
+	border-style: solid !important;
+	border-radius: 30px !important;
+	height: 50px !important;
+	background: white !important;
+	padding-right: 0px !important;
 }
 
 .blush-background {
-	background: white;
+	background: #f4eae9;
 
 
 	/*background: #eacda3; /* fallback for old browsers */*/
@@ -250,8 +292,8 @@ a {
 	/*background: #50C9C3;
 	background: -webkit-linear-gradient(to left, #50C9C3 , #96DEDA);
 	background: linear-gradient(to left, #50C9C3 , #96DEDA) !important;*/
-	background : #ffb9c9;
-	color: white;
+	background : #eee4e5;
+	color: #443b3e;
 }
 
 .blush-background-pink {
@@ -259,13 +301,13 @@ a {
 	color: white;
 }
 
-.blush-button-teal {
+.blush-button-brown {
+	background: #574C4F !important;
+	color: white !important;
+}
 
-
-	background: #50C9C3;
-	background: -webkit-linear-gradient(to left, #50C9C3 , #96DEDA);
-	background: linear-gradient(to left, #50C9C3 , #96DEDA) !important;
-
+.blush-brown {
+	color: #443b3e !important;
 }
 
 /* Home Style */
@@ -440,7 +482,7 @@ img.profile-pic.right {
 }
 
 input, textarea, .item-input, .item-input-wrapper {
-	background-color: white !important;
+	background-color: #F4EAE9 !important;
 }
 
 .bold {
