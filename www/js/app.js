@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-var app = angular.module('starter', ['ionic', 'starter.controllers', 'angular-spinkit', 'ion-datetime-picker', 'ionic.rating', 'angularMoment', 'ngCordova', 'ion-google-place'])
+var app = angular.module('starter', ['ionic', 'starter.controllers', 'angular-spinkit', 'ion-datetime-picker', 'ionic.rating', 'angularMoment', 'ngCordova', 'ion-google-place', 'pubnub.angular.service'])
 
 app.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -65,7 +65,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
   })
 
   .state('app.chatView', {
-    url: '/chat-view/:artistId',
+    url: '/chat-view/:chatId/:artistId',
     views: {
       'menuContent': {
         templateUrl: 'templates/chat-view.html',
@@ -124,6 +124,15 @@ app.config(function($stateProvider, $urlRouterProvider) {
     }
   })
 
+  .state('app.inbox', {
+    url: '/inbox',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/inbox.html',
+        controller: 'ChatsCtrl'
+      }
+    }
+  })
 
   .state('app.discover', {
       url: '/discover',

@@ -1,0 +1,18 @@
+<ion-view view-title="Inbox">
+	<ion-content>
+		<ion-list>
+			<ion-item class="item-avatar item-icon-right" ng-repeat="thread in threads" type="item-text-wrap" href="#/app/chat-view/{{thread.id}}/{{thread.attributes.artistInfo.id}}">
+				<img ng-src="{{thread.attributes.artistInfo.avatar}}">
+				<h2>{{thread.attributes.artistInfo.firstName}} {{thread.attributes.artistInfo.lastName}}</h2>
+				<p>{{thread.attributes.lastMessage}}</p>
+				<!-- <p style="font-size: 11px;">{{thread.attributes.updatedAt.toString() | limitTo:21}}</p> -->
+				<span am-time-ago="thread.attributes.updatedAt" style="font-size: 11px;"></span>
+				<i class="icon ion-chevron-right icon-accessory"></i>
+
+				<ion-option-button class="button-assertive" ng-click="remove(chat)">
+					Delete
+				</ion-option-button>
+			</ion-item>
+		</ion-list>
+	</ion-content>
+</ion-view>

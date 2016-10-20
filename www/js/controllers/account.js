@@ -1,9 +1,10 @@
 
 app.controller('AccountCtrl', function($scope, $ionicModal, $timeout, customerService, $ionicLoading, $rootScope, $ionicPopup) {
 
-  $scope.customerProfile = {};
-
-  getCustomerProfile();
+  $scope.$on('$ionicView.enter', function() {
+    $scope.customerProfile = {};
+    getCustomerProfile();
+  });
 
   function getCustomerProfile(){
     $ionicLoading.show({

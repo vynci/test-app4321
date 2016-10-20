@@ -1,15 +1,12 @@
 
 app.controller('ChatViewCtrl', ['$scope', '$rootScope', '$state',
 '$stateParams', 'MockService', '$ionicActionSheet',
-'$ionicPopup', '$ionicScrollDelegate', '$timeout', '$interval','artistService', 'customerService', '$ionicLoading',
+'$ionicPopup', '$ionicScrollDelegate', '$timeout', '$interval', '$ionicLoading', 'messageService', 'artistService', 'customerService', '$ionicScrollDelegate', 'Pubnub',
 function($scope, $rootScope, $state, $stateParams, MockService,
-  $ionicActionSheet,
-  $ionicPopup, $ionicScrollDelegate, $timeout, $interval, artistService, customerService, $ionicLoading) {
+  $ionicActionSheet, $ionicPopup, $ionicScrollDelegate, $timeout, $interval, $ionicLoading, messageService, artistService, customerService, $ionicScrollDelegate, Pubnub) {
 
     // mock acquiring data via $stateParams
     console.log($stateParams);
-
-    getArtistById($stateParams.artistId);
 
     $scope.profile = {};
     $scope.spiral = 'img/placeholder.png';
@@ -22,49 +19,85 @@ function($scope, $rootScope, $state, $stateParams, MockService,
 
     // this could be on $rootScope rather than in $stateParams
     $scope.user = {
-      _id: '534b8fb2aa5e7afc1b23e69c',
+      _id: Parse.User.current().get('profileId'),
       pic: $scope.spiral,
       username: 'Anonymous'
     };
 
-    function getCustomerProfile(){
-      if($rootScope.currentUser){
-        customerService.getCustomerById($rootScope.currentUser.get('profileId'))
-        .then(function(results) {
-          // Handle the result
-          console.log(results);
-          $scope.currentCustomerProfile = results[0];
+    $rootScope.getStreamMessage = function(messageObj){
+      if(messageObj.content){
 
-          $scope.user.username = results[0].get('firstName') + ' ' + results[0].get('lastName');
+        var Message = Parse.Object.extend("Message");
+        var message = new Message();
 
-          $ionicLoading.hide();
-        }, function(err) {
-          // Error occurred
-          console.log(err);
-        }, function(percentComplete) {
-          console.log(percentComplete);
-        });
-      }
-      else{
-        $ionicLoading.hide();
+        message.id = messageObj.content.objectId;
+        message.set("createdAt", messageObj.content.createdAt)
+        message.set("threadId", messageObj.content.threadId);
+        message.set("message", messageObj.content.message);
+        message.set("userId", messageObj.content.message.userId);
+
+        $scope.messages.push(message);
+        console.log('message pushed');
+        $timeout(function() {
+          viewScroll.scrollBottom();
+        }, 0);
       }
     }
 
-    function getArtistById(id){
+    function getMessagesApi(){
+      messageService.getMessageById($stateParams.chatId)
+      .then(function(results) {
+        // Handle the result
+        console.log(results);
+        $scope.messages = results;
+        $ionicLoading.hide();
+        $ionicScrollDelegate.scrollBottom();
+      }, function(err) {
+        $ionicLoading.hide();
+        // Error occurred
+        console.log(err);
+      }, function(percentComplete) {
+        console.log(percentComplete);
+      });
+    }
+
+    function getCustomerProfile(id){
+
       $ionicLoading.show({
         template: 'Loading :)'
       }).then(function(){
         console.log("The loading indicator is now displayed");
       });
 
+      customerService.getCustomerById(id)
+      .then(function(results) {
+        // Handle the result
+        console.log(results);
+        $scope.currentCustomerProfile = results[0];
+
+        $scope.user.username = results[0].get('firstName') + ' ' + results[0].get('lastName');
+        $scope.user.pic = results[0].get('avatar');
+
+        getArtistById($stateParams.artistId)
+
+      }, function(err) {
+        // Error occurred
+        $ionicLoading.hide();
+        console.log(err);
+      }, function(percentComplete) {
+        console.log(percentComplete);
+      });
+    }
+
+    function getArtistById(id){
       artistService.getArtistById(id)
       .then(function(results) {
         // Handle the result
         $scope.profile = results[0].attributes;
         $scope.toUser.username = $scope.profile.firstName + ' ' + $scope.profile.lastName,
         $scope.toUser.pic = $scope.profile.avatar;
-        getCustomerProfile();
 
+        getMessagesApi();
       }, function(err) {
         // Error occurred
         $ionicLoading.hide();
@@ -86,8 +119,8 @@ function($scope, $rootScope, $state, $stateParams, MockService,
 
     $scope.$on('$ionicView.enter', function() {
       console.log('UserMessages $ionicView.enter');
-
-      getMessages();
+      // getArtistById(Parse.User.current().get('profileId'));
+      getCustomerProfile(Parse.User.current().get('profileId'));
 
       $timeout(function() {
         footerBar = document.body.querySelector('#userMessagesView .bar-footer');
@@ -136,47 +169,72 @@ function($scope, $rootScope, $state, $stateParams, MockService,
     });
 
     $scope.sendMessage = function(sendMessageForm) {
-      var message = {
-        toId: $scope.toUser._id,
-        text: $scope.input.message
-      };
+      var message = $scope.input.message;
 
       // if you do a web service call this will be needed as well as before the viewScroll calls
       // you can't see the effect of this in the browser it needs to be used on a real device
       // for some reason the one time blur event is not firing in the browser but does on devices
       keepKeyboardOpen();
 
-      //MockService.sendMessage(message).then(function(data) {
       $scope.input.message = '';
 
-      message._id = new Date().getTime(); // :~)
-      message.date = new Date();
-      message.username = $scope.user.username;
-      message.userId = $scope.user._id;
-      message.pic = $scope.user.picture;
-
-      $scope.messages.push(message);
+      createMessage(message)
 
       $timeout(function() {
         keepKeyboardOpen();
         viewScroll.scrollBottom(true);
       }, 0);
 
-      $timeout(function() {
-
-        var username = 'Anonymous';
-
-        if($scope.currentCustomerProfile){
-          var username = $scope.currentCustomerProfile.get('firstName');
-        }
-
-        $scope.messages.push(MockService.getMockMessage(username));
-        keepKeyboardOpen();
-        viewScroll.scrollBottom(true);
-      }, 1000);
-
-      //});
     };
+
+    function createMessage(messageTxt){
+      var Message = Parse.Object.extend("Message");
+      var message = new Message();
+
+      message.set("threadId", $stateParams.chatId);
+      message.set("message", messageTxt);
+      message.set("userId", Parse.User.current().get('profileId'));
+      $scope.messages.push(message);
+      message.save(null, {
+        success: function(result) {
+          // Execute any logic that should take place after the object is saved.
+          console.log(result);
+          var Thread = Parse.Object.extend("Thread");
+          var thread = new Thread();
+
+          thread.id = $stateParams.chatId;
+          thread.set("lastMessage", messageTxt);
+
+          thread.save(null, {
+            success: function(result) {
+              // Execute any logic that should take place after the object is saved.
+              console.log('last message success');
+              Pubnub.publish({
+                channel: 'message/' + $stateParams.artistId,
+                message: {
+                  content: message,
+                  sender: {
+                    name: $scope.user.username,
+                    avatar : $scope.user.pic
+                  },
+                  date: new Date()
+                },
+                callback: function(m) {
+                  console.log(m);
+                }
+              });
+            },
+            error: function(gameScore, error) {
+              message.set("isFail", true);
+            }
+          });
+
+        },
+        error: function(gameScore, error) {
+          message.set("isFail", true);
+        }
+      });
+    }
 
     // this keeps the keyboard open on a device only after sending a message, it is non obtrusive
     function keepKeyboardOpen() {
@@ -189,41 +247,38 @@ function($scope, $rootScope, $state, $stateParams, MockService,
 
     $scope.onMessageHold = function(e, itemIndex, message) {
       console.log('onMessageHold');
-      console.log('message: ' + JSON.stringify(message, null, 2));
-      $ionicActionSheet.show({
-        buttons: [{
-          text: 'Copy Text'
-        }, {
-          text: 'Delete Message'
-        }],
-        buttonClicked: function(index) {
-          switch (index) {
-            case 0: // Copy Text
-            //cordova.plugins.clipboard.copy(message.text);
-
-            break;
-            case 1: // Delete
-            // no server side secrets here :~)
-            $scope.messages.splice(itemIndex, 1);
-            $timeout(function() {
-              viewScroll.resize();
-            }, 0);
-
-            break;
-          }
-
-          return true;
-        }
-      });
+      // console.log('message: ' + JSON.stringify(message, null, 2));
+      // $ionicActionSheet.show({
+      // 	buttons: [{
+      // 		text: 'Copy Text'
+      // 	}, {
+      // 		text: 'Delete Message'
+      // 	}],
+      // 	buttonClicked: function(index) {
+      // 		switch (index) {
+      // 			case 0: // Copy Text
+      // 			//cordova.plugins.clipboard.copy(message.text);
+      //
+      // 			break;
+      // 			case 1: // Delete
+      // 			// no server side secrets here :~)
+      // 			$scope.messages.splice(itemIndex, 1);
+      // 			$timeout(function() {
+      // 				viewScroll.resize();
+      // 			}, 0);
+      //
+      // 			break;
+      // 		}
+      //
+      // 		return true;
+      // 	}
+      // });
     };
 
     // this prob seems weird here but I have reasons for this in my app, secret!
     $scope.viewProfile = function(msg) {
-      if (msg.userId === $scope.user._id) {
-        // go to your profile
-      } else {
-        // go to other users profile
-      }
+      console.log(msg);
+      $state.go('app.artist', {artistId: msg.get('userId')});
     };
 
     // I emit this event from the monospaced.elastic directive, read line 480

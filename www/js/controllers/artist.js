@@ -1,5 +1,5 @@
 
-app.controller('ArtistCtrl', function($scope, $ionicModal, $timeout, $ionicLoading, $stateParams, artistService, $state, $rootScope, $ionicModal, serviceService, portfolioService, reviewService, $ionicPopup) {
+app.controller('ArtistCtrl', function($scope, $ionicModal, $timeout, $ionicLoading, $stateParams, artistService, $state, $rootScope, $ionicModal, serviceService, portfolioService, reviewService, $ionicPopup, threadService, customerService) {
 
   console.log($stateParams);
 
@@ -96,6 +96,64 @@ app.controller('ArtistCtrl', function($scope, $ionicModal, $timeout, $ionicLoadi
     });
   }
 
+  function createNewThread(customer){
+    var Thread = Parse.Object.extend("Thread");
+    var thread = new Thread();
+
+    thread.set("lastMessage", '');
+    thread.set("messages", []);
+    thread.set("artistInfo", {
+      "id": $stateParams.artistId,
+      "firstName": $scope.profile.firstName,
+      "lastName": $scope.profile.lastName,
+      "avatar": $scope.profile.avatar
+    });
+
+    thread.set("customerInfo", {
+      "id": Parse.User.current().get('profileId'),
+      "firstName": customer.get('firstName'),
+      "lastName": customer.get('lastName'),
+      "avatar": customer.get('avatar') || 'img/portfolio/c.jpg'
+    });
+
+    thread.save(null, {
+      success: function(result) {
+        // Execute any logic that should take place after the object is saved.
+        console.log('last message success');
+        $state.go('app.chatView', {artistId: $scope.artistId, chatId: result.id});
+        $ionicLoading.hide();
+      },
+      error: function(gameScore, error) {
+        $ionicLoading.hide();
+      }
+    });
+  }
+
+  function getCustomerProfile(){
+    $ionicLoading.show({
+      template: 'Loading :)'
+    }).then(function(){
+    });
+
+    if(Parse.User.current()){
+      customerService.getCustomerById(Parse.User.current().get('profileId'))
+      .then(function(results) {
+        // Handle the result
+        createNewThread(results[0]);
+
+
+        return results;
+      }, function(err) {
+        // Error occurred
+        $ionicLoading.hide();
+        console.log(err);
+      }, function(percentComplete) {
+        console.log(percentComplete);
+      });
+    }
+  }
+
+
   function removeArray(arr) {
     var what, a = arguments, L = a.length, ax;
     while (L > 1 && arr.length) {
@@ -111,6 +169,28 @@ app.controller('ArtistCtrl', function($scope, $ionicModal, $timeout, $ionicLoadi
     for(var i = 0; i < 10; i++) {
       $scope.images.push({id: i, src: "http://placehold.it/200x200"});
     }
+  }
+
+  $scope.messageArtist = function(){
+    threadService.isThreadExist(Parse.User.current().get('profileId'), $scope.artistId)
+    .then(function(results) {
+      // Handle the result
+      console.log(results);
+      if(results.length){
+        $state.go('app.chatView', {artistId: $scope.artistId, chatId: results[0].id});
+      }else{
+        console.log('create new thread');
+        getCustomerProfile();
+      }
+
+      return results;
+    }, function(err) {
+      $ionicLoading.hide();
+      // Error occurred
+      console.log(err);
+    }, function(percentComplete) {
+      console.log(percentComplete);
+    });
   }
 
   $scope.followArtist = function() {

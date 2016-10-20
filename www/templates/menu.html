@@ -18,16 +18,32 @@
   </ion-side-menu-content>
 
   <ion-side-menu side="left">
-    <ion-header-bar class="bar-stable" style="height: 190px; background: #f1807a !important;">
+    <ion-header-bar class="bar-stable" style="height: 190px; background: #f1807a !important; padding-left: 0px !important;">
       <div style="width: 275px; text-align: center;">
         <div style="padding-top: 20px;">
-          <img ng-src="{{profile.avatar || spiral}}" class="blush-avatar" style="width: 100px; max-width: 100px; max-height: 100px; border-width: 7px; border-style: double; border-color: white;">
+          <img ng-src="{{currentCustomer.attributes.avatar || profilePicTemp}}" class="blush-avatar" style="width: 100px; max-width: 100px; max-height: 100px; border-width: 7px; border-style: double; border-color: white;">
         </div>
 
         <div style="padding-top: 10px; font-size: 16px;">
-          <span style="color: white;"> Arya Stark </span>
-          <span style="color: white; padding-left: 18px; padding-right: 18px;"> | </span>
-          <span style="color: white;"> Log Out </span>
+          <button ng-hide="currentUser" ng-click="showRegisterForm()" class="button button-clear button-clear" style="padding: 0px; color: white;">
+            <span> Sign Up </span>
+          </button>
+
+          <button ng-show="currentUser" ng-click="viewProfile()" class="button button-clear button-clear" style="padding: 0px; color: white;">
+            <span> {{currentCustomer.attributes.firstName}} {{currentCustomer.attributes.lastName}} </span>
+          </button>
+
+          <button class="button button-clear button-clear" style="padding: 0px; color: white; padding-left: 15px; padding-right: 15px;">
+            <span> | </span>
+          </button>
+
+          <button ng-hide="currentUser" ng-click="login()" class="button button-clear button-clear" style="padding: 0px; color: white;">
+            <span> Log In </span>
+          </button>
+
+          <button ng-show="currentUser" ng-click="doLogout()" class="button button-clear button-clear" style="padding: 0px; color: white;">
+            <span> Log Out </span>
+          </button>
         </div>
 
 
@@ -38,17 +54,23 @@
       <ion-list>
         <div style="padding-top: 150px !important;">
           <ion-item menu-close href="#/app/home">
-            Home
+            <i class="icon ion-ios-home-outline" style="font-size: 26px; padding-right:15px;"></i> Home
           </ion-item>
           <ion-item menu-close href="#/app/artistlist">
-            Find Artists
+            <i class="icon ion-ios-location-outline" style="font-size: 26px; padding-right:20px;"></i> Find Artists
           </ion-item>
           <ion-item menu-close href="#/app/discover">
-            Daily Trends
+            <i class="icon ion-ios-glasses-outline" style="font-size: 26px; padding-right:12px;"></i> Daily Trends
           </ion-item>
-          <ion-item menu-close>
-            Quick Booking
+          <ion-item menu-close href="#">
+
+            <i class="icon ion-ios-bolt-outline" style="font-size: 26px; padding-right:22px;"></i> Quick Booking
           </ion-item>
+
+          <ion-item ng-show="currentUser" menu-close href="#/app/inbox" style="border-top-width: 1px !important; border-top-color: gray; border-top-style: dashed;">
+            <i class="icon ion-ios-email-outline" style="font-size: 26px; padding-right:15px;"></i> Inbox
+          </ion-item>
+
 
 
           <!-- <div class="item item-divider">

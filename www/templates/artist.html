@@ -4,9 +4,9 @@
     <div style="background: #f1807a; padding-top: 10px;">
       <div class="row">
         <div class="col col-90" style="padding:0px; padding-left:10%;">
-          <div class="item" style="background: #f1807a; text-align: center;">
+          <div class="item" style="background: #f1807a; text-align: center; padding: 10px;">
             <img ng-src="{{profile.avatar || spiral}}" class="blush-avatar" style="width: 100px; max-width: 100px; max-height: 100px; border-width: 7px; border-style: double; border-color: white;">
-            <h2 style="color: white;">{{profile.firstName}} {{profile.lastName}}</h2>
+            <h2 style="color: white;"><b>{{profile.firstName}} {{profile.lastName}}</b></h2>
             <p style="color: white; font-size: 12px;">{{profile.serviceType}}  |  350 meters away from you</p>
             <!-- <p>
             <i class="ion-android-star energized"></i>
@@ -19,17 +19,18 @@
           <a class="button button-positive button-small" ng-href="#/app/chat-view/{{artistId}}"><i class="ion-ios-chatboxes"> Message</i></a> -->
         </div>
         </div>
-        <div class="col" style="padding:0px; text-align: center; padding-top: 10px;">
+        <div class="col" style="padding:0px; text-align: center; padding-top: 5px;">
           <div>
-            <i class="ion-ios-chatbubble" style="font-size: 28px; color: white;"></i>
+            <button ng-click="messageArtist()" class="button button-icon button-clear ion-ios-chatbubble button-clear" style="padding: 0px; font-size: 28px; color: white;">
+            </button>
           </div>
-          <br>
           <div>
-            <i class="ion-information-circled" style="font-size: 24px; color: white;"></i>
+            <button class="button button-icon button-clear ion-information-circled button-clear" style="padding: 0px; font-size: 24px; color: white;">
+            </button>
           </div>
-          <br>
           <div>
-            <i class="ion-android-person-add" style="font-size: 24px; color: white;"></i>
+            <button class="button button-icon button-clear ion-android-person-add button-clear" style="padding: 0px; font-size: 24px; color: white;">
+            </button>
           </div>
         </div>
       </div>
@@ -76,6 +77,7 @@
           <div class="col"><img ng-src="{{service.attributes.servicePhotos[1].path}}" alt="" style="width: 100%;"></div>
           <div class="col"><img ng-src="{{service.attributes.servicePhotos[2].path}}" alt="" style="width: 100%;"></div>
           <div class="col"><img ng-src="{{service.attributes.servicePhotos[3].path}}" alt="" style="width: 100%;"></div>
+          <div class="col"><img ng-src="{{service.attributes.servicePhotos[2].path}}" alt="" style="width: 100%;"></div>
         </div>
         </div>
 

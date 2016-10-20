@@ -30,6 +30,9 @@
 }
 
 /* ionic overrides*/
+a {
+	font-family: RaleWay;
+}
 
 p {
 	font-family: RaleWay;
@@ -45,6 +48,10 @@ b, strong {
 
 span {
 	font-family: RaleWay;
+}
+
+.popup-container .popup {
+	width: 90% !important;
 }
 
 .bar .title {
