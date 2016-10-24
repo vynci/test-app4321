@@ -87,13 +87,13 @@
 
     <div ng-if="selectedTab === 'portfolio'">
       <div class="row" ng-repeat="image in artistPortfolio" ng-if="$index % 3 === 0">
-        <div class="col col-33" ng-if="$index < artistPortfolio.length">
+        <div class="col col-33" ng-if="$index < artistPortfolio.length" style="height: 90px !important; overflow: hidden !important;">
           <img ng-src="{{artistPortfolio[$index].attributes.imagePath}}" spinkit-image-preloader='chasing-dots-spinner' width="100%" />
         </div>
-        <div class="col col-33" ng-if="$index + 1 < artistPortfolio.length">
+        <div class="col col-33" ng-if="$index + 1 < artistPortfolio.length" style="height: 90px !important; overflow: hidden !important;">
           <img ng-src="{{artistPortfolio[$index + 1].attributes.imagePath}}" spinkit-image-preloader='chasing-dots-spinner' width="100%" />
         </div>
-        <div class="col col-33" ng-if="$index + 2 < artistPortfolio.length">
+        <div class="col col-33" ng-if="$index + 2 < artistPortfolio.length" style="height: 90px !important; overflow: hidden !important;">
           <img ng-src="{{artistPortfolio[$index + 2].attributes.imagePath}}" spinkit-image-preloader='chasing-dots-spinner' width="100%" />
         </div>
       </div>
