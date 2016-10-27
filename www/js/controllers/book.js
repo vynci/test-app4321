@@ -36,6 +36,7 @@ app.controller('BookCtrl', function($scope, $ionicModal, $timeout, serviceServic
       booking.set('paymentMode', $scope.choice.name);
       booking.set('totalBill', $scope.totalBill);
       booking.set('schedule', $scope.datetimeValue);
+      booking.set('status', 'pending');
 
       booking.save(null, {
         success: function(result) {

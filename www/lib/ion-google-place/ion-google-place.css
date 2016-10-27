@@ -6,10 +6,12 @@
     left: 0;
     z-index: 20;
     display: none;
+    background-color: transparent;
 }
 
 
 input.ion-google-place[readonly]{
-    background-color: transparent;
     cursor: text;
+    background-color: white !important;
+    border-radius: 30px;
 }

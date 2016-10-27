@@ -147,6 +147,16 @@ app.controller('ArtistListViewCtrl', function($scope, $ionicModal, $timeout, $io
     return response;
   };
 
+  $scope.parseAddress = function(address){
+    var parsed = '';
+
+    if(address){
+      parsed = '(' + address + ')';
+    }
+
+    return parsed;
+  }
+
   $scope.$watch('position.search', function(value, old) {
     if(value.geometry){
       var point = new Parse.GeoPoint({latitude: value.geometry.location.lat(), longitude: value.geometry.location.lng()});

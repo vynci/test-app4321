@@ -29,7 +29,7 @@
             </button>
           </div>
           <div>
-            <button class="button button-icon button-clear ion-android-person-add button-clear" style="padding: 0px; font-size: 24px; color: white;">
+            <button class="button button-icon button-clear ion-android-person-add button-clear" ng-click="followArtist()" style="padding: 0px; font-size: 24px; color: white;">
             </button>
           </div>
         </div>
@@ -73,11 +73,11 @@
           </span> -->
         </ion-checkbox>
         <div class="row" style="padding-left: 15%; padding-right: 10%;">
-          <div class="col"><img ng-src="{{service.attributes.servicePhotos[0].path}}" alt="" style="width: 100%;"></div>
-          <div class="col"><img ng-src="{{service.attributes.servicePhotos[1].path}}" alt="" style="width: 100%;"></div>
-          <div class="col"><img ng-src="{{service.attributes.servicePhotos[2].path}}" alt="" style="width: 100%;"></div>
-          <div class="col"><img ng-src="{{service.attributes.servicePhotos[3].path}}" alt="" style="width: 100%;"></div>
-          <div class="col"><img ng-src="{{service.attributes.servicePhotos[2].path}}" alt="" style="width: 100%;"></div>
+          <div class="col"><img ng-src="{{service.attributes.servicePhotos[0].path}}" alt="" style="width: 100%;" ng-click="viewPortfolio(service.attributes.servicePhotos[0].path)"></div>
+          <div class="col"><img ng-src="{{service.attributes.servicePhotos[1].path}}" alt="" style="width: 100%;" ng-click="viewPortfolio(service.attributes.servicePhotos[1].path)"></div>
+          <div class="col"><img ng-src="{{service.attributes.servicePhotos[2].path}}" alt="" style="width: 100%;" ng-click="viewPortfolio(service.attributes.servicePhotos[2].path)"></div>
+          <div class="col"><img ng-src="{{service.attributes.servicePhotos[3].path}}" alt="" style="width: 100%;" ng-click="viewPortfolio(service.attributes.servicePhotos[3].path)"></div>
+          <div class="col"><img ng-src="{{service.attributes.servicePhotos[2].path}}" alt="" style="width: 100%;" ng-click="viewPortfolio(service.attributes.servicePhotos[2].path)"></div>
         </div>
         </div>
 
@@ -88,13 +88,13 @@
     <div ng-if="selectedTab === 'portfolio'">
       <div class="row" ng-repeat="image in artistPortfolio" ng-if="$index % 3 === 0">
         <div class="col col-33" ng-if="$index < artistPortfolio.length" style="height: 90px !important; overflow: hidden !important;">
-          <img ng-src="{{artistPortfolio[$index].attributes.imagePath}}" spinkit-image-preloader='chasing-dots-spinner' width="100%" />
+          <img ng-src="{{artistPortfolio[$index].attributes.imagePath}}" ng-click="viewPortfolio(artistPortfolio[$index + 0].attributes.imagePath, artistPortfolio[$index + 0].attributes.description)" spinkit-image-preloader='chasing-dots-spinner' width="100%" />
         </div>
         <div class="col col-33" ng-if="$index + 1 < artistPortfolio.length" style="height: 90px !important; overflow: hidden !important;">
-          <img ng-src="{{artistPortfolio[$index + 1].attributes.imagePath}}" spinkit-image-preloader='chasing-dots-spinner' width="100%" />
+          <img ng-src="{{artistPortfolio[$index + 1].attributes.imagePath}}" ng-click="viewPortfolio(artistPortfolio[$index + 1].attributes.imagePath, artistPortfolio[$index + 1].attributes.description)" spinkit-image-preloader='chasing-dots-spinner' width="100%" />
         </div>
         <div class="col col-33" ng-if="$index + 2 < artistPortfolio.length" style="height: 90px !important; overflow: hidden !important;">
-          <img ng-src="{{artistPortfolio[$index + 2].attributes.imagePath}}" spinkit-image-preloader='chasing-dots-spinner' width="100%" />
+          <img ng-src="{{artistPortfolio[$index + 2].attributes.imagePath}}" ng-click="viewPortfolio(artistPortfolio[$index + 2].attributes.imagePath, artistPortfolio[$index + 2].attributes.description)" spinkit-image-preloader='chasing-dots-spinner' width="100%" />
         </div>
       </div>
     </div>

@@ -25,7 +25,7 @@
 
     <div class="list">
 
-      <a class="item item-thumbnail-left" ng-repeat="appointment in appointments" ng-if="appointment.attributes.isCompleted">
+      <a class="item item-thumbnail-left" ng-repeat="appointment in appointments" ng-if="appointment.attributes.status === 'completed'">
         <img ng-src="{{appointment.attributes.artistInfo.avatar}}" class="blush-avatar">
         <h2>{{appointment.attributes.artistInfo.firstName}} {{appointment.attributes.artistInfo.lastName}}</h2>
         <p ng-show="appointment.attributes.isReviewed">You alread did a review on this artist.</p>

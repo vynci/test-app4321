@@ -5,6 +5,15 @@
 	src: url(fonts/Raleway-Regular.ttf);
 }
 
+@font-face {
+	font-family: RalewayExtraBold;
+	src: url(fonts/Raleway-ExtraBold.ttf);
+}
+
+.rale-way-bold {
+	font-family : RalewayExtraBold !important;
+}
+
 .body{
 	font-family: Raleway !important;
 }
@@ -30,6 +39,10 @@
 }
 
 /* ionic overrides*/
+input {
+	font-family: RaleWay;
+}
+
 a {
 	font-family: RaleWay;
 }
@@ -48,6 +61,10 @@ b, strong {
 
 span {
 	font-family: RaleWay;
+}
+
+.platform-android .bar .title {
+	text-align: center;
 }
 
 .popup-container .popup {
@@ -159,7 +176,7 @@ input.ion-google-place[readonly]{
 }
 
 .tabs-striped.tabs-assertive .tabs {
-	background-color: #ff6c8f;
+	background-color: #443b3e;
 }
 
 a {
@@ -190,15 +207,16 @@ a {
 	left: 0 ;
 	right: 0 ;
 	width: 100% ;
+	background-color: #f4eae9;
 }
 
 .card {
 	/* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); */
 	box-shadow: none;
-	border-width: 1px;
+	/*border-width: 1px;
 	border-style: solid;
 	border-color: lightgray;
-	border-radius: 0px;
+	border-radius: 0px;*/
 }
 
 
@@ -323,7 +341,7 @@ a {
 	position: relative;
 	/*background: #ff6c8f;*/
 	 /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-	height: 180px;
+	height: 200px;
 	overflow: hidden;
 }
 .my-container h1 {
@@ -336,11 +354,11 @@ a {
 .my-container img {
 	position: absolute;
 	left: 0;
-	top: 0;
+	top: -15px;
 	width: 100%;
 	height: auto;
 	z-index: 1;
-	opacity: 0.5;
+	/*opacity: 0.5;*/
 }
 
 /*Chat*/

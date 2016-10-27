@@ -111,6 +111,10 @@ app.controller('HomeCtrl', function($scope, $ionicHistory, customerService, $ion
 	}
 
 	function getCurrentLocation() {
+		// point = new Parse.GeoPoint({latitude: 10.349792530358712, longitude: 123.90758514404297});
+		// $rootScope.currentUserPosition = point;
+		// getArtists(point);
+
 		try {
 			map = plugin.google.maps.Map.getMap(document.getElementById("map_canvas_home"));
 
@@ -141,7 +145,7 @@ app.controller('HomeCtrl', function($scope, $ionicHistory, customerService, $ion
 						});
 
 						alertPopup.then(function(res) {
-
+		
 						});
 					});
 				});

@@ -1,21 +1,24 @@
 <ion-view view-title="Account">
   <ion-content>
+
+    <div  class="item" style="text-align: center; background: #f4eae9; padding-top: 15px; border-bottom-color: #B3A5A5; border-bottom-width: 2px !important; border-bottom-style: dashed;">
+      <img ng-src="{{customerProfile.avatar || placeholder}}" ng-click="showUploadOption()" style="width: 100px; border-radius: 50%; max-width: 100px; max-height: 100px; border-width: 3px; border-style: solid; border-color: white;" class="blush-avatar">
+      <p ng-hide="customerProfile.avatar">Tap on the picture to change avatar!</p>
+    </div>
+
     <div class="list">
-      <div class="item item-divider">
-        My Profile
+      <div class="item item-divider" style="padding-top: 20px; text-align: center; font-family: RaleWay; background-color: #f4eae9;">
+        <b>My Profile</b>
       </div>
-      <label class="item item-input item-floating-label">
-        <span class="input-label">First Name</span>
-        <input type="text" placeholder="First Name" ng-model="customerProfile.firstName">
+      <label class="item blush-background item-input" style="padding-right: 5%;">
+        <input class="login-text login-input" type="text" placeholder="First Name" ng-model="customerProfile.firstName">
       </label>
-      <label class="item item-input item-floating-label">
-        <span class="input-label">Last Name</span>
-        <input type="text" placeholder="Last Name" ng-model="customerProfile.lastName">
+      <label class="item blush-background item-input" style="padding-right: 5%;">
+        <input class="login-text login-input" type="text" placeholder="Last Name" ng-model="customerProfile.lastName">
       </label>
 
-      <label class="item item-input item-select">
-        <span class="input-label">Gender</span>
-        <select ng-model="customerProfile.gender">
+      <label class="item blush-background item-input" style="padding-right: 5%;">
+        <select class="login-text login-input" ng-model="customerProfile.gender" style="background: #f4eae9;">
           <option value="female">Female</option>
           <option value="male">Male</option>
         </select>
@@ -23,46 +26,39 @@
 
 
 
-      <div class="item" ion-datetime-picker date ng-model="customerProfile.birthDate">
+      <div class="item" ion-datetime-picker date ng-model="customerProfile.birthDate" style="background: #f4eae9;">
         <span class="input-label">Birthdate</span>
         <strong>{{customerProfile.birthDate.toString() | limitTo:16}}</strong>
       </div>
 
 
-      <div class="item item-divider">
-        Contact Information
+      <div class="item item-divider" style="text-align: center; font-family: RaleWay; background-color: #f4eae9;">
+         <b>Contact Information</b>
       </div>
 
-      <label class="item item-input item-floating-label">
-        <span class="input-label">Email</span>
-        <input type="text" placeholder="Email" ng-model="customerProfile.email">
+      <label class="item blush-background item-input" style="padding-right: 5%;">
+        <input type="text" class="login-text login-input" placeholder="Email" ng-model="customerProfile.email">
       </label>
-      <label class="item item-input item-floating-label">
-        <span class="input-label">Contact Number</span>
-        <input type="text" placeholder="Contact Number" ng-model="customerProfile.contactNumber">
+      <label class="item blush-background item-input" style="padding-right: 5%;">
+        <input type="text" class="login-text login-input" placeholder="Contact Number" ng-model="customerProfile.contactNumber">
       </label>
-      <label class="item item-input item-floating-label">
-        <span class="input-label">Address</span>
-        <input type="text" placeholder="Address" ng-model="customerProfile.address">
+      <label class="item blush-background item-input" style="padding-right: 5%;">
+        <input type="text" class="login-text login-input" placeholder="Address" ng-model="customerProfile.address">
       </label>
 
-      <div class="item item-divider">
-        Account Credentials
+      <div class="item item-divider" style="text-align: center; font-family: RaleWay; background-color: #f4eae9;">
+         <b>Account Credentials</b>
       </div>
 
-      <label class="item item-input item-floating-label">
-        <span class="input-label">Old Password</span>
-        <input type="password" placeholder="First Name" ng-model="customerProfile.oldPassword">
+      <label class="item blush-background item-input" style="padding-right: 5%;">
+        <input type="password" class="login-text login-input" placeholder="First Name" ng-model="customerProfile.oldPassword">
       </label>
-      <label class="item item-input item-floating-label">
-        <span class="input-label">New Password</span>
-        <input type="password" placeholder="Last Name" ng-model="customerProfile.newPassword">
+      <label class="item blush-background item-input" style="padding-right: 5%;">
+        <input type="password" class="login-text login-input" placeholder="Last Name" ng-model="customerProfile.newPassword">
       </label>
-
-
-
-      <label class="item" style="padding-bottom: 0px;">
-        <button class="button button-block button-light blush-button-teal button-outline" ng-click="updateProfile()">Update Account</button>
+      <label class="item blush-background" style="padding-bottom: 0px;">
+        <button class="button button-block button-light blush-button-brown login-button" ng-click="updateProfile()">Update Account</button>
+        <br>
       </label>
     </div>
   </ion-content>

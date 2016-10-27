@@ -1,15 +1,15 @@
-<ion-view view-title="Artists Near You">
+<ion-view view-title="Artists Near Me">
   <ion-content overflow-scroll="true">
-    <div style="padding-left: 3%; padding-right: 3%;">
-      <ion-google-place placeholder=" Search: Find artists by entering location..." ng-model="position.search" current-location="false"/>
+    <div style="padding: 3%; background: #574C4F;">
+      <ion-google-place placeholder="Find artists by entering location..." ng-model="position.search" current-location="false"/>
     </div>
 
     <div class="row">
       <div class="col">
-        <button class="button button-block button-positive button-small" ng-click="showFilters()">Show Filters</button>
+        <button class="button button-block button-light blush-button-brown login-button button-small" ng-click="showFilters()" style="height: 30px !important;">Show Filters</button>
       </div>
       <div class="col">
-        <button class="button button-block button-positive button-small" ng-disabled="isListEmpty" ng-click="changeToMapView()">View in Map</button>
+        <button class="button button-block button-light blush-button-brown login-button button-small" ng-disabled="isListEmpty" ng-click="changeToMapView()" style="height: 30px !important;">View in Map</button>
       </div>
     </div>
 
@@ -17,16 +17,27 @@
       <div ng-repeat="artist in fromCloudActiveArtists | filter: filterArtist | orderBy: filter.sort">
         <a class="item item-thumbnail-left" ng-href="#/app/artist/{{artist.id}}">
           <img ng-src="{{artist.attributes.avatar || spiral}}" class="blush-avatar">
-          <h2>{{artist.attributes.firstName}} {{artist.attributes.lastName}}</h2>
+
+          <div class="row" style="padding-left: 0px; padding-bottom: 0px;">
+            <div class="col" style="padding-left: 0px; padding-bottom: 0px;">
+              <h2>{{artist.attributes.firstName}} {{artist.attributes.lastName}}</ht>
+            </div>
+            <div class="col" style="padding-left: 0px; padding-bottom: 0px; text-align: right;">
+              <i ng-class="artist.attributes.rating >= 1 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
+              <i ng-class="artist.attributes.rating >= 2 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
+              <i ng-class="artist.attributes.rating >= 3 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
+              <i ng-class="artist.attributes.rating >= 4 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
+              <i ng-class="artist.attributes.rating == 5 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
+            </div>
+          </div>
+
+          <!-- <h2>{{artist.attributes.firstName}} {{artist.attributes.lastName}} -->
+
+          </h2>
+          <p>{{artist.attributes.address}}</p>
           <p>{{artist.attributes.serviceType}}</p>
           <p>₱{{artist.attributes.priceRange.low}} - ₱{{artist.attributes.priceRange.high}}</p>
-          <p>
-            <i ng-class="artist.attributes.rating >= 1 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
-            <i ng-class="artist.attributes.rating >= 2 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
-            <i ng-class="artist.attributes.rating >= 3 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
-            <i ng-class="artist.attributes.rating >= 4 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
-            <i ng-class="artist.attributes.rating == 5 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
-          </p>
+
         </a>
       </div>
       <div class="row" ng-if="!filter.hair && !filter.makeup">
@@ -46,4 +57,8 @@
         </div>
       </div>
   </ion-content>
+  <!-- <div class="item item-divider blush-background" style="position: fixed; bottom: 0; width: 100%; padding-top: 10px; padding-bottom: 10px; padding-right: 5px;">
+      <button class="button button-block button-small button-energized" style="margin-top: 0px;
+        margin-bottom: 0px; background: #b7d05b; border-radius:30px; height: 40px;"><b style="font-size: 16px;">Filter Results</button>
+  </div> -->
 </ion-view>

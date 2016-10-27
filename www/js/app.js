@@ -25,7 +25,10 @@ app.run(function($ionicPlatform) {
   Parse.serverURL = 'https://muse-rest-api.herokuapp.com/parse';
 })
 
-app.config(function($stateProvider, $urlRouterProvider) {
+app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+
+  $ionicConfigProvider.form.toggle('large').checkbox('circle');
+
   $stateProvider
 
   .state('app', {

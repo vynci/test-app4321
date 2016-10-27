@@ -193,6 +193,27 @@ app.controller('ArtistCtrl', function($scope, $ionicModal, $timeout, $ionicLoadi
     });
   }
 
+  $scope.viewPortfolio = function(path, description){
+
+    if(!description){
+      description = '';
+    }
+
+    var myPopup = $ionicPopup.show({
+      template: '<div style=""><img style="width:100%;" src="' + path +'"></div><br><p>' + description + '</p>',
+      title: '<b>View Portfolio</b>',
+      subTitle: '',
+      scope: $scope,
+      buttons: [
+        { text: 'Close' },
+      ]
+    });
+
+    myPopup.then(function(res) {
+      console.log('Tapped!', res);
+    });
+  }
+
   $scope.followArtist = function() {
     var alertPopup = $ionicPopup.alert({
       title: 'Follow Artist',
@@ -236,7 +257,8 @@ app.controller('ArtistCtrl', function($scope, $ionicModal, $timeout, $ionicLoadi
         id : $stateParams.artistId,
         firstName : $scope.profile.firstName,
         lastName : $scope.profile.lastName,
-        avatar : $scope.profile.avatar
+        avatar : $scope.profile.avatar,
+        contactNumber : $scope.profile.contactNumber
       },
       selectedService : $scope.selectedService
     };
