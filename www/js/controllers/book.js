@@ -1,5 +1,5 @@
 
-app.controller('BookCtrl', function($scope, $ionicModal, $timeout, serviceService, $ionicHistory, $ionicLoading, $rootScope, $ionicPopup, customerService, $state) {
+app.controller('BookCtrl', function($scope, $ionicModal, $timeout, serviceService, $ionicHistory, $ionicLoading, $rootScope, $ionicPopup, customerService, $state, Pubnub) {
 
   $scope.datetimeValue = new Date();
   $scope.choice = {
@@ -42,6 +42,22 @@ app.controller('BookCtrl', function($scope, $ionicModal, $timeout, serviceServic
         success: function(result) {
           // Execute any logic that should take place after the object is saved.
           $ionicLoading.hide();
+
+          Pubnub.publish({
+            channel: 'book/' + $scope.artist.id,
+            message: {
+              content: result,
+              sender: {
+                name: $scope.artist.firstName + ' ' + $scope.artist.lastName,
+                avatar : $scope.artist.avatar
+              },
+              date: new Date()
+            },
+            callback: function(m) {
+              console.log(m);
+            }
+          });
+
           var alertPopup = $ionicPopup.alert({
             title: 'Booking Successful!',
             template: 'Your Artist will contact your mobile number ' + $scope.customerProfile.contactNumber + ' in a while.'
@@ -117,6 +133,7 @@ app.controller('BookCtrl', function($scope, $ionicModal, $timeout, serviceServic
         $scope.customerProfile.gender = results[0].get('gender') || 'female';
         $scope.customerProfile.address = results[0].get('address');
         $scope.customerProfile.contactNumber = results[0].get('contactNumber');
+        $scope.customerProfile.avatar = results[0].get('avatar');
 
         $ionicLoading.hide();
 

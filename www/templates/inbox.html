@@ -1,4 +1,4 @@
-<ion-view view-title="Inbox">
+<ion-view view-title="Chat ({{isPubnubOnline || 'Offline'}})">
 	<ion-content>
 		<ion-list>
 			<ion-item class="item-avatar item-icon-right" ng-repeat="thread in threads" type="item-text-wrap" href="#/app/chat-view/{{thread.id}}/{{thread.attributes.artistInfo.id}}">

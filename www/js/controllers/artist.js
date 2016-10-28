@@ -258,7 +258,8 @@ app.controller('ArtistCtrl', function($scope, $ionicModal, $timeout, $ionicLoadi
         firstName : $scope.profile.firstName,
         lastName : $scope.profile.lastName,
         avatar : $scope.profile.avatar,
-        contactNumber : $scope.profile.contactNumber
+        contactNumber : $scope.profile.contactNumber,
+        email : $scope.profile.email
       },
       selectedService : $scope.selectedService
     };

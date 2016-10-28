@@ -285,8 +285,6 @@ angular.module('starter.controllers', [])
 
 
   function pubnubInit(){
-
-    $scope.bookingAlertChannel = 'book/' + Parse.User.current().get('profileId');
     $scope.messageAlertChannel = 'message/' + Parse.User.current().get('profileId');
 
     $scope.uuid = Parse.User.current().get('profileId');
@@ -299,37 +297,31 @@ angular.module('starter.controllers', [])
     });
 
     Pubnub.subscribe({
-      channel: $scope.bookingAlertChannel,
-      triggerEvents: ['callback'],
-      connect : function() {
-        // send a message
-        console.log('hello');
-      }
-    });
-
-    Pubnub.subscribe({
       channel: $scope.messageAlertChannel,
-      triggerEvents: ['callback'],
+      triggerEvents: ['callback', 'connect', 'disconnect'],
       connect : function() {
         // send a message
         console.log('hello');
 
       }
-    });
-
-    $rootScope.$on(Pubnub.getMessageEventNameFor($scope.bookingAlertChannel), function(ngEvent, m) {
-      console.log(m);
-      $scope.showBookingAlert(m);
     });
 
     $rootScope.$on(Pubnub.getMessageEventNameFor($scope.messageAlertChannel), function(ngEvent, m) {
-      console.log(m);
-      console.log($state.current.name);
       if(m.content.threadId !== $state.params.chatId){
         $scope.showMessageAlert(m);
       }else{
         $rootScope.getStreamMessage(m);
       }
+    });
+
+    $rootScope.$on(Pubnub.getEventNameFor('subscribe', 'connect'), function (ngEvent, payload) {
+      $rootScope.isPubnubOnline = 'Online';
+      console.log('online');
+    });
+
+    $rootScope.$on(Pubnub.getEventNameFor('subscribe', 'disconnect'), function (ngEvent, payload) {
+      $rootScope.isPubnubOnline = 'Offline';
+      console.log('offline');
     });
   }
 

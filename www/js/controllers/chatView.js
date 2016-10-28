@@ -8,6 +8,13 @@ function($scope, $rootScope, $state, $stateParams, MockService,
     // mock acquiring data via $stateParams
     console.log($stateParams);
 
+    var messageCheckTimer;
+
+    var viewScroll = $ionicScrollDelegate.$getByHandle('userMessageScroll');
+    var footerBar; // gets set in $ionicView.enter
+    var scroller;
+    var txtInput; // ^^^
+
     $scope.profile = {};
     $scope.spiral = 'img/placeholder.png';
 
@@ -109,13 +116,6 @@ function($scope, $rootScope, $state, $stateParams, MockService,
     $scope.input = {
       message: localStorage['userMessage-' + $scope.toUser._id] || ''
     };
-
-    var messageCheckTimer;
-
-    var viewScroll = $ionicScrollDelegate.$getByHandle('userMessageScroll');
-    var footerBar; // gets set in $ionicView.enter
-    var scroller;
-    var txtInput; // ^^^
 
     $scope.$on('$ionicView.enter', function() {
       console.log('UserMessages $ionicView.enter');
