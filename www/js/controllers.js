@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicLoading, $ionicPopup, $state, $rootScope, $ionicHistory, Pubnub, $pubnubChannel, customerService, $ionicSideMenuDelegate) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicLoading, $ionicPopup, $state, $rootScope, $ionicHistory, Pubnub, $pubnubChannel, customerService, $ionicSideMenuDelegate, $cordovaLocalNotification) {
   var user = {};
   $scope.profilePicTemp = "img/placeholder.png";
   $rootScope.side_menu = document.getElementsByTagName("ion-side-menu")[0];
@@ -14,13 +14,13 @@ angular.module('starter.controllers', [])
   if(Parse.User.current()){
     $rootScope.currentUser = Parse.User.current();
     getCustomerProfile();
-    pubnubInit();
+
   }else{
     $rootScope.currentUser = null;
   }
 
   console.log($rootScope.currentUser)
-
+  $rootScope.isPubnubOnline = 'Offline';
   $scope.loginData = {};
 
   // Create the login modal that we will use later
@@ -58,6 +58,11 @@ angular.module('starter.controllers', [])
     $scope.modalConf.hide();
   };
 
+  $rootScope.pubnubRestart = function(){
+    console.log('pubnub restart!');
+    pubnubInit();
+  }
+
   var userLogin = function(username, password){
     Parse.User.logIn(username, password, {
       success: function(user) {
@@ -87,11 +92,13 @@ angular.module('starter.controllers', [])
   }
 
   $scope.viewProfile = function(){
-    $ionicHistory.nextViewOptions({
-      disableBack: true
-    });
-    $state.go('app.account');
-    $ionicSideMenuDelegate.toggleLeft();
+    if(Parse.User.current()){
+      $ionicHistory.nextViewOptions({
+        disableBack: true
+      });
+      $state.go('app.account');
+      $ionicSideMenuDelegate.toggleLeft();
+    }
   }
 
   // Triggered in the login modal to close it
@@ -270,6 +277,7 @@ angular.module('starter.controllers', [])
       .then(function(results) {
         // Handle the result
         $scope.currentCustomer = results[0];
+        pubnubInit();
         $ionicLoading.hide();
       }, function(err) {
         // Error occurred
@@ -283,46 +291,57 @@ angular.module('starter.controllers', [])
     }
   }
 
+  function openLocalNotification(message){
+    console.log('local notif!');
+    console.log(message);
+    $cordovaLocalNotification.schedule({
+      id: message.content.threadId,
+      title: message.sender.name,
+      text: message.content.message
+    }).then(function (result) {
+      // ...
+    });
+  }
 
   function pubnubInit(){
-    $scope.messageAlertChannel = 'message/' + Parse.User.current().get('profileId');
+    if(Parse.User.current()){
+      $scope.messageAlertChannel = 'message/' + Parse.User.current().get('profileId');
 
-    $scope.uuid = Parse.User.current().get('profileId');
+      Pubnub.init({
+        publish_key: 'pub-c-ffcdc13e-a8fe-4299-8a2d-eb5b41f0dc47',
+        subscribe_key: 'sub-c-2d86535e-968a-11e6-94c7-02ee2ddab7fe',
+        ssl: true
+      });
 
-    Pubnub.init({
-      publish_key: 'pub-c-ffcdc13e-a8fe-4299-8a2d-eb5b41f0dc47',
-      subscribe_key: 'sub-c-2d86535e-968a-11e6-94c7-02ee2ddab7fe',
-      ssl: true,
-      uuid: $scope.uuid
-    });
+      Pubnub.subscribe({
+        channel: $scope.messageAlertChannel,
+        triggerEvents: ['callback', 'connect', 'disconnect'],
+        connect : function() {
+          // send a message
+          console.log('hello');
+          $rootScope.isPubnubOnline = 'Online';
+        }
+      });
 
-    Pubnub.subscribe({
-      channel: $scope.messageAlertChannel,
-      triggerEvents: ['callback', 'connect', 'disconnect'],
-      connect : function() {
-        // send a message
-        console.log('hello');
+      $rootScope.$on(Pubnub.getMessageEventNameFor($scope.messageAlertChannel), function(ngEvent, m) {
+        if(m.content.threadId !== $state.params.chatId){
+          openLocalNotification(m);
+          $scope.showMessageAlert(m);
+        }else{
+          $rootScope.getStreamMessage(m);
+        }
+      });
 
-      }
-    });
+      $rootScope.$on(Pubnub.getEventNameFor('subscribe', 'connect'), function (ngEvent, payload) {
+        $rootScope.isPubnubOnline = 'Online';
+        console.log('online');
+      });
 
-    $rootScope.$on(Pubnub.getMessageEventNameFor($scope.messageAlertChannel), function(ngEvent, m) {
-      if(m.content.threadId !== $state.params.chatId){
-        $scope.showMessageAlert(m);
-      }else{
-        $rootScope.getStreamMessage(m);
-      }
-    });
-
-    $rootScope.$on(Pubnub.getEventNameFor('subscribe', 'connect'), function (ngEvent, payload) {
-      $rootScope.isPubnubOnline = 'Online';
-      console.log('online');
-    });
-
-    $rootScope.$on(Pubnub.getEventNameFor('subscribe', 'disconnect'), function (ngEvent, payload) {
-      $rootScope.isPubnubOnline = 'Offline';
-      console.log('offline');
-    });
+      $rootScope.$on(Pubnub.getEventNameFor('subscribe', 'disconnect'), function (ngEvent, payload) {
+        $rootScope.isPubnubOnline = 'Offline';
+        console.log('offline');
+      });
+    }
   }
 
   // Listening to the callbacks

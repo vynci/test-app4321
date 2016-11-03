@@ -48,7 +48,7 @@ app.controller('BookCtrl', function($scope, $ionicModal, $timeout, serviceServic
             message: {
               content: result,
               sender: {
-                name: $scope.artist.firstName + ' ' + $scope.artist.lastName,
+                name: $scope.customerProfile.firstName+ ' ' + $scope.customerProfile.lastName,
                 avatar : $scope.artist.avatar
               },
               date: new Date()

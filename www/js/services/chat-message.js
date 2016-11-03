@@ -7,7 +7,8 @@ app.service('messageService', function($q) {
 
 		if(id){
 			query.equalTo("threadId", id);
-			query.limit(200);
+			query.descending("createdAt");
+			query.limit(100);
 		}
 
 		query.find({

@@ -57,10 +57,27 @@ function($scope, $rootScope, $state, $stateParams, MockService,
         // Handle the result
         console.log(results);
         $scope.messages = results;
-        $ionicLoading.hide();
+        // $ionicLoading.hide();
+        $scope.isLoading = false;
         $ionicScrollDelegate.scrollBottom();
+
+        var Thread = Parse.Object.extend("Thread");
+        var thread = new Thread();
+
+        thread.id = $stateParams.chatId;
+        thread.set("isNewMessageCustomer", false);
+
+        thread.save(null, {
+          success: function(result) {
+          },
+          error: function(gameScore, error) {
+            message.set("isFail", true);
+          }
+        });
+
       }, function(err) {
-        $ionicLoading.hide();
+        // $ionicLoading.hide();
+        $scope.isLoading = false;
         // Error occurred
         console.log(err);
       }, function(percentComplete) {
@@ -70,11 +87,11 @@ function($scope, $rootScope, $state, $stateParams, MockService,
 
     function getCustomerProfile(id){
 
-      $ionicLoading.show({
-        template: 'Loading :)'
-      }).then(function(){
-        console.log("The loading indicator is now displayed");
-      });
+      // $ionicLoading.show({
+      //   template: 'Loading :)'
+      // }).then(function(){
+      //   console.log("The loading indicator is now displayed");
+      // });
 
       customerService.getCustomerById(id)
       .then(function(results) {
@@ -89,7 +106,8 @@ function($scope, $rootScope, $state, $stateParams, MockService,
 
       }, function(err) {
         // Error occurred
-        $ionicLoading.hide();
+        // $ionicLoading.hide();
+        $scope.isLoading = false;
         console.log(err);
       }, function(percentComplete) {
         console.log(percentComplete);
@@ -107,7 +125,8 @@ function($scope, $rootScope, $state, $stateParams, MockService,
         getMessagesApi();
       }, function(err) {
         // Error occurred
-        $ionicLoading.hide();
+        // $ionicLoading.hide();
+        $scope.isLoading = false;
       }, function(percentComplete) {
         console.log(percentComplete);
       });
@@ -121,6 +140,7 @@ function($scope, $rootScope, $state, $stateParams, MockService,
       console.log('UserMessages $ionicView.enter');
       // getArtistById(Parse.User.current().get('profileId'));
       getCustomerProfile(Parse.User.current().get('profileId'));
+      $scope.isLoading = true;
 
       $timeout(function() {
         footerBar = document.body.querySelector('#userMessagesView .bar-footer');
@@ -204,6 +224,7 @@ function($scope, $rootScope, $state, $stateParams, MockService,
 
           thread.id = $stateParams.chatId;
           thread.set("lastMessage", messageTxt);
+          thread.set("isNewMessageArtist", true);
 
           thread.save(null, {
             success: function(result) {

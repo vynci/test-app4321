@@ -228,7 +228,10 @@ app.controller('ArtistCtrl', function($scope, $ionicModal, $timeout, $ionicLoadi
   $scope.toggleSelection = function(service){
     if(!service.checked || service.checked === undefined){
       service.checked = true;
-      $scope.selectedService.push(service.id);
+      $scope.selectedService.push({
+        id : service.id,
+        name : service.attributes.name
+      });
       $scope.totalBill = $scope.totalBill + service.attributes.price;
     } else {
       service.checked = false;

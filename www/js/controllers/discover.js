@@ -8,11 +8,13 @@ app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ion
 
   getPortfolios();
 
-  $ionicLoading.show({
-    template: 'Loading :)'
-  }).then(function(){
-    console.log("The loading indicator is now displayed");
-  });
+  // $ionicLoading.show({
+  //   template: 'Loading :)'
+  // }).then(function(){
+  //   console.log("The loading indicator is now displayed");
+  // });
+
+  $scope.isLoading = true;
 
   $ionicModal.fromTemplateUrl('templates/comment-modal.html', {
     scope: $scope
@@ -40,8 +42,10 @@ app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ion
         $scope.cards = results;
       }
       $ionicLoading.hide();
+      $scope.isLoading = false;
     }, function(err) {
       $ionicLoading.hide();
+      $scope.isLoading = false;
       // Error occurred
       console.log(err);
     }, function(percentComplete) {
@@ -192,11 +196,11 @@ app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ion
   };
 
   function getCustomerProfile(){
-    $ionicLoading.show({
-      template: 'Loading :)'
-    }).then(function(){
-      console.log("The loading indicator is now displayed");
-    });
+    // $ionicLoading.show({
+    //   template: 'Loading :)'
+    // }).then(function(){
+    //   console.log("The loading indicator is now displayed");
+    // });
 
     if(Parse.User.current()){
       customerService.getCustomerById(Parse.User.current().get('profileId'))

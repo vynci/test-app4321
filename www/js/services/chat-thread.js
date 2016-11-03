@@ -7,6 +7,7 @@ app.service('threadService', function($q) {
 
 		if(id){
 			query.equalTo("customerInfo.id", id);
+			query.descending("updatedAt");
 		}
 
 		query.find({

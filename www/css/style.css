@@ -34,6 +34,11 @@
 	width:10px
 }
 
+.blushnewmessage{
+	font-weight: bold !important;
+	color: black !important;
+}
+
 #home-find : hover {
 	background-color: #46000D;
 }
@@ -61,6 +66,12 @@ b, strong {
 
 span {
 	font-family: RaleWay;
+}
+
+.button.button-positive {
+	border-color: transparent;
+	background-color: #574C4F !important;
+	color: #fff;
 }
 
 .platform-android .bar .title {
@@ -185,7 +196,7 @@ a {
 }
 
 .button {
-	border-radius: 0px;
+	border-radius: 30px !important;
 }
 
 .button.button-light.button-outline {

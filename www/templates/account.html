@@ -18,7 +18,7 @@
       </label>
 
       <label class="item blush-background item-input" style="padding-right: 5%;">
-        <select class="login-text login-input" ng-model="customerProfile.gender" style="background: #f4eae9;">
+        <select class="login-text login-input" ng-model="customerProfile.gender" style="background: #f4eae9; width: 100%;">
           <option value="female">Female</option>
           <option value="male">Male</option>
         </select>
@@ -26,9 +26,10 @@
 
 
 
-      <div class="item" ion-datetime-picker date ng-model="customerProfile.birthDate" style="background: #f4eae9;">
-        <span class="input-label">Birthdate</span>
-        <strong>{{customerProfile.birthDate.toString() | limitTo:16}}</strong>
+      <div class="item" ion-datetime-picker date ng-model="customerProfile.birthDate" style="background: #f4eae9; text-align: center;">
+        <span class=""><b>Birthdate</b></span><br>
+        <input class="login-text login-input" type="text" placeholder="Birth Date" style="width: 100%;" value="{{customerProfile.birthDate.toString() | limitTo:16}}">
+        <strong></strong>
       </div>
 
 

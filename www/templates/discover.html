@@ -1,7 +1,13 @@
 <ion-view view-title="Discover">
   <ion-content overflow-scroll="true">
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="refresh()"></ion-refresher>
-    <div class="list card" ng-repeat="card in cards">
+    <div ng-if="isLoading" style="text-align: center; padding-top: 50%;">
+      <ion-spinner icon="spiral"></ion-spinner><br>
+      <span>Loading Trends...</span>
+    </div>
+
+
+    <div ng-if="!isLoading" class="list card" ng-repeat="card in cards">
 
       <div class="item item-avatar">
         <img ng-src="{{card.attributes.artistInfo.avatar || spiral}}">
@@ -20,7 +26,7 @@
       </div>
 
     </div>
-    <div class="row">
+    <div ng-if="!isLoading" class="row">
       <div class="col" style="text-align: center;">
         <button class="button button-positive button-outline" ng-click="loadMorePosts()">Load More Posts...</button>
       </div>

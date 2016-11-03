@@ -1,11 +1,15 @@
 
-app.controller('AccountCtrl', function($scope, $ionicModal, $timeout, customerService, $ionicLoading, $rootScope, $ionicPopup, $cordovaCamera) {
+app.controller('AccountCtrl', function($scope, $ionicModal, $timeout, customerService, $ionicLoading, $rootScope, $ionicPopup, $cordovaCamera, $state) {
 
   $scope.placeholder = 'img/placeholder.png';
 
   $scope.$on('$ionicView.enter', function() {
-    $scope.customerProfile = {};
-    getCustomerProfile();
+    if(Parse.User.current()){
+      $scope.customerProfile = {};
+      getCustomerProfile();
+    }else{
+      $state.go('app.account');
+    }
   });
 
   function getCustomerProfile(){
@@ -135,6 +139,11 @@ app.controller('AccountCtrl', function($scope, $ionicModal, $timeout, customerSe
     });
 
   };
+
+  $scope.onImgLoad = function (event) {
+    console.log('image loaded!');
+    $scope.isImageLoaded = false;
+  }
 
   function updateAvatar(url){
     $ionicLoading.show({
