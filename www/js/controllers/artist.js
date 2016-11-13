@@ -3,12 +3,6 @@ app.controller('ArtistCtrl', function($scope, $ionicModal, $timeout, $ionicLoadi
 
   console.log($stateParams);
 
-  $ionicLoading.show({
-    template: 'Loading...'
-  }).then(function(){
-    console.log("The loading indicator is now displayed");
-  });
-
   $scope.tabStatus = {
     services : '',
     portfolio : '',
@@ -24,6 +18,10 @@ app.controller('ArtistCtrl', function($scope, $ionicModal, $timeout, $ionicLoadi
 
   $scope.totalBill = 0;
   $scope.artistId = $stateParams.artistId;
+  $scope.isServiceLoading = false;
+  $scope.isPortfolioLoading = false;
+  $scope.isReviewLoading = false;
+
   getArtistById($stateParams.artistId);
 
   function getArtistById(id){
@@ -45,14 +43,16 @@ app.controller('ArtistCtrl', function($scope, $ionicModal, $timeout, $ionicLoadi
   }
 
   function getServiceById(id){
+    $scope.isServicesLoading = true;
+
     serviceService.getServiceById(id)
     .then(function(results) {
       // Handle the result
       $scope.artistServices = results;
-      $ionicLoading.hide();
+      $scope.isServicesLoading = false;
       return results;
     }, function(err) {
-      $ionicLoading.hide();
+      $scope.isServicesLoading = false;
       // Error occurred
       console.log(err);
     }, function(percentComplete) {
@@ -61,13 +61,15 @@ app.controller('ArtistCtrl', function($scope, $ionicModal, $timeout, $ionicLoadi
   }
 
   function getPortfolioById(id){
+    $scope.isPortfolioLoading = true;
     portfolioService.getPortfolioById(id)
     .then(function(results) {
       // Handle the result
       console.log(results);
+      $scope.isPortfolioLoading = false;
       $scope.artistPortfolio = results;
     }, function(err) {
-      $ionicLoading.hide();
+      $scope.isPortfolioLoading = false;
       // Error occurred
       console.log(err);
     }, function(percentComplete) {
@@ -76,19 +78,15 @@ app.controller('ArtistCtrl', function($scope, $ionicModal, $timeout, $ionicLoadi
   }
 
   function getReviewsById(id){
-    $ionicLoading.show({
-      template: 'Loading...'
-    }).then(function(){
-      console.log("The loading indicator is now displayed");
-    });
+    $scope.isReviewLoading = true;
     reviewService.getReviewsById(id)
     .then(function(results) {
       // Handle the result
       console.log(results);
       $scope.artistReviews = results;
-      $ionicLoading.hide();
+      $scope.isReviewLoading = false;
     }, function(err) {
-      $ionicLoading.hide();
+      $scope.isReviewLoading = false;
       // Error occurred
       console.log(err);
     }, function(percentComplete) {
@@ -113,7 +111,7 @@ app.controller('ArtistCtrl', function($scope, $ionicModal, $timeout, $ionicLoadi
       "id": Parse.User.current().get('profileId'),
       "firstName": customer.get('firstName'),
       "lastName": customer.get('lastName'),
-      "avatar": customer.get('avatar') || 'img/portfolio/c.jpg'
+      "avatar": customer.get('avatar') || 'img/placeholder.png'
     });
 
     thread.save(null, {
@@ -171,26 +169,61 @@ app.controller('ArtistCtrl', function($scope, $ionicModal, $timeout, $ionicLoadi
     }
   }
 
-  $scope.messageArtist = function(){
-    threadService.isThreadExist(Parse.User.current().get('profileId'), $scope.artistId)
-    .then(function(results) {
-      // Handle the result
-      console.log(results);
-      if(results.length){
-        $state.go('app.chatView', {artistId: $scope.artistId, chatId: results[0].id});
-      }else{
-        console.log('create new thread');
-        getCustomerProfile();
-      }
-
-      return results;
-    }, function(err) {
-      $ionicLoading.hide();
-      // Error occurred
-      console.log(err);
-    }, function(percentComplete) {
-      console.log(percentComplete);
+  $scope.showArtistInfo = function(){
+    var alertPopup = $ionicPopup.alert({
+      title: '<b> About ' + $scope.profile.firstName +'</b>',
+      template: $scope.profile.aboutArtist || $scope.profile.firstName + ' is still working on her service information :)'
     });
+
+    alertPopup.then(function(res) {
+      console.log('Thank you for not eating my delicious ice cream cone');
+    });
+  }
+
+  $scope.messageArtist = function(){
+    if(Parse.User.current()){
+      threadService.isThreadExist(Parse.User.current().get('profileId'), $scope.artistId)
+      .then(function(results) {
+        // Handle the result
+        console.log(results);
+        if(results.length){
+          $state.go('app.chatView', {artistId: $scope.artistId, chatId: results[0].id});
+        }else{
+          console.log('create new thread');
+          getCustomerProfile();
+        }
+
+        return results;
+      }, function(err) {
+        $ionicLoading.hide();
+        // Error occurred
+        console.log(err);
+      }, function(percentComplete) {
+        console.log(percentComplete);
+      });
+    }else{
+      var myPopup = $ionicPopup.show({
+        template: 'A registered account is needed to chat with an artist. Signup now, it is easy and quick.',
+        title: '<b>Chat</b>',
+        subTitle: '',
+        scope: $scope,
+        buttons: [
+          { text: 'Cancel' },
+          {
+            text: '<b>Signup</b>',
+            type: 'button-positive',
+            onTap: function(e) {
+              $scope.showRegisterForm();
+            }
+          }
+          ]
+        });
+
+      myPopup.then(function(res) {
+        console.log('Tapped!', res);
+      });
+    }
+
   }
 
   $scope.viewPortfolio = function(path, description){
@@ -201,7 +234,7 @@ app.controller('ArtistCtrl', function($scope, $ionicModal, $timeout, $ionicLoadi
 
     var myPopup = $ionicPopup.show({
       template: '<div style=""><img style="width:100%;" src="' + path +'"></div><br><p>' + description + '</p>',
-      title: '<b>View Portfolio</b>',
+      title: '<b>View Photo</b>',
       subTitle: '',
       scope: $scope,
       buttons: [

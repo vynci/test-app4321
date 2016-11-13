@@ -68,6 +68,31 @@ span {
 	font-family: RaleWay;
 }
 
+.button.button-assertive.button-outline {
+	border-color: #f1807a;
+	background: transparent;
+	color: #f1807a;
+}
+
+.button.button-assertive.button-outline.activated {
+	background: #F76A63;
+}
+
+.button.button-assertive {
+	border-color: transparent;
+	background-color: #f1807a;
+	color: #fff;
+}
+
+.button.button-assertive.activated {
+	border-color: transparent;
+	background-color: #F76A63;
+}
+
+.button.button-positive.button-clear {
+	color: white;
+}
+
 .button.button-positive {
 	border-color: transparent;
 	background-color: #574C4F !important;

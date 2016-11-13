@@ -12,7 +12,7 @@
     <div style="padding-right: 9%; padding-left: 9%;">
       <div style="text-align: center;">
         <!-- <img src="img/stroke.png" alt="" style="width: 80%;"> -->
-        <h1 style="color: rgba(68, 68, 68, 0.74); font-size: 38px;">Create your <b>Blush Account</b> for <b>FREE.</b></h1>
+        <h1 style="color: rgba(68, 68, 68, 0.74); font-size: 30px;">Create your <b>Blush Account</b> for <b>FREE.</b></h1>
         <h1 style="color: rgba(68, 68, 68, 0.74); font-size: 16px;">No credit card required.</h1>
       </div>
 
@@ -21,19 +21,23 @@
       <form ng-submit="doRegister()">
         <div class="list">
           <label class="item blush-background item-input" style="padding-right: 5%;">
-            <input class="login-text login-input" placeholder="First Name" type="text" ng-model="registerData.firstName" autofocus>
+            <input class="login-text login-input" placeholder="First Name" type="text" style="height: 40px !important;" ng-model="registerData.firstName" autofocus required>
           </label>
           <label class="item blush-background item-input" style="padding-right: 5%;">
-            <input class="login-text login-input" placeholder="Last Name" type="text" ng-model="registerData.lastName" autofocus>
+            <input class="login-text login-input" placeholder="Last Name" type="text" style="height: 40px !important;" ng-model="registerData.lastName" required>
           </label>
           <label class="item blush-background item-input" style="padding-right: 5%;">
-            <input class="login-text login-input" placeholder="Email" type="text" ng-model="registerData.email" autofocus>
+            <input class="login-text login-input" placeholder="Email" type="text" style="height: 40px !important;" ng-model="registerData.email" required>
           </label>
           <label class="item blush-background item-input" style="padding-right: 5%;">
-            <input class="login-text login-input" placeholder="Password" type="password" ng-model="registerData.password">
+            <input class="login-text login-input" placeholder="Mobile Number" type="number" style="height: 40px !important;" ng-model="registerData.contactNumber" required>
           </label>
-
-          <br>
+          <label class="item blush-background item-input" style="padding-right: 5%;">
+            <input class="login-text login-input" placeholder="Password" type="password" style="height: 40px !important;" ng-model="registerData.password" required>
+          </label>
+          <label class="item blush-background item-input" style="padding-right: 5%;">
+            <input class="login-text login-input" placeholder="Confirm Password" type="password" style="height: 40px !important;" ng-model="registerData.confirmPassword" required>
+          </label>
 
           <label class="item blush-background">
             <p style="font-size: 0.7em; color: rgba(68, 68, 68, 0.74); text-align: center; white-space: normal;">By creating an account, I agree to Blush's <b>Terms of Service</b> and <b>Privacy Policy</b></p>

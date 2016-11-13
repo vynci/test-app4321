@@ -17,7 +17,7 @@ Submit
 
 <ion-view id="userMessagesView"
 cache-view="false"
-view-title="{{toUser.username}} ({{isPubnubOnline}})">
+view-title="{{toUser.username}}">
 
 <div class="loader-center" ng-if="!doneLoading">
   <div class="loader">
@@ -37,12 +37,12 @@ delegate-handle="userMessageScroll">
   <span>Loading Messages...</span>
 </div>
 
-<div ng-repeat="message in messages | orderBy: 'attributes.createdAt'" class="message-wrapper">
+<div ng-repeat="message in messages | orderBy: 'attributes.createdDate'" class="message-wrapper">
 
   <div ng-if="user._id !== message.attributes.userId">
 
     <img ng-click="viewProfile(message)" class="profile-pic left"
-    ng-src="{{toUser.pic}}" onerror="onProfilePicError(this)" />
+    ng-src="{{toUser.pic || spiral}}" onerror="onProfilePicError(this)" />
 
     <div class="chat-bubble left">
 
@@ -51,7 +51,7 @@ delegate-handle="userMessageScroll">
 
       <div class="message-detail">
         <!-- <span ng-click="viewProfile(message)" class="bold">{{toUser.username}}</span><br> -->
-        <span am-time-ago="message.attributes.createdAt" style="font-size: 11px;"></span>
+        <span am-time-ago="message.attributes.createdDate" style="font-size: 11px;"></span>
       </div>
 
     </div>
@@ -60,7 +60,7 @@ delegate-handle="userMessageScroll">
   <div ng-if="user._id === message.attributes.userId">
 
     <img class="profile-pic right"
-    ng-src="{{user.pic}}" onerror="onProfilePicError(this)" />
+    ng-src="{{user.pic || spiral}}" onerror="onProfilePicError(this)" />
 
     <div class="chat-bubble right">
 
@@ -69,7 +69,7 @@ delegate-handle="userMessageScroll">
 
       <div class="message-detail">
         <!-- <span ng-click="viewProfile(message)" class="bold">{{user.username}}</span><br> -->
-        <span am-time-ago="message.attributes.createdAt" style="font-size: 11px;"></span>
+        <span am-time-ago="message.attributes.createdDate" style="font-size: 11px;"></span>
         <span ng-show="message.attributes.isFail" style="font-size: 11px; color: red;">Failed to Send</span>
       </div>
 

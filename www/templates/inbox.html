@@ -11,9 +11,9 @@
 		<div ng-if="isPubnubOnline === 'Online' && !isLoading" ng-click="pubnubRestart()" style="text-align: center; background: #b7d05b; color: white;">
 			<span>Online</span>
 		</div>
-		<div ng-if="threads.length === 0 && !isLoading"> <p style="padding-left: 15px; padding-right: 15px; text-align: center; padding-top: 50%;">You have no messages yet.</p></div>
+		<div ng-if="threads.length === 0 && !isLoading "> <p style="padding-left: 15px; padding-right: 15px; text-align: center; padding-top: 50%;">You have no messages yet.</p></div>
 		<ion-list ng-if="!isLoading">
-			<ion-item class="item-avatar item-icon-right" ng-repeat="thread in threads" type="item-text-wrap" href="#/app/chat-view/{{thread.id}}/{{thread.attributes.artistInfo.id}}">
+			<ion-item ng-if="!thread.attributes.isCustomerThreadDeleted" class="item-avatar item-icon-right" ng-repeat="thread in threads" type="item-text-wrap" href="#/app/chat-view/{{thread.id}}/{{thread.attributes.artistInfo.id}}">
 				<img ng-src="{{thread.attributes.artistInfo.avatar}}">
 				<h2 ng-class="{blushnewmessage: thread.attributes.isNewMessageCustomer == true}">{{thread.attributes.artistInfo.firstName}} {{thread.attributes.artistInfo.lastName}}</h2>
 				<p ng-class="{blushnewmessage: thread.attributes.isNewMessageCustomer == true}">{{thread.attributes.lastMessage}}</p>
@@ -21,7 +21,7 @@
 				<span am-time-ago="thread.attributes.updatedAt" style="font-size: 11px;"></span>
 				<i class="icon ion-chevron-right icon-accessory"></i>
 
-				<ion-option-button class="button-assertive" ng-click="remove(chat)">
+				<ion-option-button class="button-assertive" ng-click="removeThread(thread)">
 					Delete
 				</ion-option-button>
 			</ion-item>

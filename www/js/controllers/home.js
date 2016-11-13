@@ -43,7 +43,8 @@ app.controller('HomeCtrl', function($scope, $ionicHistory, customerService, $ion
 		console.log(state);
 		if(state === 'quickbook'){
 			state = '';
-			getCurrentLocation();
+			// getCurrentLocation();
+			$rootScope.quickBook();
 		}else {
 			$ionicHistory.nextViewOptions({
 				disableAnimate: true,
@@ -54,12 +55,14 @@ app.controller('HomeCtrl', function($scope, $ionicHistory, customerService, $ion
 		}
 	}
 
-	$scope.changeToMapView = function(){
-		if(map){
-			map.remove();
-			$state.go('app.service');
-			$scope.nearestArtistModal.hide();
-		}
+	$rootScope.changeToMapView = function(){
+		// if(map){
+		// 	map.remove();
+		// 	$state.go('app.service');
+		// 	$scope.nearestArtistModal.hide();
+		// }
+		$state.go('app.service');
+		$scope.nearestArtistModal.hide();
 	}
 
 	$scope.bookSelectedArtist = function(){
@@ -95,7 +98,6 @@ app.controller('HomeCtrl', function($scope, $ionicHistory, customerService, $ion
 			$rootScope.nearbyArtists = []
 			$rootScope.nearbyArtists.push(results[0]);
 
-
 			$scope.profile = results[0];
 			$scope.randomDistance = generateRandomDistance(300,500);
 			$scope.nearestArtistModal.show();
@@ -110,57 +112,57 @@ app.controller('HomeCtrl', function($scope, $ionicHistory, customerService, $ion
 		});
 	}
 
-	function getCurrentLocation() {
-		// point = new Parse.GeoPoint({latitude: 10.349792530358712, longitude: 123.90758514404297});
-		// $rootScope.currentUserPosition = point;
-		// getArtists(point);
+	$rootScope.quickBook = function() {
+		point = new Parse.GeoPoint({latitude: 10.349792530358712, longitude: 123.90758514404297});
+		$rootScope.currentUserPosition = point;
+		getArtists(point);
 
-		try {
-			map = plugin.google.maps.Map.getMap(document.getElementById("map_canvas_home"));
-
-			map.on(plugin.google.maps.event.MAP_READY, function() {
-				map.getMyLocation({enableHighAccuracy: true }, function(location) {
-					point = new Parse.GeoPoint({latitude: location.latLng.lat, longitude: location.latLng.lng});
-					$rootScope.currentUserPosition = point;
-					getArtists(point);
-
-				}, function(err){
-					var options = {timeout: 10000, enableHighAccuracy: false };
-					$ionicLoading.show({
-						template: 'Finding the nearest artist nearby'
-					}).then(function(){
-					});
-
-					$cordovaGeolocation.getCurrentPosition(options).then(function(position){
-						var point = new Parse.GeoPoint({latitude: position.coords.latitude, longitude: position.coords.longitude});
-						$rootScope.currentUserPosition = point;
-						getArtists(point);
-
-					}, function(error){
-						$ionicLoading.hide();
-						$scope.isListEmpty = true;
-						var alertPopup = $ionicPopup.alert({
-							title: 'Find Location',
-							template: "Sorry we couldn't get your current location. <br><br> Please turn on your <b>location service</b>, and try to restart the application. <br><br> Sorry for the inconvenience."
-						});
-
-						alertPopup.then(function(res) {
-		
-						});
-					});
-				});
-			});
-		}
-		catch(err) {
-			var alertPopup = $ionicPopup.alert({
-				title: 'Find Location',
-				template: "Sorry, This feature is not available in your device."
-			});
-
-			alertPopup.then(function(res) {
-
-			});
-		}
+		// try {
+		// 	map = plugin.google.maps.Map.getMap(document.getElementById("map_canvas_home"));
+		//
+		// 	map.on(plugin.google.maps.event.MAP_READY, function() {
+		// 		map.getMyLocation({enableHighAccuracy: true }, function(location) {
+		// 			point = new Parse.GeoPoint({latitude: location.latLng.lat, longitude: location.latLng.lng});
+		// 			$rootScope.currentUserPosition = point;
+		// 			getArtists(point);
+		//
+		// 		}, function(err){
+		// 			var options = {timeout: 10000, enableHighAccuracy: false };
+		// 			$ionicLoading.show({
+		// 				template: 'Finding the nearest artist nearby'
+		// 			}).then(function(){
+		// 			});
+		//
+		// 			$cordovaGeolocation.getCurrentPosition(options).then(function(position){
+		// 				var point = new Parse.GeoPoint({latitude: position.coords.latitude, longitude: position.coords.longitude});
+		// 				$rootScope.currentUserPosition = point;
+		// 				getArtists(point);
+		//
+		// 			}, function(error){
+		// 				$ionicLoading.hide();
+		// 				$scope.isListEmpty = true;
+		// 				var alertPopup = $ionicPopup.alert({
+		// 					title: 'Find Location',
+		// 					template: "Sorry we couldn't get your current location. <br><br> Please turn on your <b>location service</b>, and try to restart the application. <br><br> Sorry for the inconvenience."
+		// 				});
+		//
+		// 				alertPopup.then(function(res) {
+		//
+		// 				});
+		// 			});
+		// 		});
+		// 	});
+		// }
+		// catch(err) {
+		// 	var alertPopup = $ionicPopup.alert({
+		// 		title: 'Find Location',
+		// 		template: "Sorry, This feature is not available in your device."
+		// 	});
+		//
+		// 	alertPopup.then(function(res) {
+		//
+		// 	});
+		// }
 	}
 
 	$scope.$on('$ionicView.beforeLeave', function(e) {

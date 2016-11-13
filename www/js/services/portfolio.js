@@ -5,6 +5,8 @@ app.service('portfolioService', function($q) {
 		var PortfolioObject = Parse.Object.extend("Portfolio");
 		var query = new Parse.Query(PortfolioObject);
 
+		query.descending("updatedAt");
+
 		if(skip){
 			query.skip(skip);
 		}

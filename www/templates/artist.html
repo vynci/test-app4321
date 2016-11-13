@@ -25,7 +25,7 @@
             </button>
           </div>
           <div>
-            <button class="button button-icon button-clear ion-information-circled button-clear" style="padding: 0px; font-size: 24px; color: white;">
+            <button ng-click="showArtistInfo()" class="button button-icon button-clear ion-information-circled button-clear" style="padding: 0px; font-size: 24px; color: white;">
             </button>
           </div>
           <div>
@@ -53,8 +53,11 @@
     </ion-tabs>
 
     <div ng-if="selectedTab === 'services'" style="padding-bottom: 20%;">
-
-      <div ng-if="!artistServices.length" class="item" style="text-align: center; white-space: normal;">Sorry, {{profile.firstName}} doesn't have any services yet.</div>
+      <div ng-if="isServicesLoading" style="text-align: center; padding-top: 25%;">
+        <ion-spinner icon="spiral"></ion-spinner><br>
+        <span>Loading Services...</span>
+      </div>
+      <div ng-if="!artistServices.length && !isServicesLoading" class="item" style="text-align: center; white-space: normal;">Sorry, {{profile.firstName}} doesn't have any services yet.</div>
 
       <ion-list>
         <div ng-repeat="service in artistServices" style="border-bottom-color: lightgray; border-bottom-width: 2px; border-bottom-style: dashed;">
@@ -86,6 +89,11 @@
     </div>
 
     <div ng-if="selectedTab === 'portfolio'">
+      <div ng-if="isPortfolioLoading" style="text-align: center; padding-top: 25%;">
+        <ion-spinner icon="spiral"></ion-spinner><br>
+        <span>Loading Portfolio...</span>
+      </div>
+      <div ng-if="!artistPortfolio.length && !isPortfolioLoading" class="item" style="text-align: center; white-space: normal;">Sorry, {{profile.firstName}} doesn't have any portfolio yet.</div>
       <div class="row" ng-repeat="image in artistPortfolio" ng-if="$index % 3 === 0">
         <div class="col col-33" ng-if="$index < artistPortfolio.length" style="height: 90px !important; overflow: hidden !important;">
           <img ng-src="{{artistPortfolio[$index].attributes.imagePath}}" ng-click="viewPortfolio(artistPortfolio[$index + 0].attributes.imagePath, artistPortfolio[$index + 0].attributes.description)" spinkit-image-preloader='chasing-dots-spinner' width="100%" />
@@ -101,17 +109,28 @@
 
     <div ng-if="selectedTab === 'reviews'">
       <br>
-      <div ng-if="!artistReviews.length" class="item" style="text-align: center; white-space: normal;">Sorry, {{profile.firstName}} doesn't have any reviews yet.</div>
+      <div ng-if="isReviewLoading" style="text-align: center; padding-top: 25%;">
+        <ion-spinner icon="spiral"></ion-spinner><br>
+        <span>Loading Reviews...</span>
+      </div>
+      <div ng-if="!artistReviews.length && !isReviewLoading" class="item" style="text-align: center; white-space: normal;">Sorry, {{profile.firstName}} doesn't have any reviews yet.</div>
       <div class="list">
 
-        <div class="item item-thumbnail-left" ng-repeat="review in artistReviews">
-          <img ng-src="{{review.attributes.customerInfo.avatar || spiral}}">
+        <div class="item item-avatar" ng-repeat="review in artistReviews">
+          <img ng-src="{{review.attributes.customerInfo.avatar || spiral}}" style="border-radius: 50%;">
           <h2>{{review.attributes.title}}</h2>
-          <p>
+          <!-- <p>
             <rating ng-model="review.attributes.ratings" max="5"></rating>
-          </p>
+          </p> -->
+          <div class="col" style="padding-left: 0px; padding-bottom: 0px; text-align: left;">
+            <i ng-class="review.attributes.ratings >= 1 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#f1807a;"></i>
+            <i ng-class="review.attributes.ratings >= 2 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#f1807a;"></i>
+            <i ng-class="review.attributes.ratings >= 3 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#f1807a;"></i>
+            <i ng-class="review.attributes.ratings >= 4 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#f1807a;"></i>
+            <i ng-class="review.attributes.ratings == 5 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#f1807a;"></i>
+          </div>
           <p style="white-space: normal;">{{review.attributes.description}}</p>
-          <p>by <em>{{review.attributes.customerInfo.firstName}} {{review.attributes.customerInfo.lastName}}</em></p>
+          <p style="font-weight: bold;font-size: 12px;" >by <em>{{review.attributes.customerInfo.firstName}} {{review.attributes.customerInfo.lastName}} | {{review.attributes.createdAt.getMonth() + 1}} / {{review.attributes.createdAt.getDate() + 1}} / {{review.attributes.createdAt.getFullYear()}}</em></p>
           <br>
         </div>
 

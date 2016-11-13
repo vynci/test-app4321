@@ -38,7 +38,7 @@ function($scope, $rootScope, $state, $stateParams, MockService,
         var message = new Message();
 
         message.id = messageObj.content.objectId;
-        message.set("createdAt", messageObj.content.createdAt)
+        message.set("createdDate", new Date());
         message.set("threadId", messageObj.content.threadId);
         message.set("message", messageObj.content.message);
         message.set("userId", messageObj.content.message.userId);
@@ -214,6 +214,7 @@ function($scope, $rootScope, $state, $stateParams, MockService,
       message.set("threadId", $stateParams.chatId);
       message.set("message", messageTxt);
       message.set("userId", Parse.User.current().get('profileId'));
+      message.set("createdDate", new Date());
       $scope.messages.push(message);
       message.save(null, {
         success: function(result) {
@@ -225,6 +226,7 @@ function($scope, $rootScope, $state, $stateParams, MockService,
           thread.id = $stateParams.chatId;
           thread.set("lastMessage", messageTxt);
           thread.set("isNewMessageArtist", true);
+          thread.set("isArtistThreadDeleted", false);
 
           thread.save(null, {
             success: function(result) {
@@ -298,7 +300,7 @@ function($scope, $rootScope, $state, $stateParams, MockService,
 
     // this prob seems weird here but I have reasons for this in my app, secret!
     $scope.viewProfile = function(msg) {
-      console.log(msg);
+      console.log(msg.attributes);
       $state.go('app.artist', {artistId: msg.get('userId')});
     };
 

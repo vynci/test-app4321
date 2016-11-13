@@ -10,7 +10,7 @@
       </ion-nav-buttons>
 
       <ion-nav-buttons side="right">
-        <a href="#/app/artistlist" class="button button-icon button-small button-clear ion-location" style="color: #443b3e;">
+        <a ng-click="findArtists(true)" class="button button-icon button-small button-clear ion-location" style="color: #443b3e;">
         </a>
       </ion-nav-buttons>
     </ion-nav-bar>
@@ -62,8 +62,7 @@
           <ion-item menu-close href="#/app/discover">
             <i class="icon ion-ios-glasses-outline" style="font-size: 26px; padding-right:12px;"></i> Daily Trends
           </ion-item>
-          <ion-item menu-close href="#">
-
+          <ion-item menu-close href="#/app/home" ng-click="quickBook()">
             <i class="icon ion-ios-bolt-outline" style="font-size: 26px; padding-right:22px;"></i> Quick Booking
           </ion-item>
 

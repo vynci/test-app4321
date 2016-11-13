@@ -22,6 +22,22 @@ app.controller('ChatsCtrl', function($scope, $ionicHistory, $state, threadServic
     $scope.$broadcast('scroll.refreshComplete');
   }
 
+  $scope.removeThread = function(thread){
+    console.log(thread);
+
+    thread.set("isCustomerThreadDeleted", true);
+
+    thread.save(null, {
+      success: function(result) {
+        // Execute any logic that should take place after the object is saved.
+        getThreads();
+      },
+      error: function(gameScore, error) {
+
+      }
+    });
+  }
+
 	function getThreads(){
 		// $ionicLoading.show({
 		// 	template: 'Loading :)'

@@ -1,62 +1,77 @@
-<ion-view view-title="Artists Near Me">
+<ion-view view-title="Find Artists">
   <ion-content overflow-scroll="true">
     <div style="padding: 3%; background: #574C4F;">
-      <ion-google-place placeholder="Find artists by entering location..." ng-model="position.search" current-location="false"/>
+      <ion-google-place placeholder="{{searchPlaceHolder}}" ng-model="position.search" current-location="false"/>
     </div>
 
     <div class="row">
       <div class="col">
-        <button class="button button-block button-light blush-button-brown login-button button-small" ng-click="showFilters()" style="height: 30px !important;">Show Filters</button>
+        <button class="button icon-left ion-funnel button-clear button-dark" ng-click="showFilters(true, 'Filters')" style="height: 30px !important;">Filter</button>
       </div>
-      <div class="col">
-        <button class="button button-block button-light blush-button-brown login-button button-small" ng-disabled="isListEmpty" ng-click="changeToMapView()" style="height: 30px !important;">View in Map</button>
+
+      <div class="col" style="text-align: center;">
+        <button class="button icon-left ion-arrow-swap button-clear button-dark" ng-click="showFilters(false, 'Sort By')" style="height: 30px !important;">Sort</button>
+      </div>
+
+      <div class="col" style="text-align: right;">
+        <button class="button icon-left ion-android-locate button-clear button-dark" ng-click="findArtistsNearby()" style="height: 30px !important;"></button>
       </div>
     </div>
 
-    <div>
-      <div ng-repeat="artist in fromCloudActiveArtists | filter: filterArtist | orderBy: filter.sort">
-        <a class="item item-thumbnail-left" ng-href="#/app/artist/{{artist.id}}">
-          <img ng-src="{{artist.attributes.avatar || spiral}}" class="blush-avatar">
+    <div ng-if="isLoading" style="text-align: center; padding-top: 45%; padding-right: 10px; padding-left: 10px;">
+      <ion-spinner icon="spiral"></ion-spinner><br>
+      <span>{{loadingStatus}}</span>
+    </div>
 
-          <div class="row" style="padding-left: 0px; padding-bottom: 0px;">
-            <div class="col" style="padding-left: 0px; padding-bottom: 0px;">
-              <h2>{{artist.attributes.firstName}} {{artist.attributes.lastName}}</ht>
-            </div>
-            <div class="col" style="padding-left: 0px; padding-bottom: 0px; text-align: right;">
-              <i ng-class="artist.attributes.rating >= 1 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
-              <i ng-class="artist.attributes.rating >= 2 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
-              <i ng-class="artist.attributes.rating >= 3 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
-              <i ng-class="artist.attributes.rating >= 4 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
-              <i ng-class="artist.attributes.rating == 5 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
-            </div>
+    <div ng-if="!isLoading" ng-repeat="artist in fromCloudActiveArtists | filter: filterArtist | orderBy: filter.sort">
+      <a class="item item-thumbnail-left" ng-href="#/app/artist/{{artist.id}}">
+        <img ng-src="{{artist.attributes.avatar || spiral}}" class="blush-avatar">
+
+        <div class="row" style="padding-left: 0px; padding-bottom: 0px;">
+          <div class="col" style="padding-left: 0px; padding-bottom: 0px;">
+            <h2>{{artist.attributes.firstName}} {{artist.attributes.lastName}}</ht>
           </div>
-
-          <!-- <h2>{{artist.attributes.firstName}} {{artist.attributes.lastName}} -->
-
-          </h2>
-          <p>{{artist.attributes.address}}</p>
-          <p>{{artist.attributes.serviceType}}</p>
-          <p>₱{{artist.attributes.priceRange.low}} - ₱{{artist.attributes.priceRange.high}}</p>
-
-        </a>
-      </div>
-      <div class="row" ng-if="!filter.hair && !filter.makeup">
-        <div class="col" style="text-align: center;">
-          <h6>You filtered out both Hair Stylists and Makeup Artists. This will display an empty list.</h6>
+          <div class="col" style="padding-left: 0px; padding-bottom: 0px; text-align: right;">
+            <i ng-class="artist.attributes.rating >= 1 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
+            <i ng-class="artist.attributes.rating >= 2 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
+            <i ng-class="artist.attributes.rating >= 3 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
+            <i ng-class="artist.attributes.rating >= 4 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
+            <i ng-class="artist.attributes.rating == 5 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
+          </div>
         </div>
+
+        <!-- <h2>{{artist.attributes.firstName}} {{artist.attributes.lastName}} -->
+
+        </h2>
+        <p>{{artist.attributes.address}}</p>
+        <p>{{artist.attributes.serviceType}}</p>
+        <p>₱{{artist.attributes.priceRange.low}} - ₱{{artist.attributes.priceRange.high}}</p>
+
+      </a>
+    </div>
+
+    <div class="row" ng-if="!filter.hair && !filter.makeup">
+      <div class="col" style="text-align: center;">
+        <h6>You filtered out both Hair Stylists and Makeup Artists. This will display an empty list.</h6>
       </div>
-      <div class="row" ng-if="isListEmpty">
-        <div class="col" style="text-align: center;">
-          <h6>Empty Artist List.</h6>
-          <h6>To Find Artists, input your location in the search box.</h6>
-        </div>
+    </div>
+    <div class="row" ng-if="isListEmpty">
+      <div class="col" style="text-align: center;">
+        <h6>Empty Artist List.</h6>
+        <h6>To Find Artists, input your location in the search box.</h6>
       </div>
-      <div class="row" ng-hide="!fromCloudActiveArtists.length || (!filter.hair && !filter.makeup)">
-        <div class="col" style="text-align: center;">
-          <button class="button button-positive button-outline" ng-click="loadMoreArtists()">Load More Artists...</button>
-        </div>
+    </div>
+    <div class="row" ng-if="!isLoading" ng-hide="!fromCloudActiveArtists.length || (!filter.hair && !filter.makeup)">
+      <div class="col" style="text-align: center;">
+        <button class="button button-positive button-outline" ng-click="loadMoreArtists()">Load More Artists...</button>
       </div>
+    </div>
+
+
   </ion-content>
+  <div ng-click="changeToMapView()" class="bar bar-footer bar-balanced" style="background: #574C4F !important">
+    <div class="title"><i class="icon ion-map"></i> Map View</div>
+  </div>
   <!-- <div class="item item-divider blush-background" style="position: fixed; bottom: 0; width: 100%; padding-top: 10px; padding-bottom: 10px; padding-right: 5px;">
       <button class="button button-block button-small button-energized" style="margin-top: 0px;
         margin-bottom: 0px; background: #b7d05b; border-radius:30px; height: 40px;"><b style="font-size: 16px;">Filter Results</button>

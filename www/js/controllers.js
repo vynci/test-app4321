@@ -81,7 +81,7 @@ angular.module('starter.controllers', [])
         // The login failed. Check error to see why.
         $ionicLoading.hide();
         var alertPopup = $ionicPopup.alert({
-          title: 'Login Error',
+          title: '<b>Login</b>',
           template: 'Sorry ' + error.message
         });
 
@@ -89,6 +89,14 @@ angular.module('starter.controllers', [])
         });
       }
     });
+  }
+
+  $scope.findArtists = function(){
+    $ionicHistory.nextViewOptions({
+      disableAnimate: true,
+      disableBack: true
+    });
+    $state.go('app.artistlist', {}, {reload: true});
   }
 
   $scope.viewProfile = function(){
@@ -99,6 +107,37 @@ angular.module('starter.controllers', [])
       $state.go('app.account');
       $ionicSideMenuDelegate.toggleLeft();
     }
+  }
+
+  $scope.forgotPassword = function(){
+    var myPopup = $ionicPopup.show({
+      template: '<input style="border-radius: 30px; padding-left: 15px;" type="text" ng-model="forgotPasswordEmail">',
+      title: '<b>Forgot Password</b>',
+      subTitle: 'Please enter the email address you registered with and we will send you instructions on how to reset your password.',
+      scope: $scope,
+      buttons: [
+        { text: 'Cancel' },
+        {
+          text: '<b>Reset Password</b>',
+          type: 'button-positive',
+          onTap: function(e) {
+            Parse.Cloud.run('hello', $scope.forgotPasswordEmail, {
+              success: function(secretString) {
+                // obtained secret string
+                console.log(secretString);
+              },
+              error: function(error) {
+                // error
+              }
+            });
+          }
+        }
+        ]
+      });
+
+    myPopup.then(function(res) {
+      console.log('Tapped!', res);
+    });
   }
 
   // Triggered in the login modal to close it
@@ -131,7 +170,7 @@ angular.module('starter.controllers', [])
 
   $scope.doLogin = function() {
     $ionicLoading.show({
-      template: 'Logging in :)'
+      template: 'Logging in...'
     }).then(function(){
       console.log("The loading indicator is now displayed");
     });
@@ -155,55 +194,67 @@ angular.module('starter.controllers', [])
       template: 'Processing Your Registration :)'
     }).then(function(){
     });
+    if($scope.registerData.password === $scope.registerData.confirmPassword){
+      var Customer = Parse.Object.extend("Customer");
+      var customer = new Customer();
 
-    var Customer = Parse.Object.extend("Customer");
-    var customer = new Customer();
+      customer.set("firstName", $scope.registerData.firstName);
+      customer.set("lastName", $scope.registerData.lastName);
+      customer.set("contactNumber", $scope.registerData.contactNumber.toString());
+      customer.set("email", $scope.registerData.email);
 
-    customer.set("firstName", $scope.registerData.firstName);
-    customer.set("lastName", $scope.registerData.lastName);
-    customer.set("email", $scope.registerData.email);
+      customer.save(null, {
+        success: function(result) {
+          // Execute any logic that should take place after the object is saved.
+          var user = new Parse.User();
+          user.set("username", $scope.registerData.email);
+          user.set("password", $scope.registerData.password);
+          user.set("profileId", result.id);
+          user.set("userType", 'customer');
 
-    customer.save(null, {
-      success: function(result) {
-        // Execute any logic that should take place after the object is saved.
-        var user = new Parse.User();
-        user.set("username", $scope.registerData.email);
-        user.set("password", $scope.registerData.password);
-        user.set("profileId", result.id);
-        user.set("userType", 'customer');
+          user.signUp(null, {
+            success: function(user) {
+              // Hooray! Let them use the app now.
+              userLogin($scope.registerData.email, $scope.registerData.password);
 
-        user.signUp(null, {
-          success: function(user) {
-            // Hooray! Let them use the app now.
-            userLogin($scope.registerData.email, $scope.registerData.password);
+            },
+            error: function(user, error) {
+              // Show the error message somewhere and let the user try again.
+              var alertPopup = $ionicPopup.alert({
+                title: 'Signup Error',
+                template: 'Sorry ' + error.message
+              });
 
-          },
-          error: function(user, error) {
-            // Show the error message somewhere and let the user try again.
-            var alertPopup = $ionicPopup.alert({
-              title: 'Signup Error',
-              template: 'Sorry ' + error.message
-            });
+              alertPopup.then(function(res) {
+              });
+              $ionicLoading.hide();
+            }
+          });
+        },
+        error: function(gameScore, error) {
+          // Execute any logic that should take place if the save fails.
+          // error is a Parse.Error with an error code and message.
+          var alertPopup = $ionicPopup.alert({
+            title: 'Signup Error',
+            template: 'Sorry ' + error.message
+          });
 
-            alertPopup.then(function(res) {
-            });
-            $ionicLoading.hide();
-          }
-        });
-      },
-      error: function(gameScore, error) {
-        // Execute any logic that should take place if the save fails.
-        // error is a Parse.Error with an error code and message.
-        var alertPopup = $ionicPopup.alert({
-          title: 'Signup Error',
-          template: 'Sorry ' + error.message
-        });
+          alertPopup.then(function(res) {
+          });
+          $ionicLoading.hide();
+        }
+      });
+    }else{
+      $ionicLoading.hide();
+      var alertPopup = $ionicPopup.alert({
+        title: 'Register',
+        template: 'Password doesn\'t match.'
+      });
 
-        alertPopup.then(function(res) {
-        });
-        $ionicLoading.hide();
-      }
-    });
+      alertPopup.then(function(res) {
+        console.log('Thank you for not eating my delicious ice cream cone');
+      });
+    }
   }
 
   $scope.showMessageAlert = function(message) {
