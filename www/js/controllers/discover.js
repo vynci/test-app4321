@@ -4,12 +4,12 @@ app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ion
   console.log('Discvoer List View!');
   $scope.spiral = 'img/placeholder.png';
   $scope.cardInfo = {};
-  $scope.pageCount = 10;
+  $scope.pageCount = 2;
 
   getPortfolios();
 
   // $ionicLoading.show({
-  //   template: 'Loading :)'
+  //   template: 'Loading...'
   // }).then(function(){
   //   console.log("The loading indicator is now displayed");
   // });
@@ -33,10 +33,12 @@ app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ion
     portfolioService.getPortfolios(skip)
     .then(function(results) {
       // Handle the result
+      $scope.numberOfResults = results.length;
       if(skip){
         console.log('skip');
         var tmp = $scope.cards;
         $scope.cards = tmp.concat(results);
+        $scope.$broadcast('scroll.infiniteScrollComplete');
       } else{
         console.log('not skip');
         $scope.cards = results;
@@ -54,19 +56,16 @@ app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ion
   }
 
   function getCommentsById(id){
-    $ionicLoading.show({
-      template: 'Loading :)'
-    }).then(function(){
-    });
+    $scope.isCommentLoading = true;
 
     commentService.getCommentsById(id)
     .then(function(results) {
       // Handle the result
       console.log(results);
       $scope.comments = results;
-      $ionicLoading.hide();
+      $scope.isCommentLoading = false;
     }, function(err) {
-      $ionicLoading.hide();
+      $scope.isCommentLoading = false;
       // Error occurred
       console.log(err);
     }, function(percentComplete) {
@@ -74,36 +73,69 @@ app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ion
     });
   }
 
+  $scope.moreDataCanBeLoaded = function(){
+    if($scope.numberOfResults !== 0){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
   $scope.refresh = function(){
+    $scope.pageCount = 2;
     getPortfolios();
     $scope.$broadcast('scroll.refreshComplete');
   }
 
   $scope.addLike = function(card){
-    if(!arrayContains.call(card.attributes.likes, Parse.User.current().id)){
-      card.add('likes', Parse.User.current().id);
+    if(Parse.User.current()){
+      if(!arrayContains.call(card.attributes.likes, Parse.User.current().id)){
+        card.add('likes', Parse.User.current().id);
 
-      card.save(null,{
-        success: function(result) {
-          // save succeeded
-        },
-        error: function(testObject, error) {
-          // inspect error
-        }
+        card.save(null,{
+          success: function(result) {
+            // save succeeded
+          },
+          error: function(testObject, error) {
+            // inspect error
+          }
+        });
+      } else {
+        card.remove('likes', Parse.User.current().id);
+
+        card.save(null,{
+          success: function(result) {
+            // save succeeded
+            console.log(result);
+          },
+          error: function(testObject, error) {
+            // inspect error
+          }
+        });
+      }
+    }else{
+      var myPopup = $ionicPopup.show({
+        template: 'Hi, a registered account is needed to like a post. Signup now, it is easy and quick!',
+        title: '<b>Discover Trends</b>',
+        subTitle: '',
+        scope: $scope,
+        buttons: [
+          { text: 'Cancel' },
+          {
+            text: '<b>Signup</b>',
+            type: 'button-positive',
+            onTap: function(e) {
+              $scope.showRegisterForm();
+            }
+          }
+        ]
       });
-    } else {
-      card.remove('likes', Parse.User.current().id);
 
-      card.save(null,{
-        success: function(result) {
-          // save succeeded
-          console.log(result);
-        },
-        error: function(testObject, error) {
-          // inspect error
-        }
+      myPopup.then(function(res) {
+        console.log('Tapped!', res);
       });
     }
+
   }
 
   $scope.getComments = function(card){
@@ -119,53 +151,72 @@ app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ion
   }
 
   $scope.postComment = function(id){
-    console.log($scope.cardInfo);
 
-    $ionicLoading.show({
-      template: 'Loading :)'
-    }).then(function(){
-    });
+    if(Parse.User.current()){
+      var Comment = Parse.Object.extend("Comment");
+      var comment = new Comment();
 
-    var Comment = Parse.Object.extend("Comment");
-    var comment = new Comment();
+      comment.set('portfolioId', $scope.cardInfo.portfolioId);
+      comment.set('commenterInfo', $scope.customerProfile);
+      comment.set('comment', $scope.cardInfo.comment);
 
-    comment.set('portfolioId', $scope.cardInfo.portfolioId);
-    comment.set('commenterInfo', $scope.customerProfile);
-    comment.set('comment', $scope.cardInfo.comment);
+      comment.save(null, {
+        success: function(result) {
+          // Execute any logic that should take place after the object is saved.
+          getCommentsById($scope.cardInfo.portfolioId);
+          $scope.cardInfo.comment = '';
 
-    comment.save(null, {
-      success: function(result) {
-        // Execute any logic that should take place after the object is saved.
-        getCommentsById($scope.cardInfo.portfolioId);
-        $scope.cardInfo.comment = '';
+          $scope.currentCard.add('comments', result.id);
 
-        $scope.currentCard.add('comments', result.id);
+          $scope.currentCard.save(null,{
+            success: function(result) {
+              // save succeeded
+              $ionicLoading.hide();
+            },
+            error: function(testObject, error) {
+              // inspect error
+              $ionicLoading.hide();
+            }
+          });
 
-        $scope.currentCard.save(null,{
-          success: function(result) {
-            // save succeeded
-            $ionicLoading.hide();
-          },
-          error: function(testObject, error) {
-            // inspect error
-            $ionicLoading.hide();
+
+        },
+        error: function(gameScore, error) {
+          // Execute any logic that should take place if the save fails.
+          // error is a Parse.Error with an error code and message.
+          getCommentsById($scope.cardInfo.portfolioId);
+          $ionicLoading.hide();
+        }
+      });
+    }else{
+      var myPopup = $ionicPopup.show({
+        template: 'Hi, a registered account is needed to comment on a post. Signup now, it is easy and quick!',
+        title: '<b>Discover Trends</b>',
+        subTitle: '',
+        scope: $scope,
+        buttons: [
+          { text: 'Cancel' },
+          {
+            text: '<b>Signup</b>',
+            type: 'button-positive',
+            onTap: function(e) {
+              $scope.showRegisterForm();
+            }
           }
-        });
+        ]
+      });
 
+      myPopup.then(function(res) {
+        console.log('Tapped!', res);
+      });
+    }
 
-      },
-      error: function(gameScore, error) {
-        // Execute any logic that should take place if the save fails.
-        // error is a Parse.Error with an error code and message.
-        getCommentsById($scope.cardInfo.portfolioId);
-        $ionicLoading.hide();
-      }
-    });
   }
 
   $scope.loadMorePosts = function(){
+    console.log('infinite');
     getPortfolios($scope.pageCount);
-    $scope.pageCount += 10;
+    $scope.pageCount += 2;
   }
 
   function arrayContains(needle) {
@@ -197,7 +248,7 @@ app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ion
 
   function getCustomerProfile(){
     // $ionicLoading.show({
-    //   template: 'Loading :)'
+    //   template: 'Loading...'
     // }).then(function(){
     //   console.log("The loading indicator is now displayed");
     // });

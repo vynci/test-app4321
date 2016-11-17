@@ -28,15 +28,16 @@
         <img ng-src="{{artist.attributes.avatar || spiral}}" class="blush-avatar">
 
         <div class="row" style="padding-left: 0px; padding-bottom: 0px;">
-          <div class="col" style="padding-left: 0px; padding-bottom: 0px;">
+          <div class="col-67" style="padding-left: 0px; padding-bottom: 0px;">
             <h2>{{artist.attributes.firstName}} {{artist.attributes.lastName}}</ht>
           </div>
-          <div class="col" style="padding-left: 0px; padding-bottom: 0px; text-align: right;">
-            <i ng-class="artist.attributes.rating >= 1 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
-            <i ng-class="artist.attributes.rating >= 2 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
-            <i ng-class="artist.attributes.rating >= 3 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
-            <i ng-class="artist.attributes.rating >= 4 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
-            <i ng-class="artist.attributes.rating == 5 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f;"></i>
+          <div class="col-33" style="padding-left: 0px; padding-bottom: 0px; text-align: right;">
+            <!-- <i class="icon ion-ios-heart" style="color: #f1807a"> {{artist.attributes.rating || 0}}</i> -->
+            <i ng-class="artist.attributes.rating >= 1 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f; font-size: 14px;"></i>
+            <i ng-class="artist.attributes.rating >= 2 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f; font-size: 14px;"></i>
+            <i ng-class="artist.attributes.rating >= 3 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f; font-size: 14px;"></i>
+            <i ng-class="artist.attributes.rating >= 4 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f; font-size: 14px;"></i>
+            <i ng-class="artist.attributes.rating == 5 ? 'ion-ios-heart' : 'ion-ios-heart-outline'" style="color:#ff6c8f; font-size: 14px;"></i>
           </div>
         </div>
 
@@ -61,12 +62,12 @@
         <h6>To Find Artists, input your location in the search box.</h6>
       </div>
     </div>
-    <div class="row" ng-if="!isLoading" ng-hide="!fromCloudActiveArtists.length || (!filter.hair && !filter.makeup)">
+    <!-- <div class="row" ng-if="!isLoading" ng-hide="!fromCloudActiveArtists.length || (!filter.hair && !filter.makeup)">
       <div class="col" style="text-align: center;">
         <button class="button button-positive button-outline" ng-click="loadMoreArtists()">Load More Artists...</button>
       </div>
-    </div>
-
+    </div> -->
+    <ion-infinite-scroll on-infinite="loadMoreArtists()" distance="1%" icon="ion-loading-c" ng-if="moreDataCanBeLoaded()">
 
   </ion-content>
   <div ng-click="changeToMapView()" class="bar bar-footer bar-balanced" style="background: #574C4F !important">

@@ -116,7 +116,7 @@ span {
 }
 
 .dot1, .dot2 {
-	background-color: #6cff93 !important;
+	background-color: #443b3e !important;
 }
 
 .menu {
@@ -390,7 +390,7 @@ a {
 .my-container img {
 	position: absolute;
 	left: 0;
-	top: -15px;
+	top: -20px;
 	width: 100%;
 	height: auto;
 	z-index: 1;

@@ -13,7 +13,7 @@ app.service('artistService', function($q) {
 			query.skip(skip);
 		}
 
-		query.limit(10);
+		query.limit(5);
 
 		query.find({
 			success: function(results) {

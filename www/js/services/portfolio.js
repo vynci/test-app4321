@@ -11,7 +11,7 @@ app.service('portfolioService', function($q) {
 			query.skip(skip);
 		}
 
-		query.limit(10);
+		query.limit(2);
 
 		query.find({
 			success: function(results) {

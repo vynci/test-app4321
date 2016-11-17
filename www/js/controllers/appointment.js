@@ -6,18 +6,13 @@ app.controller('AppointmentCtrl', function($scope, $ionicModal, $timeout, $ionic
   $scope.rateDescription = ['', 'Disappointed', 'Below Average', 'Satisfied', 'Above Expectations', 'Absolutely Delighted'];
 
   function getAppointments(){
-    $ionicLoading.show({
-      template: 'Loading :)'
-    }).then(function(){
-      console.log("The loading indicator is now displayed");
-    });
-
+    $scope.isLoading = true;
     appointmentService.getBookingsById(Parse.User.current().get('profileId'))
     .then(function(results) {
       // Handle the result
       console.log(results);
       $scope.appointments = results;
-      $ionicLoading.hide();
+      $scope.isLoading = false;
     }, function(err) {
       $ionicLoading.hide();
       // Error occurred
@@ -54,7 +49,7 @@ app.controller('AppointmentCtrl', function($scope, $ionicModal, $timeout, $ionic
   $scope.submitReview = function(){
     //
     $ionicLoading.show({
-      template: 'Loading :)'
+      template: 'Loading...'
     }).then(function(){
     });
 
@@ -124,11 +119,7 @@ app.controller('AppointmentCtrl', function($scope, $ionicModal, $timeout, $ionic
   });
 
   function getCustomerProfile(){
-    $ionicLoading.show({
-      template: 'Loading :)'
-    }).then(function(){
-      console.log("The loading indicator is now displayed");
-    });
+    $scope.isLoading = true;
 
     if(Parse.User.current()){
       customerService.getCustomerById(Parse.User.current().get('profileId'))
@@ -139,7 +130,7 @@ app.controller('AppointmentCtrl', function($scope, $ionicModal, $timeout, $ionic
         $scope.customerProfile.lastName = results[0].get('lastName');
         $scope.customerProfile.avatar = results[0].get('avatar');
 
-        $ionicLoading.hide();
+        $scope.isLoading = false;
 
         return results;
       }, function(err) {

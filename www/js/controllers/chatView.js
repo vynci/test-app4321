@@ -88,7 +88,7 @@ function($scope, $rootScope, $state, $stateParams, MockService,
     function getCustomerProfile(id){
 
       // $ionicLoading.show({
-      //   template: 'Loading :)'
+      //   template: 'Loading...'
       // }).then(function(){
       //   console.log("The loading indicator is now displayed");
       // });

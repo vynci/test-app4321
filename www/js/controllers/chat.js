@@ -40,7 +40,7 @@ app.controller('ChatsCtrl', function($scope, $ionicHistory, $state, threadServic
 
 	function getThreads(){
 		// $ionicLoading.show({
-		// 	template: 'Loading :)'
+		// 	template: 'Loading...'
 		// }).then(function(){
 		// 	console.log("The loading indicator is now displayed");
 		// });

@@ -23,7 +23,7 @@ app.controller('BookCtrl', function($scope, $ionicModal, $timeout, serviceServic
 
     if($scope.customerProfile.contactNumber){
       $ionicLoading.show({
-        template: 'Loading :)'
+        template: 'Loading...'
       }).then(function(){
       });
 
@@ -117,7 +117,7 @@ app.controller('BookCtrl', function($scope, $ionicModal, $timeout, serviceServic
 
   function getCustomerProfile(){
     $ionicLoading.show({
-      template: 'Loading :)'
+      template: 'Loading...'
     }).then(function(){
     });
 

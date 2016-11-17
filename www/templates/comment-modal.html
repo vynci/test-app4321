@@ -1,4 +1,4 @@
-<ion-modal-view>
+<ion-modal-view style="background:white;">
 	<ion-header-bar>
 		<h1 class="title">Comments</h1>
 		<div class="buttons">
@@ -10,7 +10,12 @@
 	</ion-header-bar>
 	<ion-content>
 
-		<div class="list">
+		<div ng-if="isCommentLoading" style="text-align: center; padding-top: 45%; padding-right: 10px; padding-left: 10px;">
+			<ion-spinner icon="spiral"></ion-spinner><br>
+			<span>Loading Comments</span>
+		</div>
+
+		<div class="list" ng-if="!isCommentLoading">
 
 			<a class="item item-avatar" ng-repeat="comment in comments">
 				<img ng-src="{{comment.attributes.commenterInfo.avatar || spiral}}">

@@ -14,7 +14,7 @@ app.controller('AccountCtrl', function($scope, $ionicModal, $timeout, customerSe
 
   function getCustomerProfile(){
     $ionicLoading.show({
-      template: 'Loading :)'
+      template: 'Loading...'
     }).then(function(){
       console.log("The loading indicator is now displayed");
     });

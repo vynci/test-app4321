@@ -129,7 +129,7 @@ app.controller('ArtistCtrl', function($scope, $ionicModal, $timeout, $ionicLoadi
 
   function getCustomerProfile(){
     $ionicLoading.show({
-      template: 'Loading :)'
+      template: 'Loading...'
     }).then(function(){
     });
 

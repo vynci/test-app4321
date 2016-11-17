@@ -59,7 +59,7 @@ app.controller('ServiceCtrl', function($scope, $ionicHistory, $ionicModal, $time
 
   function initMarkers(){
     $ionicLoading.show({
-      template: 'Loading :)'
+      template: 'Loading...'
     }).then(function(){
     });
 

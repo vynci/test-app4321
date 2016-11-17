@@ -10,9 +10,11 @@ app.controller('ArtistListViewCtrl', function($scope, $ionicModal, $timeout, $io
     sort : ''
   }
 
-  $scope.pageCount = 10;
+  $scope.pageCount = 5;
   $scope.isListEmpty = false;
   $scope.isLoading = false;
+
+  $scope.fromCloudActiveArtists = [];
 
   var map;
   var point;
@@ -48,6 +50,7 @@ app.controller('ArtistListViewCtrl', function($scope, $ionicModal, $timeout, $io
         var tmp = $scope.fromCloudActiveArtists;
         $scope.fromCloudActiveArtists = tmp.concat(results);
         $rootScope.nearbyArtists = $scope.fromCloudActiveArtists;
+        $scope.$broadcast('scroll.infiniteScrollComplete');
       }
       $scope.isListEmpty = false;
       $scope.isLoading = false;
@@ -97,59 +100,64 @@ app.controller('ArtistListViewCtrl', function($scope, $ionicModal, $timeout, $io
   }
 
   function getCurrentLocation() {
-    point = new Parse.GeoPoint({latitude: 10.349792530358712, longitude: 123.90758514404297});
-    reverseGeocoding({latitude: 10.349792530358712, longitude: 123.90758514404297});
-    getArtists(point);
-    // if(plugin){
-    //   map = plugin.google.maps.Map.getMap();
-    //   map.on(plugin.google.maps.event.MAP_READY, function() {
-    //     map.getMyLocation({enableHighAccuracy: true }, function(location) {
-    //       point = new Parse.GeoPoint({latitude: location.latLng.lat, longitude: location.latLng.lng});
-    //       $rootScope.currentUserPosition = point;
-    //       getArtists(point);
-    //     }, function(err){
-    //       console.log('C');
-    //       var options = {timeout: 10000, enableHighAccuracy: false };
-    //       $ionicLoading.show({
-    //         template: 'Finding Artists Near You :)'
-    //       }).then(function(){
-    //       });
-    //
-    //       $cordovaGeolocation.getCurrentPosition(options).then(function(position){
-    //         var point = new Parse.GeoPoint({latitude: position.coords.latitude, longitude: position.coords.longitude});
-    //         $rootScope.currentUserPosition = point;
-    //         getArtists(point);
-    //
-    //       }, function(error){
-    //         $ionicLoading.hide();
-    //         $scope.isListEmpty = true;
-    //         var alertPopup = $ionicPopup.alert({
-    //           title: 'Find Location',
-    //           template: "Sorry we couldn't get your current location. <br><br> Please input your location in the search box above. <br><br> Sorry for the inconvenience."
-    //         });
-    //
-    //         alertPopup.then(function(res) {
-    //
-    //         });
-    //       });
-    //     });
-    //   });
-    // } else {
-    //   var alertPopup = $ionicPopup.alert({
-    //     title: 'Find Location',
-    //     template: "Sorry, This feature is not available in your device."
-    //   });
-    //
-    //   alertPopup.then(function(res) {
-    //     $state.go('app.home');
-    //   });
-    // }
+    $scope.pageCount = 5;
+
+    // point = new Parse.GeoPoint({latitude: 10.349792530358712, longitude: 123.90758514404297});
+    // reverseGeocoding({latitude: 10.349792530358712, longitude: 123.90758514404297});
+    // getArtists(point);
+
+    if(plugin){
+      map = plugin.google.maps.Map.getMap();
+      map.on(plugin.google.maps.event.MAP_READY, function() {
+        map.getMyLocation({enableHighAccuracy: true }, function(location) {
+          point = new Parse.GeoPoint({latitude: location.latLng.lat, longitude: location.latLng.lng});
+          reverseGeocoding({latitude: location.latLng.lat, longitude: location.latLng.lng});
+          $rootScope.currentUserPosition = point;
+          getArtists(point);
+        }, function(err){
+          console.log('C');
+          var options = {timeout: 10000, enableHighAccuracy: false };
+          // $ionicLoading.show({
+          //   template: 'Finding Artists Near You...'
+          // }).then(function(){
+          // });
+
+          $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+            var point = new Parse.GeoPoint({latitude: position.coords.latitude, longitude: position.coords.longitude});
+            reverseGeocoding({latitude: position.coords.latitude, longitude: position.coords.longitude});
+            $rootScope.currentUserPosition = point;
+            getArtists(point);
+
+          }, function(error){
+            $ionicLoading.hide();
+            $scope.isListEmpty = true;
+            var alertPopup = $ionicPopup.alert({
+              title: 'Find Location',
+              template: "Sorry we couldn't get your current location. <br><br> Please input your location in the search box above. <br><br> Sorry for the inconvenience."
+            });
+
+            alertPopup.then(function(res) {
+
+            });
+          });
+        });
+      });
+    } else {
+      var alertPopup = $ionicPopup.alert({
+        title: 'Find Location',
+        template: "Sorry, This feature is not available in your device."
+      });
+
+      alertPopup.then(function(res) {
+        $state.go('app.home');
+      });
+    }
   }
 
   $scope.findArtistsNearby = function() {
     var confirmPopup = $ionicPopup.confirm({
       title: '<b>Find Artists</b>',
-      template: 'Find Artitsts Near Your Location?'
+      template: 'Find artists near to your current location?'
     });
 
     confirmPopup.then(function(res) {
@@ -164,9 +172,18 @@ app.controller('ArtistListViewCtrl', function($scope, $ionicModal, $timeout, $io
   };
 
 
+  $scope.moreDataCanBeLoaded = function(){
+    if($scope.fromCloudActiveArtists.length < 26){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
   $scope.loadMoreArtists = function(){
+    console.log('infinite!');
     getArtists(point, $scope.pageCount, true);
-    $scope.pageCount += 10;
+    $scope.pageCount += 5;
   }
 
   $scope.changeToMapView = function(){
@@ -221,6 +238,7 @@ app.controller('ArtistListViewCtrl', function($scope, $ionicModal, $timeout, $io
       var point = new Parse.GeoPoint({latitude: value.geometry.location.lat(), longitude: value.geometry.location.lng()});
       $rootScope.currentUserPosition = point;
       $scope.loadingStatus = 'Finding artists near ' + value.formatted_address;
+      $scope.pageCount = 5;
       getArtists(point);
     }
   });
