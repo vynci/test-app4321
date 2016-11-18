@@ -117,11 +117,6 @@ app.controller('ArtistListViewCtrl', function($scope, $ionicModal, $timeout, $io
         }, function(err){
           console.log('C');
           var options = {timeout: 10000, enableHighAccuracy: false };
-          // $ionicLoading.show({
-          //   template: 'Finding Artists Near You...'
-          // }).then(function(){
-          // });
-
           $cordovaGeolocation.getCurrentPosition(options).then(function(position){
             var point = new Parse.GeoPoint({latitude: position.coords.latitude, longitude: position.coords.longitude});
             reverseGeocoding({latitude: position.coords.latitude, longitude: position.coords.longitude});
