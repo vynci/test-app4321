@@ -35,8 +35,8 @@ app.controller('AccountCtrl', function($scope, $ionicModal, $timeout, customerSe
         $scope.customerProfile.address = results[0].get('address');
         $scope.customerProfile.contactNumber = results[0].get('contactNumber');
 
-        $scope.customerProfile.oldPassword = 'helloworld';
-        $scope.customerProfile.newPassword = 'helloworld';
+        $scope.customerProfile.oldPassword = '';
+        $scope.customerProfile.newPassword = '';
 
         $ionicLoading.hide();
 
@@ -189,6 +189,49 @@ app.controller('AccountCtrl', function($scope, $ionicModal, $timeout, customerSe
     $scope.currentCustomerProfile.set("birthDate",$scope.customerProfile.birthDate);
 
     console.log($scope.currentCustomerProfile.attributes);
+
+    if($scope.customerProfile.oldPassword !== ''){
+      var user = Parse.User.current();
+
+      Parse.User.logIn(user.get('username'), $scope.customerProfile.oldPassword, {
+        success: function(user) {
+          // Do stuff after successful login.
+          if($scope.customerProfile.newPassword){
+
+            user.set("password", $scope.customerProfile.newPassword);
+            user.save()
+            .then(
+              function(user) {
+                console.log('Password changed', user);
+                var alertPopup = $ionicPopup.alert({
+                  title: '<b>Login</b>',
+                  template: 'Password successfully updated.'
+                });
+
+                alertPopup.then(function(res) {
+                });
+              },
+              function(error) {
+                console.log('Something went wrong', error);
+              }
+            );
+          }
+        },
+        error: function(user, error) {
+          // The login failed. Check error to see why.
+          $ionicLoading.hide();
+          var alertPopup = $ionicPopup.alert({
+            title: '<b>Login</b>',
+            template: 'Sorry old password is incorrect. Password has not bet updated.'
+          });
+
+          alertPopup.then(function(res) {
+          });
+        }
+      });
+
+
+    }
 
     $scope.currentCustomerProfile.save(null, {
       success: function(result) {

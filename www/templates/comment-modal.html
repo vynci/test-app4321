@@ -14,6 +14,7 @@
 			<ion-spinner icon="spiral"></ion-spinner><br>
 			<span>Loading Comments</span>
 		</div>
+		<div ng-if="comments.length === 0 && !isCommentLoading "> <p style="padding-left: 15px; padding-right: 15px; text-align: center; padding-top: 10%; padding-bottom: 10%">No comments on this post yet.</p></div>
 
 		<div class="list" ng-if="!isCommentLoading">
 
@@ -24,12 +25,12 @@
 				<h5 style="white-space: normal;">{{comment.attributes.updatedAt | date: "MMMM dd yyyy h:mm a"}}</h5>
 			</a>
 
-			<div class="item item-input-inset">
-				<label class="item-input-wrapper">
-					<input type="text" placeholder="Write a Comment..." ng-model="cardInfo.comment">
+			<div class="item item-input-inset" style="padding-bottom: 13px;">
+				<label class="item-input-wrapper" style="border: 1px solid;     background: white !important;">
+					<input type="text" placeholder="Write a Comment..." ng-model="cardInfo.comment" style="height: 45px; background: white !important;">
 				</label>
-				<button class="button button-small" ng-click="postComment(cardInfo.portfolioId)">
-					Submit
+				<button class="button button-assertive" ng-disabled="!cardInfo.comment.length" ng-click="postComment(cardInfo.portfolioId)" style="border-radius: 10px !important;">
+					<i class="icon ion-android-send"></i>
 				</button>
 			</div>
 

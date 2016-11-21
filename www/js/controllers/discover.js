@@ -1,10 +1,11 @@
 
-app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ionicPopup, portfolioService, $state, commentService, customerService) {
+app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ionicPopup, portfolioService, $state, commentService, customerService, artistService) {
 
   console.log('Discvoer List View!');
   $scope.spiral = 'img/placeholder.png';
   $scope.cardInfo = {};
   $scope.pageCount = 2;
+  $scope.cards = [];
 
   getPortfolios();
 
@@ -29,6 +30,25 @@ app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ion
     getCustomerProfile();
   }
 
+  function getArtistById(portfolio){
+    console.log(portfolio.get('artistInfo').id);
+    artistService.getArtistById(portfolio.get('artistInfo').id)
+    .then(function(results) {
+      console.log(results[0]);
+      portfolio.set('artistInfo',{
+        id : results[0].id,
+        avatar : results[0].get('avatar'),
+        address : results[0].get('address'),
+        name : results[0].get('firstName') + ' ' + results[0].get('lastName'),
+      });
+      $scope.cards.push(portfolio);
+    }, function(err) {
+      // Error occurred
+    }, function(percentComplete) {
+
+    });
+  }
+
   function getPortfolios(skip){
     portfolioService.getPortfolios(skip)
     .then(function(results) {
@@ -36,12 +56,18 @@ app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ion
       $scope.numberOfResults = results.length;
       if(skip){
         console.log('skip');
-        var tmp = $scope.cards;
-        $scope.cards = tmp.concat(results);
+        // var tmp = $scope.cards;
+        // $scope.cards = tmp.concat(results);
+        angular.forEach(results, function(portfolio) {
+          getArtistById(portfolio);
+        });
         $scope.$broadcast('scroll.infiniteScrollComplete');
       } else{
         console.log('not skip');
-        $scope.cards = results;
+        angular.forEach(results, function(portfolio) {
+          getArtistById(portfolio);
+        });
+        // $scope.cards = results;
       }
       $ionicLoading.hide();
       $scope.isLoading = false;

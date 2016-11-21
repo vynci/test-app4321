@@ -31,6 +31,8 @@ angular.module('starter.controllers', [])
     password : ''
   }
 
+  $scope.forgotPasswordEmail = {};
+
   $scope.spiral = "img/02.jpg"
 
   $ionicModal.fromTemplateUrl('templates/login.html', {
@@ -111,7 +113,7 @@ angular.module('starter.controllers', [])
 
   $scope.forgotPassword = function(){
     var myPopup = $ionicPopup.show({
-      template: '<input style="border-radius: 30px; padding-left: 15px;" type="text" ng-model="forgotPasswordEmail">',
+      template: '<input style="border-radius: 30px; padding-left: 15px;" type="text" placeholder="Enter Email Address" ng-model="forgotPasswordEmail.email">',
       title: '<b>Forgot Password</b>',
       subTitle: 'Please enter the email address you registered with and we will send you instructions on how to reset your password.',
       scope: $scope,
@@ -121,13 +123,29 @@ angular.module('starter.controllers', [])
           text: '<b>Reset Password</b>',
           type: 'button-positive',
           onTap: function(e) {
-            Parse.Cloud.run('hello', $scope.forgotPasswordEmail, {
+            Parse.Cloud.run('request-reset', {email: $scope.forgotPasswordEmail.email}, {
               success: function(secretString) {
                 // obtained secret string
                 console.log(secretString);
+                var alertPopup = $ionicPopup.alert({
+                  title: 'Reset Password Request',
+                  template: 'Password reset request sent. Please check your email for further instructions.'
+                });
+
+                alertPopup.then(function(res) {
+                  console.log('Thank you for not eating my delicious ice cream cone');
+                });
               },
               error: function(error) {
-                // error
+                console.log(error);
+                var alertPopup = $ionicPopup.alert({
+                  title: 'Reset Password Request',
+                  template: 'Sorry, the email address you entered is not registered.'
+                });
+
+                alertPopup.then(function(res) {
+                  console.log('Thank you for not eating my delicious ice cream cone');
+                });
               }
             });
           }

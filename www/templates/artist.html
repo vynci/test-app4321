@@ -5,19 +5,12 @@
       <div class="row">
         <div class="col col-90" style="padding:0px; padding-left:10%;">
           <div class="item" style="background: #f1807a; text-align: center; padding: 10px;">
-            <img ng-src="{{profile.avatar || spiral}}" class="blush-avatar" style="width: 100px; max-width: 100px; max-height: 100px; border-width: 7px; border-style: double; border-color: white;">
-            <h2 style="color: white;"><b>{{profile.firstName}} {{profile.lastName}}</b></h2>
-            <p style="color: white; font-size: 12px;">{{profile.serviceType}}</p>
-            <!-- <p>
-            <i class="ion-android-star energized"></i>
-            <i class="ion-android-star energized"></i>
-            <i class="ion-android-star energized"></i>
-            <i class="ion-android-star energized"></i>
-            <i class="ion-android-star-half energized"></i>
-          </p> -->
-          <!-- <button class="button button-positive button-small" ng-click="followArtist()"><i class="ion-person-add"> Follow</i></button>
-          <a class="button button-positive button-small" ng-href="#/app/chat-view/{{artistId}}"><i class="ion-ios-chatboxes"> Message</i></a> -->
-        </div>
+            <div>
+              <img ng-src="{{profile.avatar || spiral}}" class="blush-avatar" style="width: 100px; max-width: 100px; max-height: 100px; border-width: 7px; border-style: double; border-color: white;">
+              <h2 style="color: white;"><b>{{profile.firstName}} {{profile.lastName}}</b></h2>
+              <p style="color: white; font-size: 12px;">{{profile.serviceType}} | {{profile.address}}</p>
+            </div>
+          </div>
         </div>
         <div class="col" style="padding:0px; text-align: center; padding-top: 5px;">
           <div>

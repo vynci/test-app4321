@@ -1,4 +1,4 @@
-<ion-modal-view>
+<ion-modal-view style="background: white !important;">
 	<ion-header-bar>
 		<h1 class="title">Review</h1>
 		<div class="buttons">
@@ -21,18 +21,17 @@
 				{{rateDescription[rating.rate]}}
 			</div>
 
-
-			<label class="item item-input">
-				<input type="text" placeholder="Review Title" ng-model="rating.title">
+			<label class="item item-input" style="padding-right: 13px; background: white !important;">
+				<input type="text" placeholder="Review Title" ng-model="rating.title" style="background: white !important; border: 1px solid #444; padding-left: 10px;">
 			</label>
 
 			<div class="item">
-				<textarea name="" id="" cols="30" rows="10" style="box-sizing: border-box; border-color: gray; width:100%; border-width: 1px; border-style: solid;" ng-model="rating.review" placeholder="Write A Review...">
+				<textarea name="" id="" cols="30" rows="10" style="padding-left: 10px; background-color: white !important; box-sizing: border-box; border-color: #444; width:100%; border-width: 1px; border-style: solid;" ng-model="rating.review" placeholder="Write A Review...">
 				</textarea>
 			</div>
 
 			<div class="item">
-				<button class="button button-block button-energized" ng-click="submitReview()">Submit Review</button>
+				<button class="button button-block button-positive" ng-click="submitReview()">Submit Review</button>
 			</div>
 
 		</div>

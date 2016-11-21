@@ -13,17 +13,32 @@
       Pending
     </div> -->
 
-    <div class="list" ng-if="!isLoading" >
+    <div class="button-bar" ng-if="!isLoading">
+      <a class="button button-assertive" ng-click="changeStatusView('pending')" style="border-radius: 0px !important;" ng-class="statusButton.pending">Pending</a>
+      <a class="button button-calm" ng-click="changeStatusView('accepted')" style="border-radius: 0px !important;" ng-class="statusButton.accepted">Accepted</a>
+      <a class="button button-balanced" ng-click="changeStatusView('completed')" style="border-radius: 0px !important;" ng-class="statusButton.completed">Completed</a>
+    </div>
 
-      <a class="item item-thumbnail-left" ng-repeat="appointment in appointments | orderBy: '-attributes.createdAt'">
+    <br>
+
+    <div ng-if="appointments.length === 0 && !isLoading "> <p style="padding-left: 15px; padding-right: 15px; text-align: center; padding-top: 50%;">You have no appointments yet.</p></div>
+    <div ng-if="statusButton.pending && statusButton.accepted && statusButton.completed"> <p style="padding-left: 15px; padding-right: 15px; text-align: center; padding-top: 50%;">You filtered out Pending, Accepted, and Completed Appointments. This will display an empty list.</p></div>
+
+    <div class="list" ng-if="!isLoading">
+
+      <a class="item item-thumbnail-left" ng-repeat="appointment in appointments | filter: filterAppointment">
         <img ng-src="{{appointment.attributes.artistInfo.avatar}}" class="blush-avatar">
         <h2>{{appointment.attributes.artistInfo.firstName}} {{appointment.attributes.artistInfo.lastName}}</h2>
-        <p><b>When: </b>{{appointment.attributes.schedule.toString() | limitTo:21}}</p>
+        <p>{{appointment.attributes.schedule | date: "MMMM dd yyyy"}} - {{appointment.attributes.schedule | date: "h:mm a"}}</p>
         <p><b>Total: </b>₱{{appointment.attributes.totalBill}}</p>
-        <p><b>Status: </b>{{appointment.attributes.status}}</p>
+        <p><b>Status: </b>
+          <span ng-if="appointment.attributes.status === 'completed'"><b style="color: #33cd5f;">Completed</b></span>
+          <span ng-if="appointment.attributes.status === 'pending'"><b style="color: #f1807a;">Pending</b></span>
+          <span ng-if="appointment.attributes.status === 'accepted'"><b style="color: #11c1f3;">Accepted</b></span>
+        </p>
 
-        <p ng-show="appointment.attributes.isReviewed"><em>You alread did a review on this artist and service.</em></p>
-        <button ng-if="appointment.attributes.status === 'completed'" ng-hide="appointment.attributes.isReviewed" class="button button-energized" ng-click="openReviewModal(appointment)">Add Review</button>
+        <p ng-show="appointment.attributes.isReviewed"><em>Done reviewing this artist.</em></p>
+        <button ng-if="appointment.attributes.status === 'completed'" ng-hide="appointment.attributes.isReviewed" class="button button-block button-energized" ng-click="openReviewModal(appointment)">Create Review</button>
       </a>
 
     </div>
@@ -57,6 +72,7 @@
       </a>
 
     </div> -->
-
+    <ion-infinite-scroll on-infinite="loadMoreAppointments()" distance="1%" icon="ion-loading-c">
+    </ion-infinite-scroll>
   </ion-content>
 </ion-view>

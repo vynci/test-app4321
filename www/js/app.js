@@ -23,6 +23,7 @@ app.run(function($ionicPlatform) {
 
   Parse.initialize("myAppId");
   Parse.serverURL = 'https://muse-rest-api.herokuapp.com/parse';
+  // Parse.serverURL = 'http://localhost:1337/parse';
 })
 
 app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {

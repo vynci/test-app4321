@@ -16,14 +16,22 @@ app.service('appointmentService', function($q) {
 		return defer.promise;
 	};
 
-	var getBookingsById = function(id) {
+	var getBookingsById = function(id, skip) {
 		var defer = $q.defer();
 		var AppointmentObject = Parse.Object.extend("Booking");
 		var query = new Parse.Query(AppointmentObject);
 
+		query.descending("updatedAt");
+
 		if(id){
 			query.equalTo("customerInfo.id", id);
 		}
+
+		if(skip){
+			query.skip(skip);
+		}
+
+		query.limit(100);
 
 		query.find({
 			success: function(results) {

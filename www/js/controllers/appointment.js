@@ -5,13 +5,28 @@ app.controller('AppointmentCtrl', function($scope, $ionicModal, $timeout, $ionic
 
   $scope.rateDescription = ['', 'Disappointed', 'Below Average', 'Satisfied', 'Above Expectations', 'Absolutely Delighted'];
 
-  function getAppointments(){
-    $scope.isLoading = true;
-    appointmentService.getBookingsById(Parse.User.current().get('profileId'))
+  $scope.pageCount = 100;
+  $scope.isLoading = true;
+  $scope.statusButton = {
+    pending : '',
+    accepted : '',
+    completed : ''
+  }
+
+  function getAppointments(skip){
+    appointmentService.getBookingsById(Parse.User.current().get('profileId'), skip)
     .then(function(results) {
       // Handle the result
       console.log(results);
-      $scope.appointments = results;
+      if(skip){
+        console.log('skip');
+        var tmp = $scope.appointments;
+        $scope.appointments = tmp.concat(results);
+        $scope.$broadcast('scroll.infiniteScrollComplete');
+      } else{
+        console.log('not skip');
+        $scope.appointments = results;
+      }
       $scope.isLoading = false;
     }, function(err) {
       $ionicLoading.hide();
@@ -41,9 +56,69 @@ app.controller('AppointmentCtrl', function($scope, $ionicModal, $timeout, $ionic
   $scope.rating.title = '';
   $scope.rating.review = '';
 
+  $scope.changeStatusView = function(view){
+    if(view === 'pending'){
+      if($scope.statusButton.pending === 'button-outline'){
+        $scope.statusButton.pending = '';
+      }else{
+        $scope.statusButton.pending = 'button-outline';
+      }
+    }else if(view === 'accepted'){
+      if($scope.statusButton.accepted === 'button-outline'){
+        $scope.statusButton.accepted = '';
+      }else{
+        $scope.statusButton.accepted = 'button-outline';
+      }
+    }else{
+      if($scope.statusButton.completed === 'button-outline'){
+        $scope.statusButton.completed = '';
+      }else{
+        $scope.statusButton.completed = 'button-outline';
+      }
+    }
+  };
+
+  $scope.filterAppointment = function(appointment){
+    var response;
+
+    if(!$scope.statusButton.pending && $scope.statusButton.accepted && $scope.statusButton.completed){
+      response = appointment.get('status') === 'pending';
+    }
+    else if($scope.statusButton.pending && !$scope.statusButton.accepted && $scope.statusButton.completed){
+      response = appointment.get('status') === 'accepted';
+    }
+    else if($scope.statusButton.pending && $scope.statusButton.accepted && !$scope.statusButton.completed){
+      response = appointment.get('status') === 'completed';
+    }
+    else if(!$scope.statusButton.pending && $scope.statusButton.accepted && !$scope.statusButton.completed){
+      response = appointment.get('status') === 'completed' || appointment.get('status') === 'pending';
+    }
+    else if($scope.statusButton.pending && !$scope.statusButton.accepted && !$scope.statusButton.completed){
+      response = appointment.get('status') === 'completed' || appointment.get('status') === 'accepted';
+    }
+    else if(!$scope.statusButton.pending && !$scope.statusButton.accepted && $scope.statusButton.completed){
+      response = appointment.get('status') === 'pending' || appointment.get('status') === 'accepted';
+    }
+    else if($scope.statusButton.pending && $scope.statusButton.accepted && $scope.statusButton.completed){
+      response = false;
+    }
+    else{
+      response = appointment.get('status') === 'pending' || appointment.get('status') === 'accepted' || appointment.get('status') === 'completed';
+    }
+
+
+    return response;
+  };
+
   $scope.refresh = function(){
     getAppointments();
     $scope.$broadcast('scroll.refreshComplete');
+  }
+
+  $scope.loadMoreAppointments = function(){
+    console.log('infinite');
+    getAppointments($scope.pageCount);
+    $scope.pageCount += 100;
   }
 
   $scope.submitReview = function(){

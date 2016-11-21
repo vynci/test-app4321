@@ -7,18 +7,24 @@
 		<h1 class="title">Quick Booking</h1>
 	</ion-header-bar>
 	<ion-content style="padding-top: 25%;">
-		<div>
+
+		<div ng-if="isLoading" style="text-align: center; padding-top: 45%; padding-right: 10px; padding-left: 10px;">
+			<ion-spinner icon="spiral"></ion-spinner><br>
+			<span>Loading Artist Information</span>
+		</div>
+
+		<div ng-if="profile && !isLoading">
 			<div class="item" style="text-align: center; background: #f1807a; padding-top: 2px;">
 				<img ng-src="{{profile.attributes.avatar || spiral}}" class="blush-avatar" style="width: 150px; max-width: 150px; max-height: 150px; border-width: 7px; border-style: double; border-color: white;">
 				<h2 style="color:white; font-size: 18px;"><b>{{profile.attributes.firstName}} {{profile.attributes.lastName}}</b></h2>
 				<h3 style="color:white;">{{profile.attributes.serviceType}} | ₱{{profile.attributes.priceRange.low}} - ₱{{profile.attributes.priceRange.high}}</h3>
 				<br>
-				<!-- <h3 style="color:white;">{{randomDistance}} meters away from you.</h3> -->
+				<h3 style="color:white;">{{profile.attributes.address}}</h3>
 				<br>
 				<button class="button icon-left ion-ios-location button-clear" style="color: white;" ng-click="changeToMapView()">View in Map</button>
 				<!-- <button class="button button-positive button-block" ng-click="bookSelectedArtist()">Continue Booking Artist</button> -->
+			</div>
 		</div>
-	</div>
 	</ion-content>
 	<div class="item item-divider" style="background: #574C4F; position: fixed; bottom: 0; width: 100%; padding-top: 10px; padding-bottom: 10px; padding-right: 5px;">
 		<button class="button button-block button-small button-clear" ng-click="bookSelectedArtist()" style="margin-top: 0px;margin-bottom: 0px; color: white; border-radius:30px; height: 40px;"><b style="font-size: 16px;"><i class="icon ion-checkmark-circled" style="color: #b7d05b; padding-right: 10px;"></i> Continue Booking Artist</b></button>
