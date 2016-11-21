@@ -33,6 +33,8 @@ angular.module('starter.controllers', [])
 
   $scope.forgotPasswordEmail = {};
 
+  $rootScope.customerProfile = {};
+
   $scope.spiral = "img/02.jpg"
 
   $ionicModal.fromTemplateUrl('templates/login.html', {
@@ -346,6 +348,12 @@ angular.module('starter.controllers', [])
       .then(function(results) {
         // Handle the result
         $scope.currentCustomer = results[0];
+
+        $rootScope.customerProfile.id = results[0].id;
+        $rootScope.customerProfile.firstName = results[0].get('firstName');
+        $rootScope.customerProfile.lastName = results[0].get('lastName');
+        $rootScope.customerProfile.avatar = results[0].get('avatar');
+
         pubnubInit();
         $ionicLoading.hide();
       }, function(err) {

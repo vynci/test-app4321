@@ -25,7 +25,7 @@
 
     <div ng-if="!isLoading" ng-repeat="artist in fromCloudActiveArtists | filter: filterArtist | orderBy: filter.sort">
       <a class="item item-thumbnail-left" ng-href="#/app/artist/{{artist.id}}">
-        <img ng-src="{{artist.attributes.avatar || spiral}}" class="blush-avatar">
+        <img ng-src="{{artist.attributes.avatar || spiral}}" class="animate-show blush-avatar" fade-in>
 
         <div class="row" style="padding-left: 0px; padding-bottom: 0px;">
           <div class="col-67" style="padding-left: 0px; padding-bottom: 0px;">
@@ -67,7 +67,7 @@
         <button class="button button-positive button-outline" ng-click="loadMoreArtists()">Load More Artists...</button>
       </div>
     </div> -->
-    <ion-infinite-scroll on-infinite="loadMoreArtists()" distance="1%" icon="ion-loading-c" ng-if="moreDataCanBeLoaded()">
+    <ion-infinite-scroll on-infinite="loadMoreArtists()" distance="10%" icon="ion-loading-c" ng-if="moreDataCanBeLoaded()">
 
   </ion-content>
   <div ng-click="changeToMapView()" class="bar bar-footer bar-balanced" style="background: #574C4F !important">

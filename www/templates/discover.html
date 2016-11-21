@@ -10,7 +10,7 @@
     <div ng-if="!isLoading" class="list card" ng-repeat="card in cards" style="margin-right: 0px; margin-left: 0px;">
 
       <div class="item item-avatar">
-        <img ng-src="{{card.attributes.artistInfo.avatar || spiral}}">
+        <img ng-src="{{card.attributes.artistInfo.avatar || spiral}}" class="animate-show" fade-in>
         <h2><a ng-href="#/app/artist/{{card.attributes.artistInfo.id}}"><b>{{card.attributes.artistInfo.name}}</b></a></h2>
         <p>{{card.attributes.artistInfo.address}}</p>
       </div>
@@ -36,7 +36,7 @@
         <button class="button button-positive button-outline" ng-click="loadMorePosts()">Load More Posts...</button>
       </div>
     </div> -->
-    <ion-infinite-scroll on-infinite="loadMorePosts()" distance="1%" icon="ion-loading-c" ng-if="moreDataCanBeLoaded()">
+    <ion-infinite-scroll on-infinite="loadMorePosts()" distance="20%" icon="ion-loading-c" ng-if="moreDataCanBeLoaded()">
     </ion-infinite-scroll>
 
   </ion-content>

@@ -69,11 +69,11 @@
           </span> -->
         </ion-checkbox>
         <div class="row" style="padding-left: 15%; padding-right: 10%;">
-          <div class="col"><img ng-src="{{service.attributes.servicePhotos[0].path}}" alt="" style="width: 100%;" ng-click="viewPortfolio(service.attributes.servicePhotos[0].path)"></div>
-          <div class="col"><img ng-src="{{service.attributes.servicePhotos[1].path}}" alt="" style="width: 100%;" ng-click="viewPortfolio(service.attributes.servicePhotos[1].path)"></div>
-          <div class="col"><img ng-src="{{service.attributes.servicePhotos[2].path}}" alt="" style="width: 100%;" ng-click="viewPortfolio(service.attributes.servicePhotos[2].path)"></div>
-          <div class="col"><img ng-src="{{service.attributes.servicePhotos[3].path}}" alt="" style="width: 100%;" ng-click="viewPortfolio(service.attributes.servicePhotos[3].path)"></div>
-          <div class="col"><img ng-src="{{service.attributes.servicePhotos[4].path}}" alt="" style="width: 100%;" ng-click="viewPortfolio(service.attributes.servicePhotos[4].path)"></div>
+          <div class="col"><img ng-src="{{service.attributes.servicePhotos[0].path}}" alt="" style="width: 100%;" ng-click="viewPortfolio(service.attributes.servicePhotos[0].path)" class="animate-show" fade-in></div>
+          <div class="col"><img ng-src="{{service.attributes.servicePhotos[1].path}}" alt="" style="width: 100%;" ng-click="viewPortfolio(service.attributes.servicePhotos[1].path)" class="animate-show" fade-in></div>
+          <div class="col"><img ng-src="{{service.attributes.servicePhotos[2].path}}" alt="" style="width: 100%;" ng-click="viewPortfolio(service.attributes.servicePhotos[2].path)" class="animate-show" fade-in></div>
+          <div class="col"><img ng-src="{{service.attributes.servicePhotos[3].path}}" alt="" style="width: 100%;" ng-click="viewPortfolio(service.attributes.servicePhotos[3].path)" class="animate-show" fade-in></div>
+          <div class="col"><img ng-src="{{service.attributes.servicePhotos[4].path}}" alt="" style="width: 100%;" ng-click="viewPortfolio(service.attributes.servicePhotos[4].path)" class="animate-show" fade-in></div>
         </div>
         </div>
 
@@ -89,13 +89,13 @@
       <div ng-if="!artistPortfolio.length && !isPortfolioLoading" class="item" style="text-align: center; white-space: normal;">Sorry, {{profile.firstName}} doesn't have any portfolio yet.</div>
       <div class="row" ng-repeat="image in artistPortfolio" ng-if="$index % 3 === 0">
         <div class="col col-33" ng-if="$index < artistPortfolio.length" style="height: 90px !important; overflow: hidden !important;">
-          <img ng-src="{{artistPortfolio[$index].attributes.imagePath}}" ng-click="viewPortfolio(artistPortfolio[$index + 0].attributes.imagePath, artistPortfolio[$index + 0].attributes.description)" spinkit-image-preloader='chasing-dots-spinner' width="100%" />
+          <img ng-src="{{artistPortfolio[$index].attributes.imagePath}}" ng-click="viewPortfolio(artistPortfolio[$index + 0].attributes.imagePath, artistPortfolio[$index + 0].attributes.description)" spinkit-image-preloader='chasing-dots-spinner' class="animate-show" fade-in width="100%" />
         </div>
         <div class="col col-33" ng-if="$index + 1 < artistPortfolio.length" style="height: 90px !important; overflow: hidden !important;">
-          <img ng-src="{{artistPortfolio[$index + 1].attributes.imagePath}}" ng-click="viewPortfolio(artistPortfolio[$index + 1].attributes.imagePath, artistPortfolio[$index + 1].attributes.description)" spinkit-image-preloader='chasing-dots-spinner' width="100%" />
+          <img ng-src="{{artistPortfolio[$index + 1].attributes.imagePath}}" ng-click="viewPortfolio(artistPortfolio[$index + 1].attributes.imagePath, artistPortfolio[$index + 1].attributes.description)" spinkit-image-preloader='chasing-dots-spinner' class="animate-show" fade-in width="100%" />
         </div>
         <div class="col col-33" ng-if="$index + 2 < artistPortfolio.length" style="height: 90px !important; overflow: hidden !important;">
-          <img ng-src="{{artistPortfolio[$index + 2].attributes.imagePath}}" ng-click="viewPortfolio(artistPortfolio[$index + 2].attributes.imagePath, artistPortfolio[$index + 2].attributes.description)" spinkit-image-preloader='chasing-dots-spinner' width="100%" />
+          <img ng-src="{{artistPortfolio[$index + 2].attributes.imagePath}}" ng-click="viewPortfolio(artistPortfolio[$index + 2].attributes.imagePath, artistPortfolio[$index + 2].attributes.description)" spinkit-image-preloader='chasing-dots-spinner' class="animate-show" fade-in width="100%" />
         </div>
       </div>
     </div>

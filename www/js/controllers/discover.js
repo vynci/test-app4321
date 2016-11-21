@@ -1,5 +1,5 @@
 
-app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ionicPopup, portfolioService, $state, commentService, customerService, artistService) {
+app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ionicPopup, portfolioService, $state, commentService, customerService, artistService, $rootScope) {
 
   console.log('Discvoer List View!');
   $scope.spiral = 'img/placeholder.png';
@@ -27,7 +27,7 @@ app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ion
     $scope.customerProfile = {};
   }else{
     $scope.customerProfile = {};
-    getCustomerProfile();
+    // getCustomerProfile();
   }
 
   function getArtistById(portfolio){
@@ -81,8 +81,10 @@ app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ion
     });
   }
 
-  function getCommentsById(id){
-    $scope.isCommentLoading = true;
+  function getCommentsById(id, ignoreLoad){
+    if(!ignoreLoad){
+      $scope.isCommentLoading = true;
+    }
 
     commentService.getCommentsById(id)
     .then(function(results) {
@@ -183,13 +185,13 @@ app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ion
       var comment = new Comment();
 
       comment.set('portfolioId', $scope.cardInfo.portfolioId);
-      comment.set('commenterInfo', $scope.customerProfile);
+      comment.set('commenterInfo', $rootScope.customerProfile);
       comment.set('comment', $scope.cardInfo.comment);
 
       comment.save(null, {
         success: function(result) {
           // Execute any logic that should take place after the object is saved.
-          getCommentsById($scope.cardInfo.portfolioId);
+          getCommentsById($scope.cardInfo.portfolioId, true);
           $scope.cardInfo.comment = '';
 
           $scope.currentCard.add('comments', result.id);

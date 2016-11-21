@@ -26,6 +26,30 @@ app.service('artistService', function($q) {
 		return defer.promise;
 	};
 
+	var getArtistsByRating = function(userLocation, skip) {
+		var defer = $q.defer();
+		var ArtistObject = Parse.Object.extend("Artist");
+		var query = new Parse.Query(ArtistObject);
+
+		if(skip){
+			query.skip(skip);
+		}
+
+		query.descending("rating");
+
+		query.limit(5);
+
+		query.find({
+			success: function(results) {
+				defer.resolve(results);
+			},
+			error: function(error) {
+				defer.reject(error);
+			}
+		});
+		return defer.promise;
+	};
+
 	var getArtistById = function(id) {
 		var defer = $q.defer();
 		var ArtistObject = Parse.Object.extend("Artist");
@@ -48,7 +72,8 @@ app.service('artistService', function($q) {
 
 	return {
 		getArtists: getArtists,
-		getArtistById : getArtistById
+		getArtistById : getArtistById,
+		getArtistsByRating : getArtistsByRating
 	};
 
 });

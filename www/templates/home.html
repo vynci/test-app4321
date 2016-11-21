@@ -1,7 +1,7 @@
 <ion-view view-title="Blush">
   <ion-content overflow-scroll="true">
     <div class="text-center" style="">
-
+      <br>
       <!-- <h5>Find and Book</h5> -->
       <div id="home-find" class="row responsive-sm responsive-md responsive-lg" style="padding-left: 0px; padding-right: 0px; padding-top: 0px;">
             <div class="col my-container" ng-click="redirect('app.artistlist')" style="margin-bottom: 3px; background: #574C4F;">
@@ -9,18 +9,18 @@
                 <h3 class="text-left" style="color:white; z-index: 2; position: relative; text-shadow: 2px 2px 8px #444;"><b class="rale-way-bold">FIND ARTISTS<br>NEAR YOU</b></h3>
                 <h4 class="text-left" style="color:white; z-index: 2; position: relative; text-shadow: 0 0 3px rgba(98, 94, 94, 0.95);">View it in Map or List View</h4>
               </div>
-              <img ng-src="{{homePageImages.top}}">
+              <img ng-src="{{homePageImages.top}}" class="animate-show" fade-in>
 
               <!-- <a class="button button-block button-balanced" href="#/app/service">
               Find Artists Near You
             </a> -->
           </div>
-          <div class="col my-container" ng-click="redirect('app.discover')" style="margin-bottom: 3px; background: #f1807a;">
+          <div class="col my-container" ng-click="redirect('app.discover')" style="margin-bottom: 3px; background: #574C4F;">
             <div style="margin-top: 92px;">
               <h3 class="text-left" style="color:white; z-index: 2; position: relative; text-shadow: 2px 2px 8px #444;"><b class="rale-way-bold">Discover Daily<br> Trends</b></h3>
               <h4 class="text-left" style="color:white; z-index: 2; position: relative; text-shadow: 0 0 3px rgba(98, 94, 94, 0.95);">Awesome daily updates from artists</h4>
             </div>
-            <img ng-src="{{homePageImages.mid}}">
+            <img ng-src="{{homePageImages.mid}}" class="animate-show" fade-in>
             <!-- <a class="button button-block button-assertive" href="#/app/discover">
             Discover Daily Trends
           </a> -->
@@ -34,7 +34,7 @@
           <!-- <button class="button button-block button-positive">
           Quick Booking
         </button> -->
-        <img ng-src="{{homePageImages.bot}}">
+        <img ng-src="{{homePageImages.bot}}" class="animate-show" fade-in>
       </div>
 
     </div>

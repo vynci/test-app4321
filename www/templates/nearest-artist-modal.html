@@ -15,7 +15,8 @@
 
 		<div ng-if="profile && !isLoading">
 			<div class="item" style="text-align: center; background: #f1807a; padding-top: 2px;">
-				<img ng-src="{{profile.attributes.avatar || spiral}}" class="blush-avatar" style="width: 150px; max-width: 150px; max-height: 150px; border-width: 7px; border-style: double; border-color: white;">
+				<img ng-src="{{profile.attributes.avatar || spiral}}" style="width: 150px; max-width: 150px; max-height: 150px; border-width: 7px; border-style: double; border-color: white; display: inline !important;" class="blush-avatar animate-show" fade-in>
+
 				<h2 style="color:white; font-size: 18px;"><b>{{profile.attributes.firstName}} {{profile.attributes.lastName}}</b></h2>
 				<h3 style="color:white;">{{profile.attributes.serviceType}} | ₱{{profile.attributes.priceRange.low}} - ₱{{profile.attributes.priceRange.high}}</h3>
 				<br>

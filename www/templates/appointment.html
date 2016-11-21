@@ -27,7 +27,7 @@
     <div class="list" ng-if="!isLoading">
 
       <a class="item item-thumbnail-left" ng-repeat="appointment in appointments | filter: filterAppointment">
-        <img ng-src="{{appointment.attributes.artistInfo.avatar}}" class="blush-avatar">
+        <img ng-src="{{appointment.attributes.artistInfo.avatar}}" class="animate-show blush-avatar" fade-in>
         <h2>{{appointment.attributes.artistInfo.firstName}} {{appointment.attributes.artistInfo.lastName}}</h2>
         <p>{{appointment.attributes.schedule | date: "MMMM dd yyyy"}} - {{appointment.attributes.schedule | date: "h:mm a"}}</p>
         <p><b>Total: </b>₱{{appointment.attributes.totalBill}}</p>
@@ -38,7 +38,7 @@
         </p>
 
         <p ng-show="appointment.attributes.isReviewed"><em>Done reviewing this artist.</em></p>
-        <button ng-if="appointment.attributes.status === 'completed'" ng-hide="appointment.attributes.isReviewed" class="button button-block button-energized" ng-click="openReviewModal(appointment)">Create Review</button>
+        <button ng-if="appointment.attributes.status === 'completed'" ng-hide="appointment.attributes.isReviewed" class="button button-small button-block button-energized" ng-click="openReviewModal(appointment)">Create Review</button>
       </a>
 
     </div>

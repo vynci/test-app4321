@@ -43,20 +43,20 @@ app.controller('BookCtrl', function($scope, $ionicModal, $timeout, serviceServic
           // Execute any logic that should take place after the object is saved.
           $ionicLoading.hide();
 
-          Pubnub.publish({
-            channel: 'book/' + $scope.artist.id,
-            message: {
-              content: result,
-              sender: {
-                name: $scope.customerProfile.firstName+ ' ' + $scope.customerProfile.lastName,
-                avatar : $scope.artist.avatar
-              },
-              date: new Date()
-            },
-            callback: function(m) {
-              console.log(m);
-            }
-          });
+          // Pubnub.publish({
+          //   channel: 'book/' + $scope.artist.id,
+          //   message: {
+          //     content: result,
+          //     sender: {
+          //       name: $scope.customerProfile.firstName+ ' ' + $scope.customerProfile.lastName,
+          //       avatar : $scope.artist.avatar
+          //     },
+          //     date: new Date()
+          //   },
+          //   callback: function(m) {
+          //     console.log(m);
+          //   }
+          // });
 
           var alertPopup = $ionicPopup.alert({
             title: 'Booking Successful!',
