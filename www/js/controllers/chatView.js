@@ -232,20 +232,20 @@ function($scope, $rootScope, $state, $stateParams, MockService,
             success: function(result) {
               // Execute any logic that should take place after the object is saved.
               console.log('last message success');
-              Pubnub.publish({
-                channel: 'message/' + $stateParams.artistId,
-                message: {
-                  content: message,
-                  sender: {
-                    name: $scope.user.username,
-                    avatar : $scope.user.pic
-                  },
-                  date: new Date()
-                },
-                callback: function(m) {
-                  console.log(m);
-                }
-              });
+              // Pubnub.publish({
+              //   channel: 'message/' + $stateParams.artistId,
+              //   message: {
+              //     content: message,
+              //     sender: {
+              //       name: $scope.user.username,
+              //       avatar : $scope.user.pic
+              //     },
+              //     date: new Date()
+              //   },
+              //   callback: function(m) {
+              //     console.log(m);
+              //   }
+              // });
             },
             error: function(gameScore, error) {
               message.set("isFail", true);
