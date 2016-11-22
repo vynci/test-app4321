@@ -21,11 +21,55 @@ app.controller('HomeCtrl', function($scope, $ionicHistory, customerService, $ion
 		$scope.nearestArtistModal = modal;
 	});
 
+	$scope.quickBookCloudCode = function(coordinates){
+		var loadingMsg = 'Finding the nearest artist nearby';
+
+		$ionicLoading.show({
+			template: loadingMsg
+		}).then(function(){
+
+		});
+
+		var payload = {
+			coordinates : coordinates,
+			customerInfo : {}
+		};
+
+		if($scope.customerInfo){
+			payload.customerInfo.id = $scope.customerInfo.id;
+			payload.customerInfo.info = $scope.customerInfo.attributes;
+		}
+
+		Parse.Cloud.run('quick-booking', payload, {
+			success: function(result) {
+				// obtained secret string
+				console.log(result);
+
+				var artist = result.result;
+
+				$rootScope.nearbyArtists = [];
+				$rootScope.nearbyArtists.push(artist);
+
+				$scope.profile = artist;
+
+				$scope.nearestArtistModal.show();
+
+				$scope.isLoading = false;
+				$ionicLoading.hide();
+			},
+			error: function(error) {
+				console.log(error);
+				$ionicLoading.hide();
+			}
+		});
+	}
+
 	function getCustomerProfile(){
 		if($rootScope.currentUser){
 			customerService.getCustomerById($rootScope.currentUser.get('profileId'))
 			.then(function(results) {
 				// Handle the result
+				$scope.customerInfo = results[0];
 				$scope.currentCustomer = results[0].get('firstName');
 				$ionicLoading.hide();
 			}, function(err) {
@@ -135,6 +179,8 @@ app.controller('HomeCtrl', function($scope, $ionicHistory, customerService, $ion
 		// $rootScope.currentUserPosition = point;
 		// getArtists(point);
 
+		$scope.quickBookCloudCode(point);
+
 		try {
 			map = plugin.google.maps.Map.getMap(document.getElementById("map_canvas_home"));
 
@@ -142,7 +188,7 @@ app.controller('HomeCtrl', function($scope, $ionicHistory, customerService, $ion
 				map.getMyLocation({enableHighAccuracy: true }, function(location) {
 					point = new Parse.GeoPoint({latitude: location.latLng.lat, longitude: location.latLng.lng});
 					$rootScope.currentUserPosition = point;
-					getArtists(point);
+					$scope.quickBookCloudCode(point);
 
 				}, function(err){
 					var options = {timeout: 10000, enableHighAccuracy: false };
@@ -154,7 +200,7 @@ app.controller('HomeCtrl', function($scope, $ionicHistory, customerService, $ion
 					$cordovaGeolocation.getCurrentPosition(options).then(function(position){
 						var point = new Parse.GeoPoint({latitude: position.coords.latitude, longitude: position.coords.longitude});
 						$rootScope.currentUserPosition = point;
-						getArtists(point);
+						$scope.quickBookCloudCode(point);
 
 					}, function(error){
 						$ionicLoading.hide();
