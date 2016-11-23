@@ -235,6 +235,15 @@ angular.module('starter.controllers', [])
           user.signUp(null, {
             success: function(user) {
               // Hooray! Let them use the app now.
+              var alertPopup = $ionicPopup.alert({
+                title: 'Register',
+                template: 'Register Succesful! Welcome to Blush!'
+              });
+
+              alertPopup.then(function(res) {
+                console.log('Thank you for not eating my delicious ice cream cone');
+              });
+
               userLogin($scope.registerData.email, $scope.registerData.password);
 
             },

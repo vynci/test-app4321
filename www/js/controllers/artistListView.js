@@ -128,7 +128,6 @@ app.controller('ArtistListViewCtrl', function($scope, $ionicModal, $timeout, $io
     $scope.pageCount = 5;
     $scope.isLocation = true;
 
-    //
     // point = new Parse.GeoPoint({latitude: 10.349792530358712, longitude: 123.90758514404297});
     // reverseGeocoding({latitude: 10.349792530358712, longitude: 123.90758514404297});
     // getArtists(point);

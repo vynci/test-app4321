@@ -22,6 +22,7 @@ app.controller('HomeCtrl', function($scope, $ionicHistory, customerService, $ion
 	});
 
 	$scope.quickBookCloudCode = function(coordinates){
+		console.log(coordinates);
 		var loadingMsg = 'Finding the nearest artist nearby';
 
 		$ionicLoading.show({
@@ -51,7 +52,7 @@ app.controller('HomeCtrl', function($scope, $ionicHistory, customerService, $ion
 				$rootScope.nearbyArtists.push(artist);
 
 				$scope.profile = artist;
-
+				$scope.randomDistance = generateRandomDistance(300,500);
 				$scope.nearestArtistModal.show();
 
 				$scope.isLoading = false;
@@ -177,9 +178,9 @@ app.controller('HomeCtrl', function($scope, $ionicHistory, customerService, $ion
 	$rootScope.quickBook = function() {
 		// point = new Parse.GeoPoint({latitude: 10.349792530358712, longitude: 123.90758514404297});
 		// $rootScope.currentUserPosition = point;
-		// getArtists(point);
-
-		$scope.quickBookCloudCode(point);
+		// // getArtists(point);
+		//
+		// $scope.quickBookCloudCode(point);
 
 		try {
 			map = plugin.google.maps.Map.getMap(document.getElementById("map_canvas_home"));
@@ -188,10 +189,11 @@ app.controller('HomeCtrl', function($scope, $ionicHistory, customerService, $ion
 				map.getMyLocation({enableHighAccuracy: true }, function(location) {
 					point = new Parse.GeoPoint({latitude: location.latLng.lat, longitude: location.latLng.lng});
 					$rootScope.currentUserPosition = point;
-					$scope.quickBookCloudCode(point);
+					// $scope.quickBookCloudCode(point);
+					getArtists(point);
 
 				}, function(err){
-					var options = {timeout: 10000, enableHighAccuracy: false };
+					var options = {timeout: 10000, enableHighAccuracy: true };
 					$ionicLoading.show({
 						template: 'Finding the nearest artist nearby'
 					}).then(function(){
@@ -200,7 +202,8 @@ app.controller('HomeCtrl', function($scope, $ionicHistory, customerService, $ion
 					$cordovaGeolocation.getCurrentPosition(options).then(function(position){
 						var point = new Parse.GeoPoint({latitude: position.coords.latitude, longitude: position.coords.longitude});
 						$rootScope.currentUserPosition = point;
-						$scope.quickBookCloudCode(point);
+						// $scope.quickBookCloudCode(point);
+						getArtists(point);
 
 					}, function(error){
 						$ionicLoading.hide();
