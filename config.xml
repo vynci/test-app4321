@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.zagatek.blushcust" version="0.0.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.zagatek.blushcust" version="0.0.5" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>Blush</name>
   <description>&#xD;&#xD;&#xD;
         A Philippine Based Beauty on Demand Mobile Platform.&#xD;&#xD;&#xD;
@@ -84,8 +84,8 @@
     <variable name="API_KEY_FOR_IOS" value="AIzaSyAmrM8n0B8r67-DWJyjtCW6LcfaXOVP1ko"/>
   </plugin>
   <plugin name="cordova-plugin-camera" spec="~2.3.0">
-    <variable name="CAMERA_USAGE_DESCRIPTION" value=" "/>
-    <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value=" "/>
+    <variable name="CAMERA_USAGE_DESCRIPTION" value="description"/>
+    <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="description"/>
   </plugin>
   <plugin name="de.appplant.cordova.plugin.local-notification" spec="https://github.com/katzer/cordova-plugin-local-notifications.git"/>
   <plugin name="cordova-plugin-x-toast" spec="https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git"/>
