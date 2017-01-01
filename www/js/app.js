@@ -21,7 +21,7 @@ app.run(function($ionicPlatform) {
     }
   });
 
-  Parse.initialize("myAppId");
+  Parse.initialize("myAppId", "myJavascriptKey");
   Parse.serverURL = 'https://muse-rest-api.herokuapp.com/parse';
   // Parse.serverURL = 'http://localhost:1337/parse';
 })
@@ -69,7 +69,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
   })
 
   .state('app.chatView', {
-    url: '/chat-view/:chatId/:artistId',
+    url: '/chat-view/:chatId/:artistId/:isNewMessageCustomer',
     views: {
       'menuContent': {
         templateUrl: 'templates/chat-view.html',

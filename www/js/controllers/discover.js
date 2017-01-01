@@ -101,6 +101,11 @@ app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ion
     });
   }
 
+  $scope.redirectToArtist = function(id){
+    console.log(id);
+    $state.go('app.artist', {artistId: id});
+  }
+
   $scope.moreDataCanBeLoaded = function(){
     if($scope.numberOfResults !== 0){
       return true;

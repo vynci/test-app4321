@@ -61,19 +61,22 @@ function($scope, $rootScope, $state, $stateParams, MockService,
         $scope.isLoading = false;
         $ionicScrollDelegate.scrollBottom();
 
-        var Thread = Parse.Object.extend("Thread");
-        var thread = new Thread();
+        if($stateParams.isNewMessageCustomer !== 'false'){
+          var Thread = Parse.Object.extend("Thread");
+          var thread = new Thread();
 
-        thread.id = $stateParams.chatId;
-        thread.set("isNewMessageCustomer", false);
+          thread.id = $stateParams.chatId;
+          thread.set("isNewMessageCustomer", false);
 
-        thread.save(null, {
-          success: function(result) {
-          },
-          error: function(gameScore, error) {
-            message.set("isFail", true);
-          }
-        });
+          thread.save(null, {
+            success: function(result) {
+            },
+            error: function(gameScore, error) {
+              message.set("isFail", true);
+            }
+          });
+        }
+
 
       }, function(err) {
         // $ionicLoading.hide();
@@ -227,6 +230,7 @@ function($scope, $rootScope, $state, $stateParams, MockService,
           thread.set("lastMessage", messageTxt);
           thread.set("isNewMessageArtist", true);
           thread.set("isArtistThreadDeleted", false);
+          thread.set("messageFrom", 'customer');
 
           thread.save(null, {
             success: function(result) {

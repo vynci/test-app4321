@@ -10,7 +10,7 @@
     <div ng-if="!isLoading" class="list card" ng-repeat="card in cards" style="margin-right: 0px; margin-left: 0px;">
 
       <div class="item item-avatar">
-        <img ng-src="{{card.attributes.artistInfo.avatar || spiral}}" class="animate-show" fade-in>
+        <img ng-click="redirectToArtist(card.attributes.artistInfo.id)" ng-src="{{card.attributes.artistInfo.avatar || spiral}}" class="animate-show" fade-in>
         <h2><a ng-href="#/app/artist/{{card.attributes.artistInfo.id}}"><b>{{card.attributes.artistInfo.name}}</b></a></h2>
         <p>{{card.attributes.artistInfo.address}}</p>
       </div>

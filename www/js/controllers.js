@@ -301,7 +301,7 @@ angular.module('starter.controllers', [])
           text: '<b>View</b>',
           type: 'button-positive',
           onTap: function(e) {
-            $state.go('app.chatView', {artistId: message.content.userId, chatId: message.content.threadId});
+            $state.go('app.chatView', {artistId: message.content.userId, chatId: message.content.threadId, isNewMessageCustomer: "true"});
           }
         }
       ]
@@ -411,7 +411,7 @@ angular.module('starter.controllers', [])
 
       $rootScope.$on(Pubnub.getMessageEventNameFor($scope.messageAlertChannel), function(ngEvent, m) {
         if(m.content.threadId !== $state.params.chatId){
-          openLocalNotification(m);
+          //openLocalNotification(m);
           $scope.showMessageAlert(m);
         }else{
           $rootScope.getStreamMessage(m);

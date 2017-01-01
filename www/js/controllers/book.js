@@ -2,6 +2,7 @@
 app.controller('BookCtrl', function($scope, $ionicModal, $timeout, serviceService, $ionicHistory, $ionicLoading, $rootScope, $ionicPopup, customerService, $state, Pubnub) {
 
   $scope.datetimeValue = new Date();
+
   $scope.choice = {
     name: 'cash'
   };
@@ -19,8 +20,7 @@ app.controller('BookCtrl', function($scope, $ionicModal, $timeout, serviceServic
   $scope.services = $rootScope.bookInfo.selectedService;
   $scope.totalBill = $rootScope.bookInfo.totalBill;
 
-  $scope.book = function() {
-
+  $scope.book = function(datetimeValue) {
     if($scope.customerProfile.contactNumber){
       $ionicLoading.show({
         template: 'Loading...'
@@ -35,7 +35,7 @@ app.controller('BookCtrl', function($scope, $ionicModal, $timeout, serviceServic
       booking.set('customerInfo', $scope.customerProfile);
       booking.set('paymentMode', $scope.choice.name);
       booking.set('totalBill', $scope.totalBill);
-      booking.set('schedule', $scope.datetimeValue);
+      booking.set('schedule', datetimeValue);
       booking.set('status', 'pending');
 
       booking.save(null, {
