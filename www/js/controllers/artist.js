@@ -203,15 +203,22 @@ app.controller('ArtistCtrl', function($scope, $ionicModal, $timeout, $ionicLoadi
       });
     }else{
       var myPopup = $ionicPopup.show({
-        template: 'A registered account is needed to chat with an artist. Signup now, it is easy and quick.',
+        template: 'A registered account is needed to chat with an artist. Signup now, it is easy and quick.<br><br>If you already have an account, tap on the login button.',
         title: '<b>Chat</b>',
         subTitle: '',
         scope: $scope,
         buttons: [
           { text: 'Cancel' },
           {
-            text: '<b>Signup</b>',
+            text: '<b>Login</b>',
             type: 'button-positive',
+            onTap: function(e) {
+              $scope.login();
+            }
+          },
+          {
+            text: '<b>Signup</b>',
+            type: 'button-assertive',
             onTap: function(e) {
               $scope.showRegisterForm();
             }

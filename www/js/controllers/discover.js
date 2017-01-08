@@ -1,11 +1,12 @@
 
-app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ionicPopup, portfolioService, $state, commentService, customerService, artistService, $rootScope) {
+app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ionicPopup, portfolioService, $state, commentService, customerService, artistService, $rootScope, $ionicScrollDelegate) {
 
   console.log('Discvoer List View!');
   $scope.spiral = 'img/placeholder.png';
   $scope.cardInfo = {};
   $scope.pageCount = 2;
   $scope.cards = [];
+  $scope.comments = [];
 
   getPortfolios();
 
@@ -49,6 +50,24 @@ app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ion
     });
   }
 
+  function getCustomerById(comment){
+    customerService.getCustomerById(comment.get('commenterInfo').id)
+    .then(function(results) {
+      console.log(results[0]);
+      comment.set('commenterInfo',{
+        id : results[0].id,
+        avatar : results[0].get('avatar'),
+        firstName : results[0].get('firstName'),
+        lastName : results[0].get('lastName')
+      });
+      $scope.comments.push(comment);
+    }, function(err) {
+      // Error occurred
+    }, function(percentComplete) {
+
+    });
+  }
+
   function getPortfolios(skip){
     portfolioService.getPortfolios(skip)
     .then(function(results) {
@@ -82,6 +101,9 @@ app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ion
   }
 
   function getCommentsById(id, ignoreLoad){
+
+    $scope.comments = [];
+
     if(!ignoreLoad){
       $scope.isCommentLoading = true;
     }
@@ -90,8 +112,14 @@ app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ion
     .then(function(results) {
       // Handle the result
       console.log(results);
-      $scope.comments = results;
+
+      angular.forEach(results, function(results) {
+        getCustomerById(results);
+      });
+
       $scope.isCommentLoading = false;
+
+      // $scope.comments = results;
     }, function(err) {
       $scope.isCommentLoading = false;
       // Error occurred
@@ -100,6 +128,10 @@ app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ion
       console.log(percentComplete);
     });
   }
+
+  $scope.scrollMainToTop = function() {
+    $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop(true);
+  };
 
   $scope.redirectToArtist = function(id){
     console.log(id);
@@ -116,6 +148,7 @@ app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ion
 
   $scope.refresh = function(){
     $scope.pageCount = 2;
+    $scope.cards = [];
     getPortfolios();
     $scope.$broadcast('scroll.refreshComplete');
   }
@@ -148,15 +181,22 @@ app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ion
       }
     }else{
       var myPopup = $ionicPopup.show({
-        template: 'Hi, a registered account is needed to like a post. Signup now, it is easy and quick!',
+        template: 'A registered account is needed to like a post. Signup now, it is easy and quick! <br><br>If you already have an account, tap on the login button.',
         title: '<b>Discover Trends</b>',
         subTitle: '',
         scope: $scope,
         buttons: [
           { text: 'Cancel' },
           {
-            text: '<b>Signup</b>',
+            text: '<b>Login</b>',
             type: 'button-positive',
+            onTap: function(e) {
+              $scope.login();
+            }
+          },
+          {
+            text: '<b>Signup</b>',
+            type: 'button-assertive',
             onTap: function(e) {
               $scope.showRegisterForm();
             }
@@ -193,10 +233,14 @@ app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ion
       comment.set('commenterInfo', $rootScope.customerProfile);
       comment.set('comment', $scope.cardInfo.comment);
 
+      $scope.cardInfo.comment = '';
+
       comment.save(null, {
         success: function(result) {
           // Execute any logic that should take place after the object is saved.
-          getCommentsById($scope.cardInfo.portfolioId, true);
+          console.log(result);
+          $scope.comments.push(result)
+          // getCommentsById($scope.cardInfo.portfolioId, true);
           $scope.cardInfo.comment = '';
 
           $scope.currentCard.add('comments', result.id);
@@ -223,15 +267,22 @@ app.controller('DiscoverCtrl', function($scope, $ionicModal, $ionicLoading, $ion
       });
     }else{
       var myPopup = $ionicPopup.show({
-        template: 'Hi, a registered account is needed to comment on a post. Signup now, it is easy and quick!',
+        template: 'A registered account is needed to comment on a post. Signup now, it is easy and quick! <br><br>If you already have an account, tap on the login button.',
         title: '<b>Discover Trends</b>',
         subTitle: '',
         scope: $scope,
         buttons: [
           { text: 'Cancel' },
           {
-            text: '<b>Signup</b>',
+            text: '<b>Login</b>',
             type: 'button-positive',
+            onTap: function(e) {
+              $scope.login();
+            }
+          },
+          {
+            text: '<b>Signup</b>',
+            type: 'button-assertive',
             onTap: function(e) {
               $scope.showRegisterForm();
             }

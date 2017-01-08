@@ -105,6 +105,29 @@ app.controller('AccountCtrl', function($scope, $ionicModal, $timeout, customerSe
     }
   }, false);
 
+  $scope.changePassword = function(){
+    var myPopup = $ionicPopup.show({
+      template: '<input style="border: 1px solid rgb(68, 68, 68); border-radius: 30px; padding-left: 15px;" type="password" placeholder="Old Password" ng-model="customerProfile.oldPassword"><br><input style="border: 1px solid rgb(68, 68, 68); border-radius: 30px; padding-left: 15px;" type="password" placeholder="New Password" ng-model="customerProfile.newPassword"><br><input style="border: 1px solid rgb(68, 68, 68); border-radius: 30px; padding-left: 15px;" type="password" placeholder="Confirm New Password" ng-model="customerProfile.confirmNewPassword">',
+      title: 'Change Password',
+      subTitle: 'Please enter the credentials',
+      scope: $scope,
+      buttons: [
+        { text: 'Cancel' },
+        {
+          text: '<b>Update</b>',
+          type: 'button-assertive',
+          onTap: function(e) {
+            updatePassword();
+          }
+        }
+      ]
+    });
+
+    myPopup.then(function(res) {
+      console.log('Tapped!', res);
+    });
+  }
+
 
   $scope.showUploadOption = function() {
     $scope.data = {};
@@ -177,6 +200,79 @@ app.controller('AccountCtrl', function($scope, $ionicModal, $timeout, customerSe
     });
   }
 
+  function updatePassword(){
+    if($scope.customerProfile.oldPassword !== ''){
+      var user = Parse.User.current();
+
+      $ionicLoading.show({
+        template: 'Checking Old Password...'
+      }).then(function(){
+        console.log("The loading indicator is now displayed");
+      });
+
+
+      Parse.User.logIn(user.get('username'), $scope.customerProfile.oldPassword, {
+        success: function(user) {
+          // Do stuff after successful login.
+
+          $ionicLoading.hide();
+
+          if($scope.customerProfile.newPassword === $scope.customerProfile.confirmNewPassword){
+
+            $ionicLoading.show({
+              template: 'Updating Password...'
+            }).then(function(){
+              console.log("The loading indicator is now displayed");
+            });
+
+            user.set("password", $scope.customerProfile.newPassword);
+            user.save()
+            .then(
+              function(user) {
+                console.log('Password changed', user);
+
+                $ionicLoading.hide();
+
+                var alertPopup = $ionicPopup.alert({
+                  title: '<b>Account</b>',
+                  template: 'Password successfully updated.'
+                });
+
+                alertPopup.then(function(res) {
+                });
+              },
+              function(error) {
+                console.log('Something went wrong', error);
+              }
+            );
+          }else{
+            $ionicLoading.hide();
+
+            var alertPopup = $ionicPopup.alert({
+              title: '<b>Password Update Failed</b>',
+              template: 'Sorry confirm new password does not match. Please Try Again.'
+            });
+
+            alertPopup.then(function(res) {
+            });
+          }
+        },
+        error: function(user, error) {
+          // The login failed. Check error to see why.
+          $ionicLoading.hide();
+          var alertPopup = $ionicPopup.alert({
+            title: '<b>Account</b>',
+            template: 'Sorry old password is incorrect. Password has not bet updated.'
+          });
+
+          alertPopup.then(function(res) {
+          });
+        }
+      });
+
+    }
+  }
+
 
   $scope.updateProfile = function(){
     $scope.currentCustomerProfile.set("firstName", $scope.customerProfile.firstName);
@@ -189,49 +285,6 @@ app.controller('AccountCtrl', function($scope, $ionicModal, $timeout, customerSe
     $scope.currentCustomerProfile.set("birthDate",$scope.customerProfile.birthDate);
 
     console.log($scope.currentCustomerProfile.attributes);
-
-    if($scope.customerProfile.oldPassword !== ''){
-      var user = Parse.User.current();
-
-      Parse.User.logIn(user.get('username'), $scope.customerProfile.oldPassword, {
-        success: function(user) {
-          // Do stuff after successful login.
-          if($scope.customerProfile.newPassword){
-
-            user.set("password", $scope.customerProfile.newPassword);
-            user.save()
-            .then(
-              function(user) {
-                console.log('Password changed', user);
-                var alertPopup = $ionicPopup.alert({
-                  title: '<b>Login</b>',
-                  template: 'Password successfully updated.'
-                });
-
-                alertPopup.then(function(res) {
-                });
-              },
-              function(error) {
-                console.log('Something went wrong', error);
-              }
-            );
-          }
-        },
-        error: function(user, error) {
-          // The login failed. Check error to see why.
-          $ionicLoading.hide();
-          var alertPopup = $ionicPopup.alert({
-            title: '<b>Login</b>',
-            template: 'Sorry old password is incorrect. Password has not bet updated.'
-          });
-
-          alertPopup.then(function(res) {
-          });
-        }
-      });
-
-
-    }
 
     $scope.currentCustomerProfile.save(null, {
       success: function(result) {

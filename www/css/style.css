@@ -610,3 +610,45 @@ opacity: 0;
 .animate-show.ng-hide-add, .animate-show.ng-hide-remove.ng-hide-remove-active {
 opacity: 1;
 }
+
+/* */
+
+.fixed-header{
+	/*margin-top:43px;*/
+
+	bottom: 3px;
+	right: 3px;
+	z-index: 999999999999999999;
+	/*
+	The ionic header bar is 43px in height,
+	put your content below the header bar.
+	*/
+}
+
+.platform-webview.platform-ios.platform-cordova .fixed-header{
+	margin-top:63px;
+	/* On iOS, moving a div out of ion-content,
+	I think you need to compensation for the 20px system status bar.
+	so it's 43px+20px=63px. but I'm not so sure, it hasn't been tested.
+	Test it yourself and make modifications if needed.
+	*/
+}
+
+.my-video
+{
+	height:70px;
+	position:absolute;
+	text-align:right;
+	padding:5px;
+}
+
+.ion-content-below-my-video{
+	margin-top:50px!important;
+}
+
+.platform-webview.platform-ios.platform-cordova .ion-content-below-my-video{
+	margin-top:220px;
+	/*
+	Same as .fixed-header
+	*/
+}

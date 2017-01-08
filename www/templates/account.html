@@ -50,13 +50,17 @@
       <div class="item item-divider" style="text-align: center; font-family: RaleWay; background-color: #f4eae9;">
          <b>Account Credentials</b>
       </div>
-
-      <label class="item blush-background item-input" style="padding-right: 5%;">
+      <label class="item blush-background" style="padding-bottom: 0px; border-bottom-color: #B3A5A5; border-bottom-width: 2px !important; border-bottom-style: dashed;">
+        <button class="button button-block button-assertive login-button" ng-click="changePassword()">Change Password</button>
+        <br>
+      </label>
+      <!-- <label class="item blush-background item-input" style="padding-right: 5%;">
         <input type="password" class="login-text login-input" placeholder="Old Password" ng-model="customerProfile.oldPassword">
       </label>
       <label class="item blush-background item-input" style="padding-right: 5%;">
         <input type="password" class="login-text login-input" placeholder="New Password" ng-model="customerProfile.newPassword">
-      </label>
+      </label> -->
+
       <label class="item blush-background" style="padding-bottom: 0px;">
         <button class="button button-block button-light blush-button-brown login-button" ng-click="updateProfile()">Update Account</button>
         <br>

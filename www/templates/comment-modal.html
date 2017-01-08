@@ -18,7 +18,7 @@
 
 		<div class="list" ng-if="!isCommentLoading">
 
-			<a class="item item-avatar" ng-repeat="comment in comments">
+			<a class="item item-avatar" ng-repeat="comment in comments | orderBy:'createdAt'">
 				<img ng-src="{{comment.attributes.commenterInfo.avatar || spiral}}" class="animate-show" fade-in>
 				<h2>{{comment.attributes.commenterInfo.firstName || 'Anonymous'}} {{comment.attributes.commenterInfo.lastName}}</h2>
 				<p style="white-space: normal;">{{comment.attributes.comment}}</p>
