@@ -6,7 +6,12 @@
       <p ng-hide="customerProfile.avatar">Tap on the picture to change avatar!</p>
     </div>
 
-    <div class="list">
+    <div ng-if="isLoading" style="text-align: center; padding-top: 45%; padding-right: 10px; padding-left: 10px;">
+      <ion-spinner icon="spiral"></ion-spinner><br>
+      <span>{{loadingStatus}}</span>
+    </div>
+
+    <div ng-if="!isLoading" class="list">
       <div class="item item-divider" style="padding-top: 20px; text-align: center; font-family: RaleWay; background-color: #f4eae9;">
         <b>My Profile</b>
       </div>

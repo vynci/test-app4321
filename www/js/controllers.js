@@ -4,6 +4,7 @@ angular.module('starter.controllers', [])
   var user = {};
   $scope.profilePicTemp = "img/placeholder.png";
   $rootScope.side_menu = document.getElementsByTagName("ion-side-menu")[0];
+  $scope.isLoginLoading = false;
 
   $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromParams, toParams) {
     if (toState.name != 'app.service') {
@@ -75,7 +76,7 @@ angular.module('starter.controllers', [])
         getCustomerProfile();
 
         $scope.closeModal();
-        $ionicLoading.hide();
+        $scope.isLoginLoading = false;
         $ionicHistory.nextViewOptions({
           disableBack: true
         });
@@ -83,7 +84,7 @@ angular.module('starter.controllers', [])
       },
       error: function(user, error) {
         // The login failed. Check error to see why.
-        $ionicLoading.hide();
+        $scope.isLoginLoading = false;
         var alertPopup = $ionicPopup.alert({
           title: '<b>Login</b>',
           template: 'Sorry ' + error.message
@@ -100,7 +101,7 @@ angular.module('starter.controllers', [])
       disableAnimate: true,
       disableBack: true
     });
-    $state.go('app.artistlist', {}, {reload: true});
+    $state.go('app.artistlist');
   }
 
   $scope.viewProfile = function(){
@@ -189,16 +190,22 @@ angular.module('starter.controllers', [])
   };
 
   $scope.doLogin = function() {
-    $ionicLoading.show({
-      template: 'Logging in...'
-    }).then(function(){
-      console.log("The loading indicator is now displayed");
-    });
+    $scope.isLoginLoading = true;
     userLogin($scope.loginData.username, $scope.loginData.password);
   };
 
   $scope.doLogout = function() {
     Parse.User.logOut().then(function(){
+      var pubnubChannelName = 'pubnub:default:subscribe:callback:' + $scope.messageAlertChannel;
+
+      Pubnub.unsubscribe({
+        channel: $scope.messageAlertChannel
+      });
+
+      $rootScope.$$listeners[pubnubChannelName] = null;
+      $rootScope.$$listeners['pubnub:default:subscribe:connect'] = null;
+      $rootScope.$$listeners['pubnub:default:subscribe:disconnect'] = null;
+
       $rootScope.currentUser = Parse.User.current();  // this will now be null
       $scope.currentCustomer = {};
       $scope.modal.show();
@@ -411,7 +418,7 @@ angular.module('starter.controllers', [])
 
       $rootScope.$on(Pubnub.getMessageEventNameFor($scope.messageAlertChannel), function(ngEvent, m) {
         if(m.content.threadId !== $state.params.chatId){
-          // openLocalNotification(m);
+          openLocalNotification(m);
           $scope.showMessageAlert(m);
         }else{
           $rootScope.getStreamMessage(m);

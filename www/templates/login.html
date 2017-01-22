@@ -27,12 +27,21 @@
               Login
             </button>
           </label>
-          <label class="item blush-background text-center" style="padding-top: 0px; padding-bottom: 0px;">
-            <button class="button button-block button-small button-light button-clear" ng-click="forgotPassword()" style="color: #574C4F;  margin-top: 0px;"><b>Forgot your password?</b></button>
-          </label>
-          <label class="item blush-background text-center" style="padding-top: 0px; padding-bottom: 0px;">
-            <button class="button button-block button-light button-clear" ng-click="showRegisterForm()" style="color: #574C4F;"><b>Register Here</b></button>
-          </label>
+
+          <div ng-if="isLoginLoading" style="text-align: center; padding-top: 30px;">
+            <ion-spinner icon="spiral"></ion-spinner><br>
+            <span>Logging in...</span>
+          </div>
+
+          <div ng-if="!isLoginLoading">
+            <label class="item blush-background text-center" style="padding-top: 0px; padding-bottom: 0px;">
+              <button class="button button-block button-small button-light button-clear" ng-click="forgotPassword()" style="color: #574C4F;  margin-top: 0px;"><b>Forgot your password?</b></button>
+            </label>
+            <label class="item blush-background text-center" style="padding-top: 0px; padding-bottom: 0px;">
+              <button class="button button-block button-light button-clear" ng-click="showRegisterForm()" style="color: #574C4F;"><b>Register Here</b></button>
+            </label>
+          </div>
+
         </div>
       </form>
 

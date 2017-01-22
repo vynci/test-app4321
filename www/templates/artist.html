@@ -56,8 +56,8 @@
         <div ng-repeat="service in artistServices" style="border-bottom-color: lightgray; border-bottom-width: 2px; border-bottom-style: dashed;">
           <ion-checkbox ng-click="toggleSelection(service)" ng-checked="service.checked">
             <div class="row" style="padding: 0px;">
-              <div class="col-75" style="padding: 0px;"><b>{{service.attributes.name}}</b></div>
-              <div class="col" style="padding: 0px; text-align: right;"><b>₱{{service.attributes.price}}</b></div>
+              <div class="col-75" style="padding: 0px; text-overflow: ellipsis; overflow: hidden;"><b>{{service.attributes.name}}</b></div>
+              <div class="col-25" style="padding: 0px; text-align: right; text-overflow: ellipsis; overflow: hidden;"><b>₱{{service.attributes.price}}</b></div>
             </div>
 
             <p>{{service.attributes.duration}} mins</p>

@@ -27,6 +27,16 @@ app.controller('ArtistListViewCtrl', function($scope, $ionicModal, $timeout, $io
 
   $scope.$on('$ionicView.enter', function(e) {
     console.log('enter view');
+    if($rootScope.nearbyArtists instanceof Array){
+      if(!$rootScope.nearbyArtists.length){
+        console.log('empty artistlist');
+        if($scope.fromCloudActiveArtists.length){
+          $rootScope.nearbyArtists = $scope.fromCloudActiveArtists;
+        }else{
+          getCurrentLocation();
+        }
+      }
+    }
   });
 
   $ionicModal.fromTemplateUrl('templates/filterModal.html', {

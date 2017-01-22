@@ -22,10 +22,7 @@ app.controller('BookCtrl', function($scope, $ionicModal, $timeout, serviceServic
 
   $scope.book = function(datetimeValue) {
     if($scope.customerProfile.contactNumber){
-      $ionicLoading.show({
-        template: 'Loading...'
-      }).then(function(){
-      });
+      $scope.isBookingLoading = true;
 
       var Booking = Parse.Object.extend("Booking");
       var booking = new Booking();
@@ -41,26 +38,11 @@ app.controller('BookCtrl', function($scope, $ionicModal, $timeout, serviceServic
       booking.save(null, {
         success: function(result) {
           // Execute any logic that should take place after the object is saved.
-          $ionicLoading.hide();
-
-          // Pubnub.publish({
-          //   channel: 'book/' + $scope.artist.id,
-          //   message: {
-          //     content: result,
-          //     sender: {
-          //       name: $scope.customerProfile.firstName+ ' ' + $scope.customerProfile.lastName,
-          //       avatar : $scope.artist.avatar
-          //     },
-          //     date: new Date()
-          //   },
-          //   callback: function(m) {
-          //     console.log(m);
-          //   }
-          // });
+          $scope.isBookingLoading = false;
 
           var alertPopup = $ionicPopup.alert({
-            title: 'Booking Successful!',
-            template: 'Your Artist will contact your mobile number ' + $scope.customerProfile.contactNumber + ' in a while.'
+            title: 'Booking Request Successful!',
+            template: 'Your Artist will contact your mobile number ' + $scope.customerProfile.contactNumber + ' for confirmation in a while.'
           });
 
           alertPopup.then(function(res) {
@@ -90,7 +72,7 @@ app.controller('BookCtrl', function($scope, $ionicModal, $timeout, serviceServic
         error: function(gameScore, error) {
           // Execute any logic that should take place if the save fails.
           // error is a Parse.Error with an error code and message.
-          $ionicLoading.hide();
+          $scope.isBookingLoading = false;
           var alertPopup = $ionicPopup.alert({
             title: 'Booking Error',
             template: 'Sorry, There was something wrong with the booking process.'
@@ -116,11 +98,6 @@ app.controller('BookCtrl', function($scope, $ionicModal, $timeout, serviceServic
   };
 
   function getCustomerProfile(){
-    $ionicLoading.show({
-      template: 'Loading...'
-    }).then(function(){
-    });
-
     if(Parse.User.current()){
       customerService.getCustomerById(Parse.User.current().get('profileId'))
       .then(function(results) {
@@ -135,12 +112,9 @@ app.controller('BookCtrl', function($scope, $ionicModal, $timeout, serviceServic
         $scope.customerProfile.contactNumber = results[0].get('contactNumber');
         $scope.customerProfile.avatar = results[0].get('avatar');
 
-        $ionicLoading.hide();
-
         return results;
       }, function(err) {
         // Error occurred
-        $ionicLoading.hide();
         console.log(err);
       }, function(percentComplete) {
         console.log(percentComplete);

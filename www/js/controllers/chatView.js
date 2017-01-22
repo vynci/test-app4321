@@ -305,7 +305,7 @@ function($scope, $rootScope, $state, $stateParams, MockService,
     // this prob seems weird here but I have reasons for this in my app, secret!
     $scope.viewProfile = function(msg) {
       console.log(msg.attributes);
-      $state.go('app.artist', {artistId: msg.get('userId')});
+      $state.go('app.artist', {artistId: msg.get('userId') || $stateParams.artistId});
     };
 
     // I emit this event from the monospaced.elastic directive, read line 480

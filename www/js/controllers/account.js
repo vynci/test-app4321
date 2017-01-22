@@ -2,9 +2,12 @@
 app.controller('AccountCtrl', function($scope, $ionicModal, $timeout, customerService, $ionicLoading, $rootScope, $ionicPopup, $cordovaCamera, $state) {
 
   $scope.placeholder = 'img/placeholder.png';
+  $scope.isLoading = true;
+  $scope.loadingStatus = 'Loading Account Information...'
 
   $scope.$on('$ionicView.enter', function() {
     if(Parse.User.current()){
+      $scope.isLoading = true;
       $scope.customerProfile = {};
       getCustomerProfile();
     }else{
@@ -13,12 +16,6 @@ app.controller('AccountCtrl', function($scope, $ionicModal, $timeout, customerSe
   });
 
   function getCustomerProfile(){
-    $ionicLoading.show({
-      template: 'Loading...'
-    }).then(function(){
-      console.log("The loading indicator is now displayed");
-    });
-
     if($rootScope.currentUser){
       customerService.getCustomerById($rootScope.currentUser.get('profileId'))
       .then(function(results) {
@@ -38,7 +35,7 @@ app.controller('AccountCtrl', function($scope, $ionicModal, $timeout, customerSe
         $scope.customerProfile.oldPassword = '';
         $scope.customerProfile.newPassword = '';
 
-        $ionicLoading.hide();
+        $scope.isLoading = false;
 
         return results;
       }, function(err) {

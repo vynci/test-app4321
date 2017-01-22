@@ -6,11 +6,13 @@ app.controller('ServiceCtrl', function($scope, $ionicHistory, $ionicModal, $time
   $scope.artistCount;
 
   $scope.$on('$ionicView.enter', function(e) {
+    // nearbyArtists = $rootScope.nearbyArtists;
     $scope.artistCount = 0;
     loadMap();
   });
 
   $scope.$on('$ionicView.leave', function(e) {
+    console.log('leave');
     map.remove();
   });
 
@@ -58,10 +60,10 @@ app.controller('ServiceCtrl', function($scope, $ionicHistory, $ionicModal, $time
   }
 
   function initMarkers(){
-    $ionicLoading.show({
-      template: 'Loading...'
-    }).then(function(){
-    });
+    // $ionicLoading.show({
+    //   template: 'Loading...'
+    // }).then(function(){
+    // });
 
     map.addMarker({
       'position': new plugin.google.maps.LatLng(currentPosition._latitude, currentPosition._longitude),
@@ -95,7 +97,7 @@ app.controller('ServiceCtrl', function($scope, $ionicHistory, $ionicModal, $time
         $scope.artistCount += 1;
 
         if($scope.artistCount === nearbyArtists.length){
-          $ionicLoading.hide();
+          // $ionicLoading.hide();
         }
       });
 
